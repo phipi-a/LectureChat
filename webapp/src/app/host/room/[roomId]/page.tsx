@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import styles from "./page.module.css";
-import useLocalStorage from "use-local-storage";
 import { useContext } from "react";
 import { TextField } from "@mui/material";
 import {
