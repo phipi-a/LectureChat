@@ -1,0 +1,33 @@
+{
+  "name": "lecture_chat",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.134",
+    "@mui/material": "^5.13.5",
+    "@supabase/supabase-js": "^2.26.0",
+    "@types/node": "20.3.1",
+    "@types/react": "18.2.13",
+    "@types/react-dom": "18.2.6",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.3.1",
+    "eslint": "8.43.0",
+    "eslint-config-next": "13.4.6",
+    "next": "13.4.6",
+    "notistack": "^3.0.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-query": "^3.39.3",
+    "supabase": "^1.68.6",
+    "typescript": "5.1.3"
+  }
+}
