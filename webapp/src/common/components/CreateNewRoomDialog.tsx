@@ -3,7 +3,14 @@ import {
   useInsertSelectData,
 } from "@/lib/utils/supabase/supabaseData";
 import { LoadingButton } from "@mui/lab";
-import { DialogTitle, DialogContent, Box, TextField } from "@mui/material";
+import {
+  DialogTitle,
+  DialogContent,
+  Box,
+  TextField,
+  Container,
+  Typography,
+} from "@mui/material";
 import { create } from "domain";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
@@ -11,11 +18,13 @@ import { useContext, useState } from "react";
 import { useQueryClient } from "react-query";
 import { supabase } from "../modules/supabase/supabaseClient";
 import { AuthContext } from "../context/AuthProvider";
+import { title } from "process";
 
 export function CreateNewRoomDialog({}) {
   const queryClient = useQueryClient();
   const [nameHelperText, setNameHelperText] = useState("");
   const [passwordHelperText, setPasswordHelperText] = useState("");
+  const [idHelperText, setIdHelperText] = useState("");
   const { userId } = useContext(AuthContext);
   const router = useRouter();
   const createRoom = useInsertSelectData(supabase.from("room"), {
@@ -37,11 +46,12 @@ export function CreateNewRoomDialog({}) {
 
   function handleSubmit(event: any) {
     event.preventDefault();
-    const name = event.target.name.value;
+    const title = event.target.title.value;
     const password = event.target.password.value;
+    const id = event.target.id.value;
     setNameHelperText("");
     setPasswordHelperText("");
-    if (name.length < 6) {
+    if (title.length < 6) {
       setNameHelperText("Room name must be at least 6 characters long");
       return;
     }
@@ -49,53 +59,83 @@ export function CreateNewRoomDialog({}) {
       setPasswordHelperText("Password must be at least 8 characters long");
       return;
     }
+    if (id.length != 6) {
+      setIdHelperText("Room id must be 6 characters long");
+      return;
+    }
     createRoom.mutate({
-      name: name,
+      title: title,
       password: password,
       user_id: userId!,
+      id: id,
     });
   }
   return (
     <>
       <DialogTitle>{"Create Room"}</DialogTitle>
       <DialogContent>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            variant="standard"
-            fullWidth
-            id="name"
-            label="Room Name"
-            name="name"
-            error={nameHelperText !== ""}
-            helperText={nameHelperText}
-            autoFocus
-          />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            variant="standard"
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            error={passwordHelperText !== ""}
-            helperText={passwordHelperText}
-            autoComplete="current-password"
-          />
-          <LoadingButton
-            loading={createRoom.isLoading}
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+        <Container maxWidth={"sm"}>
+          <Typography variant="h4" component="h1" align="center" gutterBottom>
+            Join Room
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
           >
-            Create
-          </LoadingButton>
-        </Box>
+            <TextField
+              margin="normal"
+              required
+              variant="standard"
+              fullWidth
+              id="title"
+              label="Room Title"
+              name="title"
+              error={nameHelperText !== ""}
+              helperText={nameHelperText}
+              autoFocus
+            />
+
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              variant="standard"
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              error={passwordHelperText !== ""}
+              helperText={passwordHelperText}
+              autoComplete="current-password"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              variant="standard"
+              name="public id"
+              label="id"
+              type="id"
+              id="id"
+              error={idHelperText !== ""}
+              helperText={idHelperText}
+              autoComplete="current-id"
+              defaultValue={Math.random().toString().substring(2, 8)}
+            />
+
+            <LoadingButton
+              loading={createRoom.isLoading}
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Create
+            </LoadingButton>
+          </Box>
+        </Container>
       </DialogContent>
     </>
   );

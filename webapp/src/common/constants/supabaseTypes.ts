@@ -13,16 +13,19 @@ export interface Database {
         Row: {
           created_at: string | null
           data: string | null
+          id: string
           room_id: string
         }
         Insert: {
           created_at?: string | null
           data?: string | null
+          id?: string
           room_id: string
         }
         Update: {
           created_at?: string | null
           data?: string | null
+          id?: string
           room_id?: string
         }
         Relationships: [
@@ -38,22 +41,22 @@ export interface Database {
         Row: {
           created_at: string | null
           id: string
-          name: string
           password: string
+          title: string
           user_id: string
         }
         Insert: {
           created_at?: string | null
-          id?: string
-          name: string
+          id: string
           password: string
+          title: string
           user_id: string
         }
         Update: {
           created_at?: string | null
           id?: string
-          name?: string
           password?: string
+          title?: string
           user_id?: string
         }
         Relationships: []
@@ -62,19 +65,25 @@ export interface Database {
         Row: {
           created_at: string | null
           id: string
+          password: string | null
           room_id: string
+          room_title: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           id?: string
+          password?: string | null
           room_id: string
+          room_title?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
           id?: string
+          password?: string | null
           room_id?: string
+          room_title?: string | null
           user_id?: string
         }
         Relationships: [
