@@ -41,7 +41,7 @@ export function JoinedRoomsList() {
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={<Typography noWrap>{room.id}</Typography>}
+              primary={<Typography noWrap>{room.room_title}</Typography>}
               secondary={
                 <Typography noWrap variant="body2" color={"text.secondary"}>
                   {timeConverter(room.created_at!)}

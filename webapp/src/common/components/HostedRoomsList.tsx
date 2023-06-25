@@ -44,7 +44,7 @@ export function HostedRoomsList() {
             </Avatar>
           </ListItemAvatar>
           <ListItemText
-            primary={<Typography noWrap>{room.name}</Typography>}
+            primary={<Typography noWrap>{room.title}</Typography>}
             secondary={
               <Typography noWrap variant="body2" color={"text.secondary"}>
                 {timeConverter(room.created_at!)}
