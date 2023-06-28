@@ -28,21 +28,14 @@ export function LiveAudioTranscriptionBox({
   >("stoped");
   const [microphoneActive, setMicrophoneActive] =
     React.useState<boolean>(false);
-  const [data, setData] = React.useState<any[]>([]);
 
   const [transcriptBoxOpen, setTranscriptBoxOpen] = React.useState(false);
 
   const getInitData = useGetData(
     ["host", "room", roomId, "initData"],
-    supabase.from("data").select("*").eq("room_id", roomId),
-    {
-      onSuccess: (data) => {
-        if (data.data) {
-          setData(data.data);
-        }
-      },
-    }
+    supabase.from("data").select("*").eq("room_id", roomId)
   );
+  const [data, setData] = React.useState<any[]>(getInitData.data?.data || []);
   const uploadAudio = useMutation({
     mutationFn: (audioBlob: Blob) => {
       const url = whisperUrl + "/asr?&output=json&language=en&";
@@ -65,16 +58,12 @@ export function LiveAudioTranscriptionBox({
       }
     },
   });
-  const insertData = useInsertSelectData(
-    supabase.from("data"),
-
-    {
-      onSuccess: (dataRes) => {
-        data.push(dataRes.data![0]);
-        setData([...data]);
-      },
-    }
-  );
+  const insertData = useInsertSelectData(supabase.from("data"), {
+    onSuccess: (dataRes) => {
+      data.push(dataRes.data![0]);
+      setData([...data]);
+    },
+  });
   const upsertData = useUpsertData(supabase.from("data"));
   const deleteData = useDeleteData(supabase.from("data"));
 

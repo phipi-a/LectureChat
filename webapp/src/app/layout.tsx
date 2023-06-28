@@ -25,6 +25,7 @@ export default function RootLayout({
       queries: {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
+        suspense: true,
       },
     },
   });

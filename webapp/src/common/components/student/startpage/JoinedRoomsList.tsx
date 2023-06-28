@@ -12,15 +12,21 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 import { AuthContext } from "../../../context/AuthProvider";
+import Room from "@/app/host/room/[roomId]/page";
+import { RoomAvatar } from "@/common/components/general/RoomAvatar";
 
 export function JoinedRoomsList() {
   const { userId } = useContext(AuthContext);
   const room_access = useGetData(
     ["student_rooms", userId],
-    supabase.from("room_access").select("*")
+    supabase.from("room_access").select("*"),
+    {
+      suspense: true,
+    }
   );
+  console.log(room_access);
   const router = useRouter();
   return (
     <>
@@ -39,9 +45,7 @@ export function JoinedRoomsList() {
             }}
           >
             <ListItemAvatar>
-              <Avatar>
-                <SchoolOutlined />
-              </Avatar>
+              <RoomAvatar roomTitle={room.room_title!} />
             </ListItemAvatar>
             <ListItemText
               primary={<Typography noWrap>{room.room_title}</Typography>}

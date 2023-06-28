@@ -143,6 +143,7 @@ export default function Home() {
       email: lastLoginEmail,
       password: lastLoginPassword,
     });
+    //wait 2 seconds
   }
   return (
     <main>

@@ -8,7 +8,7 @@ import "react-pdf/dist/cjs/Page/TextLayer.css";
 import "react-pdf/dist/cjs/Page/PageCanvas";
 import "react-pdf/dist/cjs/Page/PageSVG";
 import { Document, Page } from "react-pdf";
-import { Box, InputAdornment, TextField } from "@mui/material";
+import { Box, InputAdornment, Skeleton, TextField } from "@mui/material";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -95,8 +95,10 @@ export function PdfViewer({
       >
         <Document
           file={file}
+          loading={<></>}
           onLoadSuccess={onDocumentLoadSuccess}
           onError={console.error}
+          onLoadError={console.error}
         >
           <Page
             pageNumber={page}

@@ -2,9 +2,11 @@
 import { HostStartpage } from "@/common/components/host/startpage/HostStartpage";
 import { StudentStartpage } from "@/common/components/student/startpage/StudentStartpage";
 import { AuthContext } from "@/common/context/AuthProvider";
+import { AppLogo } from "@/common/elements/AppLogo";
+import { supabase } from "@/common/modules/supabase/supabaseClient";
 import { startPageText } from "@/common/text/startpage";
 
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useContext } from "react";
@@ -17,23 +19,74 @@ export default function Home() {
   }
   if (loggedIn) {
     return (
-      <Box
-        flex={1}
-        overflow={"auto"}
-        display={"flex"}
-        flexDirection={{ xs: "column", md: "row" }}
-      >
+      <Container>
         <Box
-          maxHeight={"50%"}
-          overflow={"auto"}
-          width={{ xs: "100%", md: "50%" }}
+          display={"flex"}
+          flexDirection={"column"}
+          sx={{
+            my: 2,
+          }}
         >
-          <StudentStartpage />
+          <Typography
+            variant={"h4"}
+            fontFamily={"monospace"}
+            fontWeight={"bold"}
+          >
+            Hey 👋
+          </Typography>
+          <Typography
+            whiteSpace={"pre-line"}
+            variant="h6"
+            color={"primary"}
+            letterSpacing={0}
+            fontFamily={"monospace"}
+          >
+            <Box component={"span"} color={"text.primary"}>
+              Welcome to{" "}
+            </Box>
+            <Box
+              component={"span"}
+              color={"primary"}
+              fontFamily={"monospace"}
+              fontWeight={"bold"}
+            >
+              <Box component="span" color={"text.primary"}>
+                Lecture
+              </Box>
+              Chat
+            </Box>
+          </Typography>
         </Box>
-        <Box overflow={"auto"} flex={1} width={{ xs: "100%", md: "50%" }}>
-          <HostStartpage />
+
+        <Box
+          flex={1}
+          overflow={"auto"}
+          display={"flex"}
+          flexDirection={{ xs: "column", md: "row" }}
+        >
+          <Box
+            maxHeight={"50%"}
+            overflow={"auto"}
+            width={{ xs: "100%", md: "50%" }}
+            m={2}
+          >
+            <Paper>
+              <StudentStartpage />
+            </Paper>
+          </Box>
+
+          <Box
+            overflow={"auto"}
+            flex={1}
+            width={{ xs: "100%", md: "50%" }}
+            m={2}
+          >
+            <Paper>
+              <HostStartpage />
+            </Paper>
+          </Box>
         </Box>
-      </Box>
+      </Container>
     );
   } else {
     return (
@@ -47,17 +100,7 @@ export default function Home() {
             my: 10,
           }}
         >
-          <Typography
-            variant={"h3"}
-            color={"primary"}
-            fontFamily={"monospace"}
-            fontWeight={"bold"}
-          >
-            <Box component="span" color={"text.primary"}>
-              Lecture
-            </Box>
-            Chat
-          </Typography>
+          <AppLogo />
 
           <Typography
             whiteSpace={"pre-line"}
