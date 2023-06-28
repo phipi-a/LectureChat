@@ -1,4 +1,3 @@
-import { createAvatar } from "@dicebear/core";
 import { Avatar } from "@mui/material";
 import { SchoolOutlined } from "@mui/icons-material";
 import React, { useMemo } from "react";
