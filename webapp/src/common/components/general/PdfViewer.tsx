@@ -97,8 +97,8 @@ export function PdfViewer({
           <Page
             pageNumber={page}
             renderAnnotationLayer={false}
-            renderTextLayer={false}
             width={width}
+            onLoadError={console.error}
             canvasBackground="grey"
           />
         </Document>
