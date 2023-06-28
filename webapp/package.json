@@ -28,7 +28,7 @@
     "notistack": "^3.0.1",
     "pdf-dist": "^1.0.0",
     "pdfjs": "^2.5.0",
-    "pdfjs-dist": "^3.6.172",
+    "pdfjs-dist": "3.6.172",
     "raw-loader": "^4.0.2",
     "re-resizable": "^6.9.9",
     "react": "18.2.0",
