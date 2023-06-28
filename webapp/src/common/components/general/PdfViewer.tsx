@@ -93,7 +93,11 @@ export function PdfViewer({
         }}
         id="PdfDiv"
       >
-        <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document
+          file={file}
+          onLoadSuccess={onDocumentLoadSuccess}
+          onError={console.error}
+        >
           <Page
             pageNumber={page}
             renderAnnotationLayer={false}
