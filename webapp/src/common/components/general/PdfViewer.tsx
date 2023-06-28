@@ -97,6 +97,7 @@ export function PdfViewer({
           file={file}
           onLoadSuccess={onDocumentLoadSuccess}
           onError={console.error}
+          onLoadError={console.error}
         >
           <Page
             pageNumber={page}
