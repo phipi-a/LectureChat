@@ -14,12 +14,13 @@ import {
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/common/context/AuthProvider";
 import { useContext } from "react";
+import { RoomAvatar } from "../../general/RoomAvatar";
 
 export function HostedRoomsList() {
   const { userId } = useContext(AuthContext);
   const rooms = useGetData(
     ["host_rooms", userId],
-    supabase.from("room").select("*")
+    supabase.from("room").select("*").order("created_at", { ascending: false })
   );
   const router = useRouter();
 
@@ -28,6 +29,7 @@ export function HostedRoomsList() {
       maxWidth="md"
       sx={{
         overflow: "auto",
+        maxHeight: "400px",
         flex: 1,
       }}
     >
@@ -39,9 +41,7 @@ export function HostedRoomsList() {
           }}
         >
           <ListItemAvatar>
-            <Avatar>
-              <SchoolOutlined />
-            </Avatar>
+            <RoomAvatar roomTitle={room.title} />
           </ListItemAvatar>
           <ListItemText
             primary={<Typography noWrap>{room.title}</Typography>}

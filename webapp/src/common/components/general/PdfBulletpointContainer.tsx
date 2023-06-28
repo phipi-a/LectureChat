@@ -5,6 +5,7 @@ import { Resizable } from "re-resizable";
 import { PdfViewer } from "./PdfViewer";
 import React, { useEffect } from "react";
 import { supabase } from "../../modules/supabase/supabaseClient";
+import { useQuery } from "react-query";
 
 export function PdfBulletpointContainer({
   roomId,
@@ -16,25 +17,16 @@ export function PdfBulletpointContainer({
   setPage: (page: number) => void;
 }) {
   const [pdfBlob, setPdfBlob] = React.useState<any>(null);
-  useEffect(() => {
-    supabase.storage
-      .from("pdf")
-      .download(roomId + ".pdf")
-      .then((res) => {
-        console.log(res);
-        var file = new File([res.data!], "test.pdf", {
-          type: "application/pdf",
-        });
-        console.log(file);
-        setPdfBlob(file);
-        console.log(window.URL.createObjectURL(res.data!));
-        setPdfBlob(
-          URL.createObjectURL(
-            new Blob([res.data!], { type: "application/pdf" })
-          )
-        );
-      });
-  }, []);
+  async function downloadPDF() {
+    const res = await supabase.storage.from("pdf").download(roomId + ".pdf");
+    console.log(res);
+    return URL.createObjectURL(
+      new Blob([res.data!], { type: "application/pdf" })
+    );
+  }
+
+  const pdfDownload = useQuery(["pdf", roomId], downloadPDF);
+
   const [width, setWidth] = React.useState(500);
   return (
     <Box
@@ -67,9 +59,9 @@ export function PdfBulletpointContainer({
         }}
       >
         <Box flex={1}>
-          {pdfBlob && (
+          {pdfDownload.data && (
             <PdfViewer
-              file={pdfBlob}
+              file={pdfDownload.data}
               width={width}
               page={page}
               setPage={setPage}

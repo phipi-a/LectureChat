@@ -126,11 +126,17 @@ export function AudioRecorder({
         });
     }
   }, [recording]);
-
   useEffect(() => {
+    return () => {
+      stopAudioRecording();
+    };
+  }, []);
+  function stopAudioRecording() {
     if (recordingMuteState) {
+      console.log("start recording");
       setRecording(true);
     } else {
+      console.log("stop recording");
       setRecording(false);
       cancelAnimationFrame(animationFrameId.current!);
       if (steamRef.current === null) {
@@ -140,6 +146,10 @@ export function AudioRecorder({
         track.stop();
       }
     }
+  }
+
+  useEffect(() => {
+    stopAudioRecording();
   }, [recordingMuteState]);
   return <></>;
 }
