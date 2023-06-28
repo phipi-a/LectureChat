@@ -1,16 +1,8 @@
 import { createAvatar } from "@dicebear/core";
 import { Avatar } from "@mui/material";
 import { SchoolOutlined } from "@mui/icons-material";
-import { icons } from "@dicebear/collection";
 import React, { useMemo } from "react";
 export function RoomAvatar({ roomTitle }: { roomTitle: string }) {
-  const avatar = useMemo(() => {
-    return createAvatar(icons, {
-      size: 128,
-      seed: "d",
-      // ... other options
-    }).toDataUriSync();
-  }, []);
   const stringToColour = (str: string) => {
     let hash = 0;
     str.split("").forEach((char) => {
