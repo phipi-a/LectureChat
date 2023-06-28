@@ -1,37 +1,15 @@
 "use client";
-import { CreateNewRoomDialog } from "@/common/components/CreateNewRoomDialog";
-import { HostStartpage } from "@/common/components/HostStartpage";
-import { HostedRoomsList } from "@/common/components/HostedRoomsList";
-import { JoinRoomDialog } from "@/common/components/JoinRoomDialog";
-import { JoinedRoomsList } from "@/common/components/JoinedRoomsList";
-import { StudentStartpage } from "@/common/components/StudentStartpage";
+import { HostStartpage } from "@/common/components/host/startpage/HostStartpage";
+import { StudentStartpage } from "@/common/components/student/startpage/StudentStartpage";
 import { AuthContext } from "@/common/context/AuthProvider";
-import CheckAuth from "@/common/modules/auth/CheckAuth";
 import { startPageText } from "@/common/text/startpage";
-import { useLocalStorage } from "@/lib/utils/helper";
 
-import {
-  Box,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Grid,
-  Container,
-  Typography,
-  Stack,
-  Dialog,
-  DialogTitle,
-} from "@mui/material";
-import { blue } from "@mui/material/colors";
-import { create } from "domain";
-import Link from "next/link";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useContext } from "react";
 
 export default function Home() {
-  const [openJoinRoom, setOpenJoinRoom] = React.useState(false);
   const router = useRouter();
   const { loggedIn, event } = useContext(AuthContext);
   if (event === "PASSWORD_RECOVERY") {
@@ -98,7 +76,7 @@ export default function Home() {
               mt: 2,
             }}
             onClick={() => {
-              router.push("/signin");
+              router.push("/signup");
             }}
           >
             Try It for Free

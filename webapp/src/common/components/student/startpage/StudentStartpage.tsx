@@ -1,10 +1,8 @@
 "use client";
 
 import { Box, Button, Dialog } from "@mui/material";
-import { HostedRoomsList } from "./HostedRoomsList";
-import { CreateNewRoomDialog } from "./CreateNewRoomDialog";
 import React from "react";
-import { JoinRoomDialog } from "./JoinRoomDialog";
+import { JoinRoomDialog } from "../joinRoom/JoinRoomDialog";
 import { JoinedRoomsList } from "./JoinedRoomsList";
 
 export function StudentStartpage() {

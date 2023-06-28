@@ -1,14 +1,10 @@
 "use client";
 import { supabase } from "@/common/modules/supabase/supabaseClient";
-import { validateEmail } from "@/lib/utils/helper";
-import {
-  useAuthSignUpWithPassword,
-  useAuthUpdatePassword,
-} from "@/lib/utils/supabase/supabaseAuth";
+import { useAuthUpdatePassword } from "@/lib/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
-import { Box, TextField, Button, Container, Typography } from "@mui/material";
+import { Box, TextField, Container, Typography } from "@mui/material";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import React from "react";
 

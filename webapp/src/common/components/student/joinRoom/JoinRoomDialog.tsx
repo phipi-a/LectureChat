@@ -3,41 +3,60 @@
 import {
   Box,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Grid,
   Container,
   Typography,
   DialogTitle,
   DialogContent,
 } from "@mui/material";
-import { createClient } from "@supabase/supabase-js";
-import { create } from "domain";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthProvider";
-import { supabase } from "../modules/supabase/supabaseClient";
-import CheckAuth from "../modules/auth/CheckAuth";
+import { AuthContext } from "../../../context/AuthProvider";
+import { supabase } from "../../../modules/supabase/supabaseClient";
+import CheckAuth from "../../../modules/auth/CheckAuth";
+import { LoadingButton } from "@mui/lab";
+import { useUpsertData } from "@/lib/utils/supabase/supabaseData";
+import { useQueryClient } from "react-query";
 
 export function JoinRoomDialog() {
   const router = useRouter();
   const { userId } = useContext(AuthContext);
   const [passwordHelperText, setPasswordHelperText] = React.useState("");
   const [roomIdHelperText, setRoomIdHelperText] = React.useState("");
+  const roomId = React.useRef("");
+  const queryClient = useQueryClient();
+  const joinRoom = useUpsertData(supabase.from("room_access"), {
+    onSuccess: (value) => {
+      if (value.error) {
+        console.log(value.error);
+        if (value.error.message.includes("duplicate key")) {
+          router.push(`/student/room/${roomId.current}`);
+          return;
+        }
+        if (
+          value.error.message.includes("invalid input") ||
+          value.error.message.includes("security policy")
+        ) {
+          setPasswordHelperText("Invalid password or room id");
+          setRoomIdHelperText("Invalid password or room id");
+          return;
+        }
+      } else {
+        queryClient.invalidateQueries("student_rooms");
+        router.push(`/student/room/${roomId.current}`);
+      }
+    },
+  });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const auth = supabase.auth;
     const data = new FormData(event.currentTarget);
-    const roomId = data.get("roomId") as string;
+    const roomId_new = data.get("roomId") as string;
     const password = data.get("password") as string;
 
     setPasswordHelperText("");
     setRoomIdHelperText("");
-    if (roomId.length < 6) {
+    if (roomId_new.length < 6) {
       setRoomIdHelperText("Room id must be at least 6 characters");
       return;
     }
@@ -45,33 +64,13 @@ export function JoinRoomDialog() {
       setPasswordHelperText("Password must be at least 8 characters");
       return;
     }
-
-    supabase
-      .from("room_access")
-      .upsert({
-        room_id: roomId,
-        user_id: userId!,
-        password: password,
-      })
-      .then((value) => {
-        if (value.error) {
-          console.log(value.error);
-          if (value.error.message.includes("duplicate key")) {
-            router.push(`/student/room/${roomId}`);
-            return;
-          }
-          if (
-            value.error.message.includes("invalid input") ||
-            value.error.message.includes("security policy")
-          ) {
-            setPasswordHelperText("Invalid password or room id");
-            setRoomIdHelperText("Invalid password or room id");
-            return;
-          }
-        } else {
-          router.push(`/student/room/${roomId}`);
-        }
-      });
+    roomId.current = roomId_new;
+    joinRoom.mutate({
+      room_id: roomId_new,
+      user_id: userId!,
+      password: password,
+      room_title: "",
+    });
   };
   return (
     <>
@@ -111,14 +110,15 @@ export function JoinRoomDialog() {
                 error={passwordHelperText !== ""}
                 autoComplete="current-password"
               />
-              <Button
+              <LoadingButton
+                loading={joinRoom.isLoading}
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Join
-              </Button>
+              </LoadingButton>
             </Box>
           </Container>
         </CheckAuth>

@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../modules/supabase/supabaseClient";
-import { CenteredLoading } from "../components/CenteredLoading";
+import { CenteredLoading } from "../components/general/CenteredLoading";
 export const AuthContext = React.createContext<{
   session: Session | null;
   loggedIn: boolean;

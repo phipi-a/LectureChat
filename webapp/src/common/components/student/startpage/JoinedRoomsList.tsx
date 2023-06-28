@@ -1,6 +1,6 @@
 "use client";
 import { useGetData } from "@/lib/utils/supabase/supabaseData";
-import { supabase } from "../modules/supabase/supabaseClient";
+import { supabase } from "../../../modules/supabase/supabaseClient";
 import { timeConverter } from "@/lib/utils/helper";
 import { SchoolOutlined } from "@mui/icons-material";
 import {
@@ -12,10 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthProvider";
 
 export function JoinedRoomsList() {
+  const { userId } = useContext(AuthContext);
   const room_access = useGetData(
-    ["student", "rooms"],
+    ["student_rooms", userId],
     supabase.from("room_access").select("*")
   );
   const router = useRouter();
@@ -41,7 +44,7 @@ export function JoinedRoomsList() {
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={<Typography noWrap>{room.id}</Typography>}
+              primary={<Typography noWrap>{room.room_title}</Typography>}
               secondary={
                 <Typography noWrap variant="body2" color={"text.secondary"}>
                   {timeConverter(room.created_at!)}

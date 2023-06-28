@@ -2,7 +2,7 @@
 
 import { Box, Button, Dialog } from "@mui/material";
 import { HostedRoomsList } from "./HostedRoomsList";
-import { CreateNewRoomDialog } from "./CreateNewRoomDialog";
+import { CreateNewRoomDialog } from "../createNewRoom/CreateNewRoomDialog";
 import React from "react";
 
 export function HostStartpage() {
