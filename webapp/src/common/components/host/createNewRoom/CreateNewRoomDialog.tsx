@@ -1,7 +1,4 @@
-import {
-  useInsertData,
-  useInsertSelectData,
-} from "@/lib/utils/supabase/supabaseData";
+import { useInsertSelectData } from "@/lib/utils/supabase/supabaseData";
 import { LoadingButton } from "@mui/lab";
 import {
   DialogTitle,
@@ -11,22 +8,49 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { create } from "domain";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import { useContext, useState } from "react";
-import { useQueryClient } from "react-query";
-import { supabase } from "../modules/supabase/supabaseClient";
-import { AuthContext } from "../context/AuthProvider";
-import { title } from "process";
+import { useContext, useRef, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { supabase } from "../../../modules/supabase/supabaseClient";
+import { AuthContext } from "../../../context/AuthProvider";
+import { DropPdfFileBox } from "./DropPdfFileBox";
 
 export function CreateNewRoomDialog({}) {
-  const queryClient = useQueryClient();
   const [nameHelperText, setNameHelperText] = useState("");
   const [passwordHelperText, setPasswordHelperText] = useState("");
   const [idHelperText, setIdHelperText] = useState("");
+  const [file, setFile] = useState<any>(null);
   const { userId } = useContext(AuthContext);
+  const roomId = useRef("");
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const uploadPdfFile = useMutation(
+    async ({ file, roomId }: { file: any; roomId: string }) => {
+      return await supabase.storage.from("pdf").upload(roomId + ".pdf", file, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
+    },
+    {
+      onSuccess: (data: any) => {
+        if (data.error) {
+          enqueueSnackbar(data.error.message, {
+            variant: "error",
+          });
+          return;
+        }
+
+        enqueueSnackbar("File uploaded", {
+          variant: "success",
+        });
+        router.push(`/host/room/${roomId.current}`);
+        console.log("router");
+      },
+    }
+  );
+
   const createRoom = useInsertSelectData(supabase.from("room"), {
     onSuccess(data) {
       if (data.error) {
@@ -38,8 +62,8 @@ export function CreateNewRoomDialog({}) {
           });
         }
       } else {
-        queryClient.invalidateQueries(["host", "rooms"]);
-        router.push(`/host/room/${data.data[0].id}`);
+        queryClient.invalidateQueries(["host_rooms"]);
+        uploadPdfFile.mutate({ file: file, roomId: data.data[0].id });
       }
     },
   });
@@ -63,6 +87,7 @@ export function CreateNewRoomDialog({}) {
       setIdHelperText("Room id must be 6 characters long");
       return;
     }
+    roomId.current = id;
     createRoom.mutate({
       title: title,
       password: password,
@@ -125,8 +150,15 @@ export function CreateNewRoomDialog({}) {
               defaultValue={Math.random().toString().substring(2, 8)}
             />
 
+            <DropPdfFileBox
+              roomId={""}
+              onFileChanged={(file) => {
+                setFile(file);
+              }}
+            />
+
             <LoadingButton
-              loading={createRoom.isLoading}
+              loading={createRoom.isLoading || uploadPdfFile.isLoading}
               type="submit"
               fullWidth
               variant="contained"

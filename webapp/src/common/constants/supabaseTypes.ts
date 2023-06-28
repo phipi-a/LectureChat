@@ -14,18 +14,21 @@ export interface Database {
           created_at: string | null
           data: string | null
           id: string
+          page: number | null
           room_id: string
         }
         Insert: {
           created_at?: string | null
           data?: string | null
           id?: string
+          page?: number | null
           room_id: string
         }
         Update: {
           created_at?: string | null
           data?: string | null
           id?: string
+          page?: number | null
           room_id?: string
         }
         Relationships: [

@@ -3,26 +3,20 @@
 import {
   Box,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Grid,
   Container,
   Typography,
   DialogTitle,
   DialogContent,
 } from "@mui/material";
-import { createClient } from "@supabase/supabase-js";
-import { create } from "domain";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthProvider";
-import { supabase } from "../modules/supabase/supabaseClient";
-import CheckAuth from "../modules/auth/CheckAuth";
+import { AuthContext } from "../../../context/AuthProvider";
+import { supabase } from "../../../modules/supabase/supabaseClient";
+import CheckAuth from "../../../modules/auth/CheckAuth";
 import { LoadingButton } from "@mui/lab";
 import { useUpsertData } from "@/lib/utils/supabase/supabaseData";
+import { useQueryClient } from "react-query";
 
 export function JoinRoomDialog() {
   const router = useRouter();
@@ -30,6 +24,7 @@ export function JoinRoomDialog() {
   const [passwordHelperText, setPasswordHelperText] = React.useState("");
   const [roomIdHelperText, setRoomIdHelperText] = React.useState("");
   const roomId = React.useRef("");
+  const queryClient = useQueryClient();
   const joinRoom = useUpsertData(supabase.from("room_access"), {
     onSuccess: (value) => {
       if (value.error) {
@@ -47,6 +42,7 @@ export function JoinRoomDialog() {
           return;
         }
       } else {
+        queryClient.invalidateQueries("student_rooms");
         router.push(`/student/room/${roomId.current}`);
       }
     },

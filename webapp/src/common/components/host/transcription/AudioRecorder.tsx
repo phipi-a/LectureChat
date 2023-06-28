@@ -6,14 +6,17 @@ export function AudioRecorder({
   newAudioBlobCallback,
   recordingStateCallback,
   longPauseCallback,
+  recordingMuteState,
 }: {
   newAudioBlobCallback: (blob: Blob) => void;
   recordingStateCallback: (state: "recording" | "stoped") => void;
   longPauseCallback: () => void;
+  recordingMuteState: boolean;
 }) {
   const animationFrameId = React.useRef<number | null>(null);
   const steamRef = React.useRef<MediaStream | null>(null);
   const [recording, setRecording] = React.useState(false);
+
   useEffect(() => {
     if (recording) {
       let currentAudioState = "longPause";
@@ -123,8 +126,11 @@ export function AudioRecorder({
         });
     }
   }, [recording]);
-  return {
-    stopAudioRecording: () => {
+
+  useEffect(() => {
+    if (recordingMuteState) {
+      setRecording(true);
+    } else {
       setRecording(false);
       cancelAnimationFrame(animationFrameId.current!);
       if (steamRef.current === null) {
@@ -133,9 +139,7 @@ export function AudioRecorder({
       for (const track of steamRef.current!.getTracks()) {
         track.stop();
       }
-    },
-    startAudioRecording: () => {
-      setRecording(true);
-    },
-  };
+    }
+  }, [recordingMuteState]);
+  return <></>;
 }

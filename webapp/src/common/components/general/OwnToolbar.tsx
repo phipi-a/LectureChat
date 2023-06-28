@@ -2,14 +2,16 @@
 import { Toolbar as Tb, Typography, Button, Link } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthProvider";
-import { supabase } from "../modules/supabase/supabaseClient";
-export function Toolbar() {
+import { AuthContext } from "../../context/AuthProvider";
+import { supabase } from "../../modules/supabase/supabaseClient";
+import { useQueryClient } from "react-query";
+export function OwnToolbar() {
   const router = useRouter();
   const onTitleClick = () => {
     router.push("/");
   };
   const { loggedIn } = useContext(AuthContext);
+  const queryClient = useQueryClient();
   return (
     <Tb>
       <Typography variant="h5">
@@ -34,6 +36,7 @@ export function Toolbar() {
         }}
         onClick={() => {
           supabase.auth.signOut().then(() => {});
+          queryClient.invalidateQueries();
         }}
       >
         Sign out

@@ -1,22 +1,19 @@
 "use client";
 import {
   AppBar,
-  Button,
-  Container,
+  Box,
   CssBaseline,
   ThemeProvider,
-  Typography,
   createTheme,
 } from "@mui/material";
 import "./globals.css";
-import { Inter } from "next/font/google";
 import React from "react";
 import { SnackbarProvider } from "notistack";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { useRouter } from "next/navigation";
 import { AuthProvider } from "@/common/context/AuthProvider";
-import { Toolbar } from "@/common/components/Toolbar";
+import { OwnToolbar } from "@/common/components/general/OwnToolbar";
 
 export default function RootLayout({
   children,
@@ -64,11 +61,14 @@ export default function RootLayout({
               <ReactQueryDevtools initialIsOpen={false} />
               <AuthProvider>
                 <AppBar position="sticky">
-                  <Toolbar />
+                  <OwnToolbar />
                 </AppBar>
-                <Container
+                <Box
                   sx={{
                     my: 2,
+                    m: 0,
+                    p: 2,
+                    maxWidth: "undefined",
                     height: "100%",
                     width: "100%",
                     display: "flex",
@@ -77,7 +77,7 @@ export default function RootLayout({
                   }}
                 >
                   {children}
-                </Container>
+                </Box>
               </AuthProvider>
             </QueryClientProvider>
           </SnackbarProvider>

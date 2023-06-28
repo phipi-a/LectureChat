@@ -1,16 +1,12 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
-import { useContext, useEffect, useRef, useState } from "react";
-import { Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 import { useGetData } from "@/lib/utils/supabase/supabaseData";
 import { supabase } from "@/common/modules/supabase/supabaseClient";
-import { CenteredLoading } from "@/common/components/CenteredLoading";
 import { Database } from "@/common/constants/supabaseTypes";
-import {
-  PostgrestResponse,
-  PostgrestSingleResponse,
-} from "@supabase/supabase-js";
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { CenteredLoading } from "@/common/components/general/CenteredLoading";
+import { PdfBulletpointContainer } from "@/common/components/general/PdfBulletpointContainer";
 
 // shortcut Database["public"]["Tables"]["data"]["Row"]
 
@@ -27,7 +23,11 @@ export default function Room({ params }: { params: { roomId: string } }) {
   );
   const initData = useGetData(
     [roomId, "initData"],
-    supabase!.from("data").select("*").eq("room_id", roomId),
+    supabase!
+      .from("data")
+      .select("*")
+      .eq("room_id", roomId)
+      .order("created_at", { ascending: true }),
     {
       onSuccess(
         data: PostgrestSingleResponse<
@@ -38,6 +38,7 @@ export default function Room({ params }: { params: { roomId: string } }) {
           console.log("erro", data);
         } else {
           console.log("data", data);
+          console.log("data.data", data.data);
           setData(data.data);
           dataRef.current = data.data;
         }
@@ -80,12 +81,22 @@ export default function Room({ params }: { params: { roomId: string } }) {
             console.log("Change received!", payload);
             dataRef.current.push(payload.new);
             setData([...dataRef.current]);
+            if (livePageRef.current) {
+              setPage(dataRef.current.at(-1)!.page!);
+            }
             return;
           }
         }
       )
       .subscribe();
   }, [supabase, roomId]);
+  const [page, setPage] = useState(1);
+  function onPageManualChange(page: number) {
+    setPage(page);
+    setLivePage(false);
+  }
+  const [livePage, setLivePage] = useState(false);
+  const livePageRef = useRef(livePage);
   if (initData.isLoading || room.isLoading) {
     return <CenteredLoading />;
   }
@@ -97,6 +108,26 @@ export default function Room({ params }: { params: { roomId: string } }) {
       <Typography variant="body1">
         {data.map((d) => d.data).join(" ")}
       </Typography>
+      <FormControlLabel
+        control={
+          <Checkbox
+            onChange={(e) => {
+              setLivePage(e.target.checked);
+              livePageRef.current = e.target.checked;
+              if (e.target.checked) {
+                setPage(data.at(-1)!.page!);
+              }
+            }}
+            checked={livePage}
+          />
+        }
+        label="PageSync"
+      />
+      <PdfBulletpointContainer
+        roomId={roomId}
+        page={page}
+        setPage={onPageManualChange}
+      />
     </div>
   );
 }
