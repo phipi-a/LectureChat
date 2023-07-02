@@ -94,15 +94,20 @@ export function useInsertData<
   useMutationOptions?: UseMutationOptions<
     PostgrestSingleResponse<null>,
     PostgrestError,
-    Row
+    Row | Row[]
   >
-): UseMutationResult<PostgrestSingleResponse<null>, PostgrestError, Row> {
-  return useMutation<PostgrestSingleResponse<null>, PostgrestError, Row>(
-    (data) => {
-      return awaitData(query.insert(data));
-    },
-    useMutationOptions
-  );
+): UseMutationResult<
+  PostgrestSingleResponse<null>,
+  PostgrestError,
+  Row | Row[]
+> {
+  return useMutation<
+    PostgrestSingleResponse<null>,
+    PostgrestError,
+    Row | Row[]
+  >((data) => {
+    return awaitData(query.insert(data));
+  }, useMutationOptions);
 }
 
 export function useInsertSelectData<

@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
@@ -16,6 +16,8 @@ export interface Database {
           id: string
           page: number | null
           room_id: string
+          video_end_ms: number | null
+          video_start_ms: number | null
         }
         Insert: {
           created_at?: string | null
@@ -23,6 +25,8 @@ export interface Database {
           id?: string
           page?: number | null
           room_id: string
+          video_end_ms?: number | null
+          video_start_ms?: number | null
         }
         Update: {
           created_at?: string | null
@@ -30,6 +34,8 @@ export interface Database {
           id?: string
           page?: number | null
           room_id?: string
+          video_end_ms?: number | null
+          video_start_ms?: number | null
         }
         Relationships: [
           {
@@ -44,6 +50,7 @@ export interface Database {
         Row: {
           created_at: string | null
           id: string
+          is_video_room: boolean | null
           password: string
           title: string
           user_id: string
@@ -51,6 +58,7 @@ export interface Database {
         Insert: {
           created_at?: string | null
           id: string
+          is_video_room?: boolean | null
           password: string
           title: string
           user_id: string
@@ -58,6 +66,7 @@ export interface Database {
         Update: {
           created_at?: string | null
           id?: string
+          is_video_room?: boolean | null
           password?: string
           title?: string
           user_id?: string
@@ -103,6 +112,21 @@ export interface Database {
             referencedColumns: ["id"]
           }
         ]
+      }
+      test: {
+        Row: {
+          created_at: string | null
+          id: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+        }
+        Relationships: []
       }
     }
     Views: {

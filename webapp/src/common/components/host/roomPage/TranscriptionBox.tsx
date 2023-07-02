@@ -25,6 +25,8 @@ import { DeleteAllDataDialog } from "./DeleteAllDataDialog";
 import { TranscriptionEditPopover } from "./TranscriptionEditPopover";
 
 export function TranscriptionBox({
+  enableDeleteAll = false,
+  alignText = "right",
   editable = false,
   rawData,
   updateDataItem,
@@ -33,6 +35,8 @@ export function TranscriptionBox({
   transcriptBoxOpen,
   setTranscriptBoxOpen,
 }: {
+  enableDeleteAll?: boolean;
+  alignText?: "left" | "right";
   editable?: boolean;
 
   rawData: any[];
@@ -74,7 +78,7 @@ export function TranscriptionBox({
           justifyContent={"end"}
           display={transcriptBoxOpen ? "flex" : "none"}
         >
-          {editable && (
+          {editable && enableDeleteAll && (
             <IconButton
               size={"small"}
               color="error"
@@ -107,7 +111,7 @@ export function TranscriptionBox({
                   variant="body1"
                   color={"text.secondary"}
                   sx={{
-                    direction: "rtl",
+                    direction: alignText === "left" ? "ltr" : "rtl",
                     overflow: "hidden",
                     maxWidth: "100%",
                     tableLayout: "fixed",
@@ -118,24 +122,21 @@ export function TranscriptionBox({
                   whiteSpace={"nowrap"}
                   textOverflow={"ellipsis"}
                 >
-                  {rawData
-                    .sort((a, b) => (a.created_at > b.created_at ? 1 : -1))
-                    .map((d) => (
-                      <span
-                        key={d.id + d.data}
-                        id={d.id}
-                        className="text_select"
-                        onClick={transcriptBoxOpen ? handleClick : undefined}
-                        style={{
-                          backgroundColor:
-                            anchorEl?.id === d.id ? "#1565c0" : "",
-                          borderRadius: "5px",
-                        }}
-                      >
-                        {d.data}
-                        &lrm;
-                      </span>
-                    ))}
+                  {rawData.map((d) => (
+                    <span
+                      key={d.id + d.data}
+                      id={d.id}
+                      className="text_select"
+                      onClick={transcriptBoxOpen ? handleClick : undefined}
+                      style={{
+                        backgroundColor: anchorEl?.id === d.id ? "#1565c0" : "",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      {d.data}
+                      &lrm;
+                    </span>
+                  ))}
                   <TranscriptionEditPopover
                     editText={editText}
                     setEditText={setEditText}

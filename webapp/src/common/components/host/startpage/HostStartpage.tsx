@@ -2,7 +2,7 @@
 
 import { Box, Button, Dialog, Divider, Typography } from "@mui/material";
 import { HostedRoomsList } from "./HostedRoomsList";
-import { CreateNewRoomDialog } from "../createNewRoom/CreateNewRoomDialog";
+import { CreateNewRoomDialog } from "../createNewRecordingRoom/CreateNewRoomDialog";
 import React, { Suspense } from "react";
 import { RoomsListFallback } from "../../general/RoomsListFallback";
 import { AddOutlined } from "@mui/icons-material";

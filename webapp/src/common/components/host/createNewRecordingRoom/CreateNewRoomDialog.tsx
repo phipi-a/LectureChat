@@ -1,4 +1,7 @@
-import { useInsertSelectData } from "@/lib/utils/supabase/supabaseData";
+import {
+  useInsertData,
+  useInsertSelectData,
+} from "@/lib/utils/supabase/supabaseData";
 import { LoadingButton } from "@mui/lab";
 import {
   DialogTitle,
@@ -7,6 +10,9 @@ import {
   TextField,
   Container,
   Typography,
+  Checkbox,
+  FormControlLabel,
+  LinearProgress,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
@@ -15,12 +21,25 @@ import { useMutation, useQueryClient } from "react-query";
 import { supabase } from "../../../modules/supabase/supabaseClient";
 import { AuthContext } from "../../../context/AuthProvider";
 import { DropPdfFileBox } from "./DropPdfFileBox";
+import { DropVideoFileBox } from "./DropVideoFileBox";
+import { ConstructionSharp } from "@mui/icons-material";
+interface Segment {
+  start: number;
+  end: number;
+  text: string;
+}
 
 export function CreateNewRoomDialog({}) {
   const [nameHelperText, setNameHelperText] = useState("");
   const [passwordHelperText, setPasswordHelperText] = useState("");
+  const [title, setTitle] = useState("");
+  const [password, setPassword] = useState("");
+  const [id, setId] = useState(Math.random().toString().substring(2, 8));
+  const [isVideoRoom, setIsVideoRoom] = useState(false);
   const [idHelperText, setIdHelperText] = useState("");
-  const [file, setFile] = useState<any>(null);
+  const [pdfFile, setPdfFile] = useState<any>(null);
+  const [videoFile, setVideoFile] = useState<any>(null);
+  const transcriptionRef = useRef<Segment[]>([]);
   const { userId } = useContext(AuthContext);
   const roomId = useRef("");
   const router = useRouter();
@@ -46,12 +65,50 @@ export function CreateNewRoomDialog({}) {
           variant: "success",
         });
         router.push(`/host/room/${roomId.current}`);
-        console.log("router");
       },
     }
   );
+  const whisperUrl = "http://localhost:9000";
 
-  const createRoom = useInsertSelectData(supabase.from("room"), {
+  const transcriptVideo = useMutation(
+    (audioBlob: Blob) => {
+      const url = whisperUrl + "/asr?&output=json&language=en&";
+
+      const formData = new FormData();
+      formData.append("audio_file", audioBlob);
+
+      return fetch(url, {
+        method: "POST",
+        body: formData,
+      }).then((res) => res.json());
+    },
+    {
+      onSuccess: (data: any) => {
+        transcriptionRef.current = data.segments;
+        createVideoRoom.mutate({
+          title: title,
+          password: password,
+          id: id,
+          user_id: userId!,
+          is_video_room: isVideoRoom,
+        });
+      },
+    }
+  );
+  const uploadVideoTranscript = useInsertData(supabase.from("data"), {
+    onSuccess(data) {
+      if (data.error) {
+        enqueueSnackbar("Error uploading transcript!", {
+          variant: "error",
+        });
+      } else {
+        queryClient.invalidateQueries(["host_rooms"]);
+        router.push(`/host/room/${roomId.current}`);
+      }
+    },
+  });
+
+  const createAudioRoom = useInsertSelectData(supabase.from("room"), {
     onSuccess(data) {
       if (data.error) {
         if (data.error.message.includes("unique_user_id_name")) {
@@ -63,16 +120,38 @@ export function CreateNewRoomDialog({}) {
         }
       } else {
         queryClient.invalidateQueries(["host_rooms"]);
-        uploadPdfFile.mutate({ file: file, roomId: data.data[0].id });
+
+        uploadPdfFile.mutate({ file: pdfFile, roomId: data.data[0].id });
+      }
+    },
+  });
+  const createVideoRoom = useInsertSelectData(supabase.from("room"), {
+    onSuccess(data) {
+      if (data.error) {
+        if (data.error.message.includes("unique_user_id_name")) {
+          setNameHelperText("Room name already in use!");
+        } else {
+          enqueueSnackbar("Error creating room!", {
+            variant: "error",
+          });
+        }
+      } else {
+        queryClient.invalidateQueries(["host_rooms"]);
+        const segments = transcriptionRef.current.map((segment: Segment) => {
+          return {
+            data: segment.text,
+            room_id: roomId.current,
+            video_start_ms: segment.start,
+            video_end_ms: segment.end,
+          };
+        });
+        uploadVideoTranscript.mutate(segments);
       }
     },
   });
 
   function handleSubmit(event: any) {
     event.preventDefault();
-    const title = event.target.title.value;
-    const password = event.target.password.value;
-    const id = event.target.id.value;
     setNameHelperText("");
     setPasswordHelperText("");
     if (title.length < 6) {
@@ -88,7 +167,12 @@ export function CreateNewRoomDialog({}) {
       return;
     }
     roomId.current = id;
-    createRoom.mutate({
+    if (isVideoRoom) {
+      const videoBlob = new Blob([videoFile], { type: "video/webm" });
+      transcriptVideo.mutate(videoBlob);
+      return;
+    }
+    createAudioRoom.mutate({
       title: title,
       password: password,
       user_id: userId!,
@@ -115,6 +199,8 @@ export function CreateNewRoomDialog({}) {
               variant="standard"
               fullWidth
               id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               label="Room Title"
               name="title"
               error={nameHelperText !== ""}
@@ -131,6 +217,8 @@ export function CreateNewRoomDialog({}) {
               label="Password"
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               error={passwordHelperText !== ""}
               helperText={passwordHelperText}
               autoComplete="current-password"
@@ -140,6 +228,8 @@ export function CreateNewRoomDialog({}) {
               required
               fullWidth
               variant="standard"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
               name="public id"
               label="id"
               type="id"
@@ -147,25 +237,46 @@ export function CreateNewRoomDialog({}) {
               error={idHelperText !== ""}
               helperText={idHelperText}
               autoComplete="current-id"
-              defaultValue={Math.random().toString().substring(2, 8)}
             />
-
-            <DropPdfFileBox
-              roomId={""}
-              onFileChanged={(file) => {
-                setFile(file);
-              }}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isVideoRoom}
+                  onChange={(e) => setIsVideoRoom(e.target.checked)}
+                  color="primary"
+                  inputProps={{ "aria-label": "secondary checkbox" }}
+                />
+              }
+              label="VideoRoom"
             />
+            {isVideoRoom ? (
+              <Box display={"flex"} flexDirection={"row"}>
+                <DropVideoFileBox
+                  onFileChanged={(file) => {
+                    setVideoFile(file);
+                  }}
+                />
+              </Box>
+            ) : (
+              <DropPdfFileBox
+                onFileChanged={(file) => {
+                  setPdfFile(file);
+                }}
+              />
+            )}
 
             <LoadingButton
-              loading={createRoom.isLoading || uploadPdfFile.isLoading}
+              loading={createAudioRoom.isLoading || uploadPdfFile.isLoading}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Create
+              {isVideoRoom && videoFile !== null
+                ? "Create and Transcode Video"
+                : "Create Room"}
             </LoadingButton>
+            <LinearProgress variant="determinate" value={20} />
           </Box>
         </Container>
       </DialogContent>
