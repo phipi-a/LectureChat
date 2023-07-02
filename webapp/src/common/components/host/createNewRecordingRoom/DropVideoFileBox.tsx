@@ -10,16 +10,13 @@ import { enqueueSnackbar } from "notistack";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-export function DropPdfFileBox({
-  roomId,
+export function DropVideoFileBox({
   onFileChanged,
 }: {
-  roomId: string;
   onFileChanged: (file: any) => void;
 }) {
   const [file, setFile] = useState<any>(null);
   const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles);
     if (acceptedFiles.length > 1) {
       //snackbar
       enqueueSnackbar("Only one file is allowed", {
@@ -34,9 +31,12 @@ export function DropPdfFileBox({
       });
       return;
     }
-    if (acceptedFiles[0].type !== "application/pdf") {
+    if (
+      acceptedFiles[0].type !== "video/mp4" &&
+      acceptedFiles[0].type !== "video/webm"
+    ) {
       //snackbar
-      enqueueSnackbar("Only PDF files are allowed", {
+      enqueueSnackbar("Only Video files are allowed", {
         variant: "error",
       });
       return;
@@ -46,7 +46,6 @@ export function DropPdfFileBox({
 
     // Do something with the files
   }, []);
-  console.log(file);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
     <Box
@@ -81,8 +80,9 @@ export function DropPdfFileBox({
             display={file ? "none" : "block"}
             textAlign={"center"}
             textOverflow={"ellipsis"}
+            noWrap
           >
-            Upload PDF
+            Upload Video
           </Typography>
         </>
       ) : (

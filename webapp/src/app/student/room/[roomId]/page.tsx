@@ -4,18 +4,12 @@ import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 import { useGetData } from "@/lib/utils/supabase/supabaseData";
 import { supabase } from "@/common/modules/supabase/supabaseClient";
 import { Database } from "@/common/constants/supabaseTypes";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { CenteredLoading } from "@/common/components/general/CenteredLoading";
 import { PdfBulletpointContainer } from "@/common/components/general/PdfBulletpointContainer";
 
 // shortcut Database["public"]["Tables"]["data"]["Row"]
 
 export default function Room({ params }: { params: { roomId: string } }) {
-  const [data, setData] = useState<
-    Database["public"]["Tables"]["data"]["Row"][]
-  >([]);
-  const dataRef = useRef(data);
-
   const { roomId } = params;
   const room = useGetData(
     [roomId, "room"],
@@ -27,24 +21,12 @@ export default function Room({ params }: { params: { roomId: string } }) {
       .from("data")
       .select("*")
       .eq("room_id", roomId)
-      .order("created_at", { ascending: true }),
-    {
-      onSuccess(
-        data: PostgrestSingleResponse<
-          Database["public"]["Tables"]["data"]["Row"][]
-        >
-      ) {
-        if (data.error) {
-          console.log("erro", data);
-        } else {
-          console.log("data", data);
-          console.log("data.data", data.data);
-          setData(data.data);
-          dataRef.current = data.data;
-        }
-      },
-    }
+      .order("created_at", { ascending: true })
   );
+  const [data, setData] = useState<
+    Database["public"]["Tables"]["data"]["Row"][]
+  >(initData.data?.data || []);
+  const dataRef = useRef(data);
   useEffect(() => {
     const channel = supabase!
       .channel("*")

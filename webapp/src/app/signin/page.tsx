@@ -163,11 +163,13 @@ export default function Home() {
             error={emailHelperText !== ""}
             helperText={emailHelperText}
             autoFocus
+            tabIndex={1}
           />
           <Typography variant="body2" color="text.secondary" align="right">
             {"Forgot your password? "}
             <LoadingButton
               onClick={handleForgotPassword}
+              tabIndex={5}
               variant="text"
               loading={resetPassword.isLoading}
               sx={{ textTransform: "none" }}
@@ -178,6 +180,7 @@ export default function Home() {
           <TextField
             margin="normal"
             required
+            tabIndex={2}
             fullWidth
             name="password"
             label="Password"
@@ -225,7 +228,9 @@ export default function Home() {
         </Box>
         <Typography variant="body2" color="text.secondary" align="center">
           {"Don't have an account? "}
-          <Link href="/signup">{"Sign Up"}</Link>
+          <Link href="/signup" tabIndex={4}>
+            {"Sign Up"}
+          </Link>
         </Typography>
       </Container>
     </main>

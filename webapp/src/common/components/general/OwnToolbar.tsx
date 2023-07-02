@@ -1,5 +1,5 @@
 "use client";
-import { Toolbar as Tb, Typography, Button, Link } from "@mui/material";
+import { Toolbar as Tb, Typography, Button, Link, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
@@ -14,19 +14,30 @@ export function OwnToolbar() {
   const queryClient = useQueryClient();
   return (
     <Tb>
-      <Typography variant="h5">
+      <Typography
+        whiteSpace={"pre-line"}
+        variant="h5"
+        color={"primary"}
+        letterSpacing={0}
+        fontFamily={"monospace"}
+      >
         <Link
           href="/"
-          onClick={(e) => {
-            e.preventDefault();
-            onTitleClick();
-          }}
           sx={{
-            color: "text.primary",
             textDecoration: "none",
           }}
         >
-          LectureChat
+          <Box
+            component={"span"}
+            color={"primary"}
+            fontFamily={"monospace"}
+            fontWeight={"bold"}
+          >
+            <Box component="span" color={"text.primary"}>
+              Lecture
+            </Box>
+            Chat
+          </Box>
         </Link>
       </Typography>
       <Button
