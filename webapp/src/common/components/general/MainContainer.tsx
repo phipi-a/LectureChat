@@ -11,15 +11,18 @@ import { Resizable } from "re-resizable";
 import React, { useContext } from "react";
 import { Chat } from "./Chat";
 import "./v.css";
+import { BulletPoints } from "./BulletPoints";
 
 export function MainContainer({
   children,
   width,
   setWidth,
+  roomId,
 }: {
   children: React.ReactNode;
   width: number;
   setWidth: React.Dispatch<React.SetStateAction<number>>;
+  roomId: string;
 }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const [currentTab, setCurrentTab] = React.useState("1");
@@ -104,11 +107,7 @@ export function MainContainer({
 
             <Box flex={1} alignItems={"center"} overflow={"auto"}>
               <TabPanel value="1">
-                <ul>
-                  <li>Bulletpoint 1 example</li>
-                  <li>Bulletpoint 2 efasddsfadsfdsxample</li>
-                  <li>Bulletpoint 3 example</li>
-                </ul>
+                <BulletPoints roomId={roomId} />
               </TabPanel>
               <TabPanel value="2">
                 <Typography variant="body2">

@@ -11,8 +11,10 @@ import "./v.css";
 
 export function VideoBulletPointContainer({
   videoUrl,
+  roomId,
 }: {
   videoUrl: string | null;
+  roomId: string;
 }) {
   const { playPosition } = useContext(RoomContext);
   const [duration, setDuration] = React.useState<number>(0);
@@ -28,7 +30,7 @@ export function VideoBulletPointContainer({
     }
   }, [playPosition, player]);
   return (
-    <MainContainer width={width} setWidth={setWidth}>
+    <MainContainer width={width} setWidth={setWidth} roomId={roomId}>
       {ReactPlayer.canPlay(videoUrl!) || videoUrlFilePath !== "" ? (
         <div className="player-wrapper">
           <ReactPlayer

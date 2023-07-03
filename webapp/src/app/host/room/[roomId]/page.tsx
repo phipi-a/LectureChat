@@ -48,7 +48,10 @@ export default function Room({ params }: { params: { roomId: string } }) {
           </Suspense>
           <Box display={"flex"} flex={1} overflow={"auto"}>
             <Suspense fallback={<MainContainerFallback />}>
-              <VideoBulletPointContainer videoUrl={room!.video_url} />
+              <VideoBulletPointContainer
+                videoUrl={room!.video_url}
+                roomId={params.roomId}
+              />
             </Suspense>
           </Box>
         </Box>
