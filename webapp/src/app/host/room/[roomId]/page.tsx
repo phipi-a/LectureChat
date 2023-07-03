@@ -19,11 +19,7 @@ export default function Room({ params }: { params: { roomId: string } }) {
   const getRoom = useGetData(
     ["host", "room", params.roomId],
 
-    supabase
-      .from("room")
-      .select("*")
-      .eq("id", params.roomId)
-      .single()
+    supabase.from("room").select("*").eq("id", params.roomId).single()
   );
 
   const room = getRoom.data?.data;

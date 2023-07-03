@@ -1,16 +1,12 @@
-import { Send, SendOutlined } from "@mui/icons-material";
+import { Send } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
   IconButton,
   List,
-  ListItem,
-  ListItemText,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
-import { Icon } from "@react-pdf-viewer/core";
 
 export function Chat({ display }: { display: boolean }) {
   const messages = [
@@ -53,6 +49,7 @@ export function Chat({ display }: { display: boolean }) {
         <List>
           {messages.map((message, index) => (
             <Box
+              key={message.text}
               sx={{
                 display: "flex",
                 justifyContent: message.ai ? "flex-start" : "flex-end",

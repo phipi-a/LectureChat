@@ -1,19 +1,19 @@
 "use client";
 
+import { RoomContext } from "@/common/context/RoomProvider";
 import { supabase } from "@/common/modules/supabase/supabaseClient";
 import {
+  useDeleteData,
   useGetData,
   useInsertSelectData,
   useUpsertData,
-  useDeleteData,
 } from "@/lib/utils/supabase/supabaseData";
-import { MicOutlined, MicOff } from "@mui/icons-material";
-import { Box, IconButton, CircularProgress, Collapse } from "@mui/material";
+import { MicOff, MicOutlined } from "@mui/icons-material";
+import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useMutation } from "react-query";
 import { AudioRecorder } from "../transcription/AudioRecorder";
 import { TranscriptionBox } from "./TranscriptionBox";
-import { RoomContext } from "@/common/context/RoomProvider";
 
 export function LiveAudioTranscriptionBox({
   roomId,
@@ -26,18 +26,14 @@ export function LiveAudioTranscriptionBox({
   const [recordingState, setRecordingState] = React.useState<
     "recording" | "stoped"
   >("stoped");
-  const [microphoneActive, setMicrophoneActive] = React.useState<boolean>(
-    false
-  );
+  const [microphoneActive, setMicrophoneActive] =
+    React.useState<boolean>(false);
 
   const [transcriptBoxOpen, setTranscriptBoxOpen] = React.useState(false);
   const { segments, setSegments } = useContext(RoomContext);
   const getInitData = useGetData(
     ["host", "room", roomId, "initData"],
-    supabase
-      .from("data")
-      .select("*")
-      .eq("room_id", roomId)
+    supabase.from("data").select("*").eq("room_id", roomId)
   );
   useEffect(() => {
     setSegments(getInitData.data?.data || []);
@@ -108,10 +104,10 @@ export function LiveAudioTranscriptionBox({
       alignItems={transcriptBoxOpen ? "flex-start" : "center"}
     >
       <AudioRecorder
-        newAudioBlobCallback={function(blob: Blob): void {
+        newAudioBlobCallback={function (blob: Blob): void {
           uploadAudio.mutate(blob);
         }}
-        recordingStateCallback={function(state: "recording" | "stoped"): void {
+        recordingStateCallback={function (state: "recording" | "stoped"): void {
           setRecordingState(state);
         }}
         longPauseCallback={() => {}}

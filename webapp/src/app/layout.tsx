@@ -1,4 +1,6 @@
 "use client";
+import { OwnToolbar } from "@/common/components/general/OwnToolbar";
+import { AuthProvider } from "@/common/context/AuthProvider";
 import {
   AppBar,
   Box,
@@ -6,14 +8,12 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-import "./globals.css";
-import React from "react";
+import { useRouter } from "next/navigation";
 import { SnackbarProvider } from "notistack";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { useRouter } from "next/navigation";
-import { AuthProvider } from "@/common/context/AuthProvider";
-import { OwnToolbar } from "@/common/components/general/OwnToolbar";
+import "./globals.css";
 
 export default function RootLayout({
   children,

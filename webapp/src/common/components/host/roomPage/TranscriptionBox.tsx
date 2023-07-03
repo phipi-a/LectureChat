@@ -1,29 +1,11 @@
 "use client";
 
-import {
-  DeleteOutline,
-  CloseFullscreenOutlined,
-  CheckOutlined,
-  Delete,
-} from "@mui/icons-material";
-import {
-  Box,
-  IconButton,
-  Typography,
-  Popover,
-  TextField,
-  Stack,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
+import { RoomContext } from "@/common/context/RoomProvider";
+import { CloseFullscreenOutlined, DeleteOutline } from "@mui/icons-material";
+import { Box, IconButton, Typography } from "@mui/material";
 import React from "react";
 import { DeleteAllDataDialog } from "./DeleteAllDataDialog";
 import { TranscriptionEditPopover } from "./TranscriptionEditPopover";
-import { RoomContext } from "@/common/context/RoomProvider";
 
 export function TranscriptionBox({
   enableDeleteAll = false,
@@ -154,13 +136,13 @@ export function TranscriptionBox({
                       });
                     }}
                     handleClose={handleClose}
-                    onTextConfirm={function(text: string): void {
+                    onTextConfirm={function (text: string): void {
                       const item = rawData.find((d) => d.id === anchorEl?.id);
                       item.data = editText;
                       updateDataItem(item);
                       handleClose();
                     }}
-                    onTextDelete={function(): void {
+                    onTextDelete={function (): void {
                       const item = rawData.find((d) => d.id === anchorEl?.id);
                       deleteDataItem(item);
                       handleClose();

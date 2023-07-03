@@ -1,19 +1,16 @@
 "use client";
 
+import { RoomContext } from "@/common/context/RoomProvider";
 import { supabase } from "@/common/modules/supabase/supabaseClient";
 import {
+  useDeleteData,
   useGetData,
   useInsertSelectData,
   useUpsertData,
-  useDeleteData,
 } from "@/lib/utils/supabase/supabaseData";
-import { MicOutlined, MicOff } from "@mui/icons-material";
-import { Box, IconButton, CircularProgress, Collapse } from "@mui/material";
-import React, { use, useContext, useEffect } from "react";
-import { useMutation } from "react-query";
-import { AudioRecorder } from "../transcription/AudioRecorder";
+import { Box, Collapse } from "@mui/material";
+import React, { useContext, useEffect } from "react";
 import { TranscriptionBox } from "./TranscriptionBox";
-import { RoomContext } from "@/common/context/RoomProvider";
 
 export function VideoTranscriptionBox({
   roomId,
@@ -27,10 +24,7 @@ export function VideoTranscriptionBox({
 
   const getInitData = useGetData(
     ["host", "room", roomId, "initData"],
-    supabase
-      .from("data")
-      .select("*")
-      .eq("room_id", roomId)
+    supabase.from("data").select("*").eq("room_id", roomId)
   );
   useEffect(() => {
     setSegments(getInitData.data?.data || []);

@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  CheckOutlined,
-  DeleteOutline,
-  PlayArrow,
-  VideoLibrary,
-} from "@mui/icons-material";
-import { Popover, Box, TextField, Stack, IconButton } from "@mui/material";
-import React from "react";
+import { CheckOutlined, DeleteOutline, PlayArrow } from "@mui/icons-material";
+import { Box, IconButton, Popover, Stack, TextField } from "@mui/material";
 
 export function TranscriptionEditPopover({
   editText,

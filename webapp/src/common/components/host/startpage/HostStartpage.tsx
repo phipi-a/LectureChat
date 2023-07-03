@@ -1,11 +1,11 @@
 "use client";
 
+import { AddOutlined } from "@mui/icons-material";
 import { Box, Button, Dialog, Divider, Typography } from "@mui/material";
-import { HostedRoomsList } from "./HostedRoomsList";
-import { CreateNewRoomDialog } from "../createNewRecordingRoom/CreateNewRoomDialog";
 import React, { Suspense } from "react";
 import { RoomsListFallback } from "../../general/RoomsListFallback";
-import { AddOutlined } from "@mui/icons-material";
+import { CreateNewRoomDialog } from "../createNewRecordingRoom/CreateNewRoomDialog";
+import { HostedRoomsList } from "./HostedRoomsList";
 
 export function HostStartpage() {
   const [openCreateRoom, setOpenCreateRoom] = React.useState(false);

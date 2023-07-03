@@ -1,6 +1,4 @@
 import { Avatar } from "@mui/material";
-import { SchoolOutlined } from "@mui/icons-material";
-import React, { useMemo } from "react";
 export function RoomAvatar({ roomTitle }: { roomTitle: string }) {
   const stringToColour = (str: string) => {
     let hash = 0;
