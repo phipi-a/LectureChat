@@ -133,10 +133,8 @@ export function AudioRecorder({
   }, []);
   function stopAudioRecording() {
     if (recordingMuteState) {
-      console.log("start recording");
       setRecording(true);
     } else {
-      console.log("stop recording");
       setRecording(false);
       cancelAnimationFrame(animationFrameId.current!);
       if (steamRef.current === null) {

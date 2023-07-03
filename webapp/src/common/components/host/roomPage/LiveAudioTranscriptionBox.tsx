@@ -9,33 +9,40 @@ import {
 } from "@/lib/utils/supabase/supabaseData";
 import { MicOutlined, MicOff } from "@mui/icons-material";
 import { Box, IconButton, CircularProgress, Collapse } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useMutation } from "react-query";
 import { AudioRecorder } from "../transcription/AudioRecorder";
 import { TranscriptionBox } from "./TranscriptionBox";
+import { RoomContext } from "@/common/context/RoomProvider";
 
 export function LiveAudioTranscriptionBox({
   roomId,
   whisperUrl,
-  page,
 }: {
   roomId: string;
   whisperUrl: string;
-  page: number;
 }) {
+  const { currentPage } = useContext(RoomContext);
   const [recordingState, setRecordingState] = React.useState<
     "recording" | "stoped"
   >("stoped");
-  const [microphoneActive, setMicrophoneActive] =
-    React.useState<boolean>(false);
+  const [microphoneActive, setMicrophoneActive] = React.useState<boolean>(
+    false
+  );
 
   const [transcriptBoxOpen, setTranscriptBoxOpen] = React.useState(false);
-
+  const { segments, setSegments } = useContext(RoomContext);
   const getInitData = useGetData(
     ["host", "room", roomId, "initData"],
-    supabase.from("data").select("*").eq("room_id", roomId)
+    supabase
+      .from("data")
+      .select("*")
+      .eq("room_id", roomId)
   );
-  const [data, setData] = React.useState<any[]>(getInitData.data?.data || []);
+  useEffect(() => {
+    setSegments(getInitData.data?.data || []);
+  }, [getInitData.data?.data]);
+
   const uploadAudio = useMutation({
     mutationFn: (audioBlob: Blob) => {
       const url = whisperUrl + "/asr?&output=json&language=en&";
@@ -53,23 +60,23 @@ export function LiveAudioTranscriptionBox({
         insertData.mutate({
           room_id: roomId,
           data: data.text,
-          page: page,
+          page: currentPage,
         });
       }
     },
   });
   const insertData = useInsertSelectData(supabase.from("data"), {
     onSuccess: (dataRes) => {
-      data.push(dataRes.data![0]);
-      setData([...data]);
+      segments!.push(dataRes.data![0]);
+      setSegments([...segments!]);
     },
   });
   const upsertData = useUpsertData(supabase.from("data"));
   const deleteData = useDeleteData(supabase.from("data"));
 
   function updateDataItem(item: any) {
-    data.find((d) => d.id === item.id).data = item.data;
-    setData([...data]);
+    segments!.find((d) => d.id === item.id)!.data = item.data;
+    setSegments([...segments!]);
     upsertData.mutate(item);
   }
   function deleteDataItem(item: any) {
@@ -77,7 +84,7 @@ export function LiveAudioTranscriptionBox({
       field: "id",
       value: item.id,
     });
-    setData([...data.filter((d) => d.id !== item.id)]);
+    setSegments([...segments!.filter((d) => d.id !== item.id)]);
   }
 
   function deleteAllData() {
@@ -85,7 +92,7 @@ export function LiveAudioTranscriptionBox({
       field: "room_id",
       value: roomId,
     });
-    setData([]);
+    setSegments([]);
   }
 
   if (getInitData.isLoading) {
@@ -101,10 +108,10 @@ export function LiveAudioTranscriptionBox({
       alignItems={transcriptBoxOpen ? "flex-start" : "center"}
     >
       <AudioRecorder
-        newAudioBlobCallback={function (blob: Blob): void {
+        newAudioBlobCallback={function(blob: Blob): void {
           uploadAudio.mutate(blob);
         }}
-        recordingStateCallback={function (state: "recording" | "stoped"): void {
+        recordingStateCallback={function(state: "recording" | "stoped"): void {
           setRecordingState(state);
         }}
         longPauseCallback={() => {}}
@@ -164,7 +171,7 @@ export function LiveAudioTranscriptionBox({
         <Collapse in={transcriptBoxOpen} collapsedSize={"2em"}>
           <TranscriptionBox
             editable={true}
-            rawData={data}
+            rawData={segments}
             updateDataItem={updateDataItem}
             deleteDataItem={deleteDataItem}
             deleteAllData={deleteAllData}

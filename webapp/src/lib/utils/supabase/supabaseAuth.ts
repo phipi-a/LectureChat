@@ -11,7 +11,7 @@ import {
   UseMutationResult,
   useMutation,
 } from "react-query";
-function addDefaultErrorHandling(
+export function addDefaultErrorHandling(
   useMutationOptions?: UseMutationOptions<any, any, any>,
   enqueueSnackbar?: (message: string, options?: any) => void
 ) {

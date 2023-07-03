@@ -23,9 +23,11 @@ import {
 import React from "react";
 import { DeleteAllDataDialog } from "./DeleteAllDataDialog";
 import { TranscriptionEditPopover } from "./TranscriptionEditPopover";
+import { RoomContext } from "@/common/context/RoomProvider";
 
 export function TranscriptionBox({
   enableDeleteAll = false,
+  videoMode = false,
   alignText = "right",
   editable = false,
   rawData,
@@ -38,6 +40,8 @@ export function TranscriptionBox({
   enableDeleteAll?: boolean;
   alignText?: "left" | "right";
   editable?: boolean;
+  videoMode?: boolean;
+  onGoToVideoClick?: (str: string) => void;
 
   rawData: any[];
   updateDataItem: (item: any) => void;
@@ -46,6 +50,7 @@ export function TranscriptionBox({
   transcriptBoxOpen: boolean;
   setTranscriptBoxOpen: (open: boolean) => void;
 }) {
+  const { setPlayPosition } = React.useContext(RoomContext);
   const [openDeleteAllDialog, setOpenDeleteAllDialog] = React.useState(false);
   const [editText, setEditText] = React.useState<string>("");
 
@@ -141,14 +146,21 @@ export function TranscriptionBox({
                     editText={editText}
                     setEditText={setEditText}
                     anchorEl={anchorEl}
+                    videoMode={videoMode}
+                    onGoTOVideoClick={() => {
+                      setPlayPosition({
+                        pos: rawData.find((d) => d.id === anchorEl?.id)
+                          .video_start_ms,
+                      });
+                    }}
                     handleClose={handleClose}
-                    onTextConfirm={function (text: string): void {
+                    onTextConfirm={function(text: string): void {
                       const item = rawData.find((d) => d.id === anchorEl?.id);
                       item.data = editText;
                       updateDataItem(item);
                       handleClose();
                     }}
-                    onTextDelete={function (): void {
+                    onTextDelete={function(): void {
                       const item = rawData.find((d) => d.id === anchorEl?.id);
                       deleteDataItem(item);
                       handleClose();

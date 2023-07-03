@@ -1,10 +1,11 @@
 "use client";
-import { Toolbar as Tb, Typography, Button, Link, Box } from "@mui/material";
+import { Box, Button, Toolbar as Tb, Typography } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import { useQueryClient } from "react-query";
 import { AuthContext } from "../../context/AuthProvider";
 import { supabase } from "../../modules/supabase/supabaseClient";
-import { useQueryClient } from "react-query";
 export function OwnToolbar() {
   const router = useRouter();
   const onTitleClick = () => {
@@ -23,8 +24,9 @@ export function OwnToolbar() {
       >
         <Link
           href="/"
-          sx={{
+          style={{
             textDecoration: "none",
+            color: "inherit",
           }}
         >
           <Box

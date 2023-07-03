@@ -8,6 +8,7 @@ import {
   GenericTable,
   GenericView,
 } from "@supabase/supabase-js/dist/module/lib/types";
+import { enqueueSnackbar } from "notistack";
 import {
   QueryKey,
   UseInfiniteQueryResult,
@@ -19,6 +20,7 @@ import {
   useMutation,
   useQuery,
 } from "react-query";
+import { addDefaultErrorHandling } from "./supabaseAuth";
 
 export async function awaitData<T>(query: PostgrestBuilder<T>) {
   const a = await query;
@@ -79,6 +81,10 @@ export function useUpsertData<
     Row
   >
 ): UseMutationResult<PostgrestSingleResponse<null>, PostgrestError, Row> {
+  useMutationOptions = addDefaultErrorHandling(
+    useMutationOptions,
+    enqueueSnackbar
+  );
   return useMutation<PostgrestSingleResponse<null>, PostgrestError, Row>(
     (data) => {
       return awaitData(query.upsert(data));
@@ -101,6 +107,10 @@ export function useInsertData<
   PostgrestError,
   Row | Row[]
 > {
+  useMutationOptions = addDefaultErrorHandling(
+    useMutationOptions,
+    enqueueSnackbar
+  );
   return useMutation<
     PostgrestSingleResponse<null>,
     PostgrestError,
@@ -122,6 +132,10 @@ export function useInsertSelectData<
     Row
   >
 ): UseMutationResult<PostgrestSingleResponse<RRow[]>, PostgrestError, Row> {
+  useMutationOptions = addDefaultErrorHandling(
+    useMutationOptions,
+    enqueueSnackbar
+  );
   return useMutation<PostgrestSingleResponse<RRow[]>, PostgrestError, Row>(
     (data) => {
       return awaitData(query.insert(data).select());
@@ -146,6 +160,10 @@ export function useDeleteData<
   PostgrestError,
   { field: ColumnName; value: any }
 > {
+  useMutationOptions = addDefaultErrorHandling(
+    useMutationOptions,
+    enqueueSnackbar
+  );
   return useMutation<
     PostgrestSingleResponse<null>,
     PostgrestError,

@@ -12,12 +12,16 @@ import { useDropzone } from "react-dropzone";
 
 export function DropPdfFileBox({
   onFileChanged,
+  disabled,
 }: {
   onFileChanged: (file: any) => void;
+  disabled?: boolean;
 }) {
   const [file, setFile] = useState<any>(null);
   const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles);
+    if (disabled) {
+      return;
+    }
     if (acceptedFiles.length > 1) {
       //snackbar
       enqueueSnackbar("Only one file is allowed", {
@@ -44,7 +48,7 @@ export function DropPdfFileBox({
 
     // Do something with the files
   }, []);
-  console.log(file);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
     <Box

@@ -2,7 +2,7 @@
 import { supabase } from "@/common/modules/supabase/supabaseClient";
 import { useAuthUpdatePassword } from "@/lib/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
-import { Box, TextField, Container, Typography } from "@mui/material";
+import { Box, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
@@ -43,7 +43,6 @@ export default function Home() {
       return;
     }
     if (password !== confirmPassword) {
-      console.log(password);
       setPasswordHelperText("Passwords do not match");
       setConfirmPasswordHelperText("Passwords do not match");
       return;

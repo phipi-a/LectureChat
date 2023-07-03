@@ -9,6 +9,30 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      bulletpoints: {
+        Row: {
+          bulletpoints: Json | null
+          created_at: string | null
+          id: number
+          room_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bulletpoints?: Json | null
+          created_at?: string | null
+          id?: number
+          room_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bulletpoints?: Json | null
+          created_at?: string | null
+          id?: number
+          room_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       data: {
         Row: {
           created_at: string | null
@@ -54,6 +78,7 @@ export interface Database {
           password: string
           title: string
           user_id: string
+          video_url: string | null
         }
         Insert: {
           created_at?: string | null
@@ -62,6 +87,7 @@ export interface Database {
           password: string
           title: string
           user_id: string
+          video_url?: string | null
         }
         Update: {
           created_at?: string | null
@@ -70,6 +96,7 @@ export interface Database {
           password?: string
           title?: string
           user_id?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -79,7 +106,9 @@ export interface Database {
           id: string
           password: string | null
           room_id: string
+          room_is_video_room: boolean
           room_title: string | null
+          room_video_url: string | null
           user_id: string
         }
         Insert: {
@@ -87,7 +116,9 @@ export interface Database {
           id?: string
           password?: string | null
           room_id: string
+          room_is_video_room?: boolean
           room_title?: string | null
+          room_video_url?: string | null
           user_id: string
         }
         Update: {
@@ -95,7 +126,9 @@ export interface Database {
           id?: string
           password?: string | null
           room_id?: string
+          room_is_video_room?: boolean
           room_title?: string | null
+          room_video_url?: string | null
           user_id?: string
         }
         Relationships: [

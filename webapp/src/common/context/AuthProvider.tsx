@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Session } from "@supabase/supabase-js";
-import { supabase } from "../modules/supabase/supabaseClient";
 import { CenteredLoading } from "../components/general/CenteredLoading";
+import { supabase } from "../modules/supabase/supabaseClient";
 export const AuthContext = React.createContext<{
   session: Session | null;
   loggedIn: boolean;
@@ -25,16 +25,14 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
       .then(({ data: { session } }) => {
         setSession(session);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
 
     supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setEvent(event);
     });
   }, []);
-  console.log(session);
+
   if (session === undefined) return <CenteredLoading />;
   else {
     return (

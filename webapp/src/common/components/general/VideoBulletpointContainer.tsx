@@ -1,91 +1,100 @@
 "use client";
 
-import { Box } from "@mui/material";
-import { Resizable } from "re-resizable";
-import React, { useEffect } from "react";
-import { useQuery } from "react-query";
-import { DropVideoFileBox } from "../host/createNewRecordingRoom/DropVideoFileBox";
+import { RoomContext } from "@/common/context/RoomProvider";
+import { Box, Typography } from "@mui/material";
+import Link from "next/link";
+import React, { useContext, useEffect } from "react";
 import ReactPlayer from "react-player";
+import { DropVideoFileBox } from "../host/createNewRecordingRoom/DropVideoFileBox";
+import { MainContainer } from "./MainContainer";
 import "./v.css";
 
-export function VideoBulletPointContainer({ roomId }: { roomId: string }) {
-  const [videoFile, setVideoFile] = React.useState<File | null>(null);
-
+export function VideoBulletPointContainer({
+  videoUrl,
+}: {
+  videoUrl: string | null;
+}) {
+  const { playPosition } = useContext(RoomContext);
+  const [duration, setDuration] = React.useState<number>(0);
+  const [playing, setPlaying] = React.useState<boolean>(false);
+  const player = React.useRef<ReactPlayer>(null);
   const [width, setWidth] = React.useState(500);
-  const [height, setHeight] = React.useState(500);
+  const [videoUrlFilePath, setVideoUrlFilePath] = React.useState<string>("");
+
+  useEffect(() => {
+    if (player.current && duration !== 0) {
+      player.current.seekTo(playPosition.pos / duration);
+      setPlaying(true);
+    }
+  }, [playPosition, player]);
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "nowrap",
-        height: "100%",
-        flexDirection: "row",
-      }}
-    >
-      <Box m={1}>
-        <DropVideoFileBox
-          onFileChanged={(file) => {
-            setVideoFile(file);
-          }}
-        />
-      </Box>
-      <Resizable
-        defaultSize={{
-          width: width,
-          height: "100%",
-        }}
-        maxWidth={"90%"}
-        minWidth={"10%"}
-        enable={{
-          top: false,
-          right: true,
-          bottom: false,
-          left: false,
-          topRight: false,
-          bottomRight: false,
-          bottomLeft: false,
-          topLeft: false,
-        }}
-        onResizeStop={(e, direction, ref, d) => {
-          setWidth(width + d.width);
-        }}
-        lockAspectRatio={true}
-      >
-        <Box height={"100%"}>
-          <div className="player-wrapper">
-            <ReactPlayer
-              className="react-player"
-              url="https://www.youtube.com/watch?v=ysz5S6PUM-U"
-              width="100%"
-              height="100%"
-            />
-          </div>
-        </Box>
-      </Resizable>
-      <Box
-        flex={1}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+    <MainContainer width={width} setWidth={setWidth}>
+      {ReactPlayer.canPlay(videoUrl!) || videoUrlFilePath !== "" ? (
+        <div className="player-wrapper">
+          <ReactPlayer
+            onError={(e) => {}}
+            onReady={() => {}}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+            }}
+            ref={player}
+            onDuration={(duration) => {
+              setDuration(duration);
+            }}
+            controls={true}
+            playing={playing}
+            onPlay={() => {
+              setPlaying(true);
+            }}
+            onPause={() => {
+              setPlaying(false);
+            }}
+            className="react-player"
+            url={videoUrlFilePath !== "" ? videoUrlFilePath : videoUrl!}
+            width="100%"
+            height="100%"
+          />
+        </div>
+      ) : (
         <Box
-          sx={{
-            height: "100%",
-            width: "3px",
-            backgroundColor: "#1565c0",
-            zIndex: 1,
-            transform: "translateX(-1px)",
-          }}
-        ></Box>
-        {/*
-          example bullet point*/}
-        <ul>
-          <li>Bulletpoint 1 example</li>
-          <li>Bulletpoint 2 example</li>
-          <li>Bulletpoint 3 example</li>
-        </ul>
-      </Box>
-    </Box>
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          flexDirection={"column"}
+        >
+          {videoUrl?.trim() !== "" ? (
+            <>
+              <Typography variant={"h6"}>Video not found</Typography>
+              <Typography variant={"body1"}>
+                The following link was provided:
+              </Typography>
+
+              <Link href={videoUrl!}>
+                <Typography
+                  variant={"body1"}
+                  textOverflow={"ellipsis"}
+                  maxWidth={"200px"}
+                  overflow={"hidden"}
+                  whiteSpace={"nowrap"}
+                >
+                  {videoUrl}
+                </Typography>
+              </Link>
+            </>
+          ) : (
+            <></>
+          )}
+          <DropVideoFileBox
+            onFileChanged={function (file: any): void {
+              const temporaryURL = URL.createObjectURL(file);
+
+              setVideoUrlFilePath(temporaryURL);
+            }}
+          />
+        </Box>
+      )}
+    </MainContainer>
   );
 }
