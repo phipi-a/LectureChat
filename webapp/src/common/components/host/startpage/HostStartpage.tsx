@@ -1,7 +1,8 @@
 "use client";
 
+import { PaperBox } from "@/common/elements/PaperBox";
 import { AddOutlined } from "@mui/icons-material";
-import { Box, Button, Dialog, Divider, Typography } from "@mui/material";
+import { Button, Dialog } from "@mui/material";
 import React, { Suspense } from "react";
 import { RoomsListFallback } from "../../general/RoomsListFallback";
 import { CreateNewRoomDialog } from "../createNewRecordingRoom/CreateNewRoomDialog";
@@ -10,10 +11,9 @@ import { HostedRoomsList } from "./HostedRoomsList";
 export function HostStartpage() {
   const [openCreateRoom, setOpenCreateRoom] = React.useState(false);
   return (
-    <Box height={"100%"} flexDirection={"column"} display={"flex"} m={1}>
-      <Box display={"flex"} alignItems={"center"}>
-        <Typography variant={"h6"}>Your Hosted Rooms</Typography>
-        <Box flexGrow={1} />
+    <PaperBox
+      title={"Your Hosted Rooms"}
+      button={
         <Button
           variant="outlined"
           color="primary"
@@ -27,10 +27,8 @@ export function HostStartpage() {
           Create Room
           <AddOutlined />
         </Button>
-      </Box>
-
-      <Divider variant="middle" />
-
+      }
+    >
       <Suspense fallback={<RoomsListFallback />}>
         <HostedRoomsList />
       </Suspense>
@@ -42,6 +40,6 @@ export function HostStartpage() {
       >
         <CreateNewRoomDialog />
       </Dialog>
-    </Box>
+    </PaperBox>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
+import { PaperBox } from "@/common/elements/PaperBox";
 import { MeetingRoomOutlined } from "@mui/icons-material";
-import { Box, Button, Dialog, Divider, Typography } from "@mui/material";
+import { Button, Dialog } from "@mui/material";
 import React, { Suspense } from "react";
 import { RoomsListFallback } from "../../general/RoomsListFallback";
 import { JoinRoomDialog } from "../joinRoom/JoinRoomDialog";
@@ -10,10 +11,9 @@ import { JoinedRoomsList } from "./JoinedRoomsList";
 export function StudentStartpage() {
   const [openJoinRoom, setOpenJoinRoom] = React.useState(false);
   return (
-    <Box height={"100%"} flexDirection={"column"} display={"flex"} m={1}>
-      <Box display={"flex"} alignItems={"center"}>
-        <Typography variant={"h6"}>Recently Joined Rooms</Typography>
-        <Box flexGrow={1} />
+    <PaperBox
+      title={"Recently Joined Rooms"}
+      button={
         <Button
           variant="outlined"
           color="primary"
@@ -27,10 +27,8 @@ export function StudentStartpage() {
           Join Room
           <MeetingRoomOutlined />
         </Button>
-      </Box>
-
-      <Divider variant="middle" />
-
+      }
+    >
       <Suspense fallback={<RoomsListFallback />}>
         <JoinedRoomsList />
       </Suspense>
@@ -42,6 +40,6 @@ export function StudentStartpage() {
       >
         <JoinRoomDialog />
       </Dialog>
-    </Box>
+    </PaperBox>
   );
 }

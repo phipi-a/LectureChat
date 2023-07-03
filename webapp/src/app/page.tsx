@@ -1,11 +1,12 @@
 "use client";
 import { HostStartpage } from "@/common/components/host/startpage/HostStartpage";
+import { PersonalizeStartPage } from "@/common/components/personalize/PersonalizeStartPage";
 import { StudentStartpage } from "@/common/components/student/startpage/StudentStartpage";
 import { AuthContext } from "@/common/context/AuthProvider";
 import { AppLogo } from "@/common/elements/AppLogo";
 import { startPageText } from "@/common/text/startpage";
 
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
@@ -55,33 +56,19 @@ export default function Home() {
             </Box>
           </Typography>
         </Box>
-
         <Box
-          flex={1}
-          overflow={"auto"}
           display={"flex"}
-          flexDirection={{ xs: "column", md: "row" }}
+          flexDirection={{
+            xs: "column",
+            md: "row-reverse",
+          }}
         >
-          <Box
-            maxHeight={"50%"}
-            overflow={"auto"}
-            width={{ xs: "100%", md: "50%" }}
-            m={2}
-          >
-            <Paper>
-              <StudentStartpage />
-            </Paper>
+          <Box flex={1}>
+            <HostStartpage />
           </Box>
-
-          <Box
-            overflow={"auto"}
-            flex={1}
-            width={{ xs: "100%", md: "50%" }}
-            m={2}
-          >
-            <Paper>
-              <HostStartpage />
-            </Paper>
+          <Box flex={1}>
+            <StudentStartpage />
+            <PersonalizeStartPage />
           </Box>
         </Box>
       </Container>
