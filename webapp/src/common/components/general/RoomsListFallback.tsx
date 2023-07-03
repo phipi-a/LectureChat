@@ -1,4 +1,5 @@
 "use client";
+import { SchoolOutlined } from "@mui/icons-material";
 import {
   Avatar,
   Container,
@@ -7,8 +8,6 @@ import {
   ListItemText,
   Skeleton,
 } from "@mui/material";
-import { SchoolOutlined } from "@mui/icons-material";
-import React from "react";
 export function RoomsListFallback() {
   return (
     <Container

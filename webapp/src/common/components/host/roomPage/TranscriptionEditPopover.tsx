@@ -1,12 +1,13 @@
 "use client";
 
-import { CheckOutlined, DeleteOutline } from "@mui/icons-material";
-import { Popover, Box, TextField, Stack, IconButton } from "@mui/material";
-import React from "react";
+import { CheckOutlined, DeleteOutline, PlayArrow } from "@mui/icons-material";
+import { Box, IconButton, Popover, Stack, TextField } from "@mui/material";
 
 export function TranscriptionEditPopover({
   editText,
   setEditText,
+  videoMode = false,
+  onGoTOVideoClick = () => {},
   anchorEl,
   handleClose,
   onTextConfirm,
@@ -15,6 +16,8 @@ export function TranscriptionEditPopover({
   editText: string;
   setEditText: (text: string) => void;
   anchorEl: HTMLButtonElement | null;
+  videoMode: boolean;
+  onGoTOVideoClick: () => void;
   handleClose: () => void;
   onTextConfirm: (text: string) => void;
   onTextDelete: () => void;
@@ -68,6 +71,17 @@ export function TranscriptionEditPopover({
           >
             <DeleteOutline color="error" />
           </IconButton>
+          {videoMode && (
+            <IconButton
+              aria-label="go to video"
+              component="span"
+              onClick={() => {
+                onGoTOVideoClick();
+              }}
+            >
+              <PlayArrow color="primary" />
+            </IconButton>
+          )}
         </Stack>
       </Box>
     </Popover>

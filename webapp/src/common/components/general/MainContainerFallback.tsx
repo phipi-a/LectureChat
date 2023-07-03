@@ -1,8 +1,7 @@
 import { Box, Skeleton } from "@mui/material";
 import { Resizable } from "re-resizable";
-import React from "react";
 
-export function PdfBulletpointContainerFallback() {
+export function MainContainerFallback() {
   return (
     <Box
       sx={{

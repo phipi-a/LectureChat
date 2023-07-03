@@ -3,12 +3,10 @@ import { HostStartpage } from "@/common/components/host/startpage/HostStartpage"
 import { StudentStartpage } from "@/common/components/student/startpage/StudentStartpage";
 import { AuthContext } from "@/common/context/AuthProvider";
 import { AppLogo } from "@/common/elements/AppLogo";
-import { supabase } from "@/common/modules/supabase/supabaseClient";
 import { startPageText } from "@/common/text/startpage";
 
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { useContext } from "react";
 
 export default function Home() {

@@ -1,22 +1,21 @@
 "use client";
 
+import { useUpsertData } from "@/lib/utils/supabase/supabaseData";
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
-  TextField,
   Container,
-  Typography,
-  DialogTitle,
   DialogContent,
+  DialogTitle,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React from "react";
-import { useContext } from "react";
-import { AuthContext } from "../../../context/AuthProvider";
-import { supabase } from "../../../modules/supabase/supabaseClient";
-import CheckAuth from "../../../modules/auth/CheckAuth";
-import { LoadingButton } from "@mui/lab";
-import { useUpsertData } from "@/lib/utils/supabase/supabaseData";
+import React, { useContext } from "react";
 import { useQueryClient } from "react-query";
+import { AuthContext } from "../../../context/AuthProvider";
+import CheckAuth from "../../../modules/auth/CheckAuth";
+import { supabase } from "../../../modules/supabase/supabaseClient";
 
 export function JoinRoomDialog() {
   const router = useRouter();
@@ -28,15 +27,11 @@ export function JoinRoomDialog() {
   const joinRoom = useUpsertData(supabase.from("room_access"), {
     onSuccess: (value) => {
       if (value.error) {
-        console.log(value.error);
         if (value.error.message.includes("duplicate key")) {
           router.push(`/student/room/${roomId.current}`);
           return;
         }
-        if (
-          value.error.message.includes("invalid input") ||
-          value.error.message.includes("security policy")
-        ) {
+        if (value.error.message.includes("password")) {
           setPasswordHelperText("Invalid password or room id");
           setRoomIdHelperText("Invalid password or room id");
           return;

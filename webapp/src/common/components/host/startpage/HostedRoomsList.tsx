@@ -1,19 +1,18 @@
 "use client";
-import { useGetData } from "@/lib/utils/supabase/supabaseData";
-import { supabase } from "../../../modules/supabase/supabaseClient";
+import { AuthContext } from "@/common/context/AuthProvider";
 import { timeConverter } from "@/lib/utils/helper";
-import { SchoolOutlined } from "@mui/icons-material";
+import { useGetData } from "@/lib/utils/supabase/supabaseData";
+import { MicOutlined, OndemandVideoOutlined } from "@mui/icons-material";
 import {
-  Typography,
   Container,
-  ListItemButton,
   ListItemAvatar,
-  Avatar,
+  ListItemButton,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "@/common/context/AuthProvider";
 import { useContext } from "react";
+import { supabase } from "../../../modules/supabase/supabaseClient";
 import { RoomAvatar } from "../../general/RoomAvatar";
 
 export function HostedRoomsList() {
@@ -51,6 +50,7 @@ export function HostedRoomsList() {
               </Typography>
             }
           />
+          {room.is_video_room ? <OndemandVideoOutlined /> : <MicOutlined />}
         </ListItemButton>
       ))}
     </Container>

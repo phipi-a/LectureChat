@@ -12,11 +12,16 @@ import { useDropzone } from "react-dropzone";
 
 export function DropVideoFileBox({
   onFileChanged,
+  disabled,
 }: {
   onFileChanged: (file: any) => void;
+  disabled?: boolean;
 }) {
   const [file, setFile] = useState<any>(null);
   const onDrop = useCallback((acceptedFiles: any) => {
+    if (disabled) {
+      return;
+    }
     if (acceptedFiles.length > 1) {
       //snackbar
       enqueueSnackbar("Only one file is allowed", {
@@ -53,6 +58,7 @@ export function DropVideoFileBox({
         width: "100px",
         border: "1px dashed ",
         padding: 1,
+
         ":hover": {
           color: "primary.main",
           borderColor: "primary.main",

@@ -1,11 +1,11 @@
 "use client";
 
 import {
+  Settings,
   VisibilityOffOutlined,
   VisibilityOutlined,
-  Settings,
 } from "@mui/icons-material";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import { HostRoomSettingsDialog } from "./HostRoomSettingsDialog";
 

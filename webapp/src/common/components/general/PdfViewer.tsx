@@ -3,36 +3,27 @@ import React, { useCallback, useEffect } from "react";
 
 import { pdfjs } from "react-pdf";
 
+import { RoomContext } from "@/common/context/RoomProvider";
+import { Box, InputAdornment, TextField } from "@mui/material";
+import { Document, Page } from "react-pdf";
 import "react-pdf/dist/cjs/Page/AnnotationLayer.css";
-import "react-pdf/dist/cjs/Page/TextLayer.css";
 import "react-pdf/dist/cjs/Page/PageCanvas";
 import "react-pdf/dist/cjs/Page/PageSVG";
-import { Document, Page } from "react-pdf";
-import { Box, InputAdornment, Skeleton, TextField } from "@mui/material";
+import "react-pdf/dist/cjs/Page/TextLayer.css";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
   import.meta.url
 ).toString();
-export function PdfViewer({
-  file,
-  width,
-  page,
-  setPage,
-}: {
-  file: any;
-  width: number;
-  page: number;
-  setPage: (page: number) => void;
-}) {
+export function PdfViewer({ file, width }: { file: any; width: number }) {
+  const { currentPage, setCurrentPage } = React.useContext(RoomContext);
   const [numPages, setNumPages] = React.useState(0);
 
-  const pageRef = React.useRef(page);
+  const pageRef = React.useRef(currentPage);
   useEffect(() => {
-    pageRef.current = page;
-  }, [page]);
+    pageRef.current = currentPage;
+  }, [currentPage]);
   function onDocumentLoadSuccess(pdf: { numPages: any }) {
-    console.log("Document", pdf);
     setNumPages(pdf.numPages);
   }
 
@@ -40,13 +31,13 @@ export function PdfViewer({
     if (event.key === "ArrowRight") {
       if (pageRef.current === numPages) return;
       pageRef.current = pageRef.current + 1;
-      setPage(pageRef.current);
+      setCurrentPage(pageRef.current);
     }
     if (event.key === "ArrowLeft") {
       if (pageRef.current === 1) return;
 
       pageRef.current = pageRef.current - 1;
-      setPage(pageRef.current);
+      setCurrentPage(pageRef.current);
     }
   }, []);
 
@@ -78,9 +69,9 @@ export function PdfViewer({
         }}
         variant="standard"
         size="small"
-        value={page}
+        value={currentPage}
         onChange={(e) => {
-          setPage(parseInt(e.target.value));
+          setCurrentPage(parseInt(e.target.value));
         }}
       ></TextField>
       <Box
@@ -101,7 +92,7 @@ export function PdfViewer({
           onLoadError={console.error}
         >
           <Page
-            pageNumber={page}
+            pageNumber={currentPage}
             renderAnnotationLayer={false}
             width={width}
             onLoadError={console.error}

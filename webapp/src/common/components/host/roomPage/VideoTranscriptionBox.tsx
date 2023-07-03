@@ -1,48 +1,48 @@
 "use client";
 
+import { RoomContext } from "@/common/context/RoomProvider";
 import { supabase } from "@/common/modules/supabase/supabaseClient";
 import {
+  useDeleteData,
   useGetData,
   useInsertSelectData,
   useUpsertData,
-  useDeleteData,
 } from "@/lib/utils/supabase/supabaseData";
-import { MicOutlined, MicOff } from "@mui/icons-material";
-import { Box, IconButton, CircularProgress, Collapse } from "@mui/material";
-import React, { useEffect } from "react";
-import { useMutation } from "react-query";
-import { AudioRecorder } from "../transcription/AudioRecorder";
+import { Box, Collapse } from "@mui/material";
+import React, { useContext, useEffect } from "react";
 import { TranscriptionBox } from "./TranscriptionBox";
 
 export function VideoTranscriptionBox({
   roomId,
   whisperUrl,
-  page,
 }: {
   roomId: string;
   whisperUrl: string;
-  page: number;
 }) {
   const [transcriptBoxOpen, setTranscriptBoxOpen] = React.useState(false);
+  const { segments, setSegments } = useContext(RoomContext);
 
   const getInitData = useGetData(
     ["host", "room", roomId, "initData"],
     supabase.from("data").select("*").eq("room_id", roomId)
   );
-  const [data, setData] = React.useState<any[]>(getInitData.data?.data || []);
+  useEffect(() => {
+    setSegments(getInitData.data?.data || []);
+  }, [getInitData.data?.data]);
+  //const [data, setData] = React.useState<any[]>(getInitData.data?.data || []);
 
   const insertData = useInsertSelectData(supabase.from("data"), {
     onSuccess: (dataRes) => {
-      data.push(dataRes.data![0]);
-      setData([...data]);
+      segments!.push(dataRes.data![0]);
+      setSegments([...segments!]);
     },
   });
   const upsertData = useUpsertData(supabase.from("data"));
   const deleteData = useDeleteData(supabase.from("data"));
 
   function updateDataItem(item: any) {
-    data.find((d) => d.id === item.id).data = item.data;
-    setData([...data]);
+    segments!.find((d) => d.id === item.id)!.data = item.data;
+    setSegments([...segments!]);
     upsertData.mutate(item);
   }
   function deleteDataItem(item: any) {
@@ -50,8 +50,9 @@ export function VideoTranscriptionBox({
       field: "id",
       value: item.id,
     });
-    setData([...data.filter((d) => d.id !== item.id)]);
+    setSegments([...segments!.filter((d) => d.id !== item.id)]);
   }
+  //wait for segments are set
 
   return (
     <Box
@@ -80,7 +81,8 @@ export function VideoTranscriptionBox({
             editable={true}
             enableDeleteAll={false}
             alignText="left"
-            rawData={data}
+            rawData={segments!}
+            videoMode={true}
             updateDataItem={updateDataItem}
             deleteDataItem={deleteDataItem}
             deleteAllData={() => {}}

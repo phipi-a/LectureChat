@@ -1,31 +1,15 @@
 "use client";
 
-import {
-  DeleteOutline,
-  CloseFullscreenOutlined,
-  CheckOutlined,
-  Delete,
-} from "@mui/icons-material";
-import {
-  Box,
-  IconButton,
-  Typography,
-  Popover,
-  TextField,
-  Stack,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
+import { RoomContext } from "@/common/context/RoomProvider";
+import { CloseFullscreenOutlined, DeleteOutline } from "@mui/icons-material";
+import { Box, IconButton, Typography } from "@mui/material";
 import React from "react";
 import { DeleteAllDataDialog } from "./DeleteAllDataDialog";
 import { TranscriptionEditPopover } from "./TranscriptionEditPopover";
 
 export function TranscriptionBox({
   enableDeleteAll = false,
+  videoMode = false,
   alignText = "right",
   editable = false,
   rawData,
@@ -38,6 +22,8 @@ export function TranscriptionBox({
   enableDeleteAll?: boolean;
   alignText?: "left" | "right";
   editable?: boolean;
+  videoMode?: boolean;
+  onGoToVideoClick?: (str: string) => void;
 
   rawData: any[];
   updateDataItem: (item: any) => void;
@@ -46,6 +32,7 @@ export function TranscriptionBox({
   transcriptBoxOpen: boolean;
   setTranscriptBoxOpen: (open: boolean) => void;
 }) {
+  const { setPlayPosition } = React.useContext(RoomContext);
   const [openDeleteAllDialog, setOpenDeleteAllDialog] = React.useState(false);
   const [editText, setEditText] = React.useState<string>("");
 
@@ -141,6 +128,13 @@ export function TranscriptionBox({
                     editText={editText}
                     setEditText={setEditText}
                     anchorEl={anchorEl}
+                    videoMode={videoMode}
+                    onGoTOVideoClick={() => {
+                      setPlayPosition({
+                        pos: rawData.find((d) => d.id === anchorEl?.id)
+                          .video_start_ms,
+                      });
+                    }}
                     handleClose={handleClose}
                     onTextConfirm={function (text: string): void {
                       const item = rawData.find((d) => d.id === anchorEl?.id);

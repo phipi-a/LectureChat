@@ -8,13 +8,13 @@ import {
 } from "@/lib/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
 import {
-  Box,
-  TextField,
-  Container,
-  Typography,
   Alert,
   AlertTitle,
+  Box,
   Collapse,
+  Container,
+  TextField,
+  Typography,
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -45,7 +45,6 @@ export default function Home() {
   );
   const handleForgotPassword = (event: any) => {
     const email = emailRef.current.value;
-    console.log(email);
 
     setEmailHelperText("");
     if (email.length === 0) {
@@ -75,7 +74,6 @@ export default function Home() {
     enqueueSnackbar,
     {
       onSuccess(data) {
-        console.log(data);
         if (data.error) {
           if (data.error.message === "Invalid login credentials") {
             setEmailHelperText("Invalid email or password");
@@ -91,7 +89,6 @@ export default function Home() {
           if (data.data.session.user.email_confirmed_at == null) {
             setEmailNotVerified(true);
           } else {
-            console.log("Signed in!");
             router.replace("/");
           }
         } else {

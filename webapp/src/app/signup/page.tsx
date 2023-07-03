@@ -3,7 +3,7 @@ import { supabase } from "@/common/modules/supabase/supabaseClient";
 import { validateEmail } from "@/lib/utils/helper";
 import { useAuthSignUpWithPassword } from "@/lib/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
-import { Box, TextField, Container, Typography } from "@mui/material";
+import { Box, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
@@ -21,7 +21,6 @@ export default function Home() {
     {
       onSuccess(data) {
         if (data.error) {
-          console.log("erro", data);
         } else {
           if (data.data?.user?.identities?.length === 0) {
             setEmailHelperText("Email already in use!");
@@ -42,13 +41,13 @@ export default function Home() {
     const email = data.get("email") as string;
     const password = data.get("password") as string;
     const confirmPassword = data.get("confirmPassword") as string;
-    console.log(email, password);
+
     supabase.auth.signOut();
     event.preventDefault();
     setPasswordHelperText("");
     setEmailHelperText("");
     setConfirmPasswordHelperText("");
-    console.log(email, password, confirmPassword);
+
     if (email.length === 0) {
       setEmailHelperText("Email cannot be empty");
       return;
@@ -66,7 +65,6 @@ export default function Home() {
       return;
     }
     if (password !== confirmPassword) {
-      console.log(password);
       setPasswordHelperText("Passwords do not match");
       setConfirmPasswordHelperText("Passwords do not match");
       return;

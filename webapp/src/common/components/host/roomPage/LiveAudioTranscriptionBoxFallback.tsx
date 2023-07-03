@@ -1,12 +1,4 @@
-import { MicOutlined, MicOff } from "@mui/icons-material";
-import {
-  Box,
-  IconButton,
-  CircularProgress,
-  Collapse,
-  Skeleton,
-} from "@mui/material";
-import React from "react";
+import { Box, Collapse, Skeleton } from "@mui/material";
 
 export function LiveAudioTranscriptionBoxFallback() {
   return (

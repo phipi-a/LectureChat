@@ -1,21 +1,19 @@
 "use client";
-import { useGetData } from "@/lib/utils/supabase/supabaseData";
-import { supabase } from "../../../modules/supabase/supabaseClient";
+import { RoomAvatar } from "@/common/components/general/RoomAvatar";
 import { timeConverter } from "@/lib/utils/helper";
-import { SchoolOutlined } from "@mui/icons-material";
+import { useGetData } from "@/lib/utils/supabase/supabaseData";
+import { MicOutlined, OndemandVideoOutlined } from "@mui/icons-material";
 import {
   Container,
-  ListItemButton,
   ListItemAvatar,
-  Avatar,
+  ListItemButton,
   ListItemText,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { Suspense, useContext } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../../../context/AuthProvider";
-import Room from "@/app/host/room/[roomId]/page";
-import { RoomAvatar } from "@/common/components/general/RoomAvatar";
+import { supabase } from "../../../modules/supabase/supabaseClient";
 
 export function JoinedRoomsList() {
   const { userId } = useContext(AuthContext);
@@ -26,7 +24,7 @@ export function JoinedRoomsList() {
       suspense: true,
     }
   );
-  console.log(room_access);
+
   const router = useRouter();
   return (
     <>
@@ -55,6 +53,11 @@ export function JoinedRoomsList() {
                 </Typography>
               }
             />
+            {room.room_is_video_room ? (
+              <OndemandVideoOutlined />
+            ) : (
+              <MicOutlined />
+            )}
           </ListItemButton>
         ))}
       </Container>

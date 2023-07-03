@@ -1,11 +1,11 @@
 "use client";
 
+import { MeetingRoomOutlined } from "@mui/icons-material";
 import { Box, Button, Dialog, Divider, Typography } from "@mui/material";
 import React, { Suspense } from "react";
+import { RoomsListFallback } from "../../general/RoomsListFallback";
 import { JoinRoomDialog } from "../joinRoom/JoinRoomDialog";
 import { JoinedRoomsList } from "./JoinedRoomsList";
-import { RoomsListFallback } from "../../general/RoomsListFallback";
-import { MeetingRoom, MeetingRoomOutlined } from "@mui/icons-material";
 
 export function StudentStartpage() {
   const [openJoinRoom, setOpenJoinRoom] = React.useState(false);
