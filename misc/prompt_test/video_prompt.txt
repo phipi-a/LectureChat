@@ -1,0 +1,29 @@
+You get a list of sorted subtitles from a video. Extract the main ideas from the video into bullet points. Create a bullet point for each interesting information together with a longer explanation. For the longer explanation use markdown format including headlines, bullet points, code, tables, quotes from the video, emojis etc.
+The input has the following format:
+
+[
+  {
+    "data": "Content of the subtitle",
+    "video_start_ms": 500,
+    "video_end_ms": 1000
+  }
+]
+
+Return a json array of bullet points with a short and long summary and the time in the video where they occur in JSON format. For example:
+
+[
+  {
+    "data": "short Bullet point 1",
+   "longer_explanation_markdown": "
+      ### Part 1
+      Explanation....
+ 
+     - Example 1
+     - Example 2
+   ",
+    "video_start_ms": 0,
+    "video_end_ms": 1000
+  }
+]
+
+You only can respond with json format.

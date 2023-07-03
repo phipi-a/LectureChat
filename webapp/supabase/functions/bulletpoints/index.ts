@@ -104,6 +104,8 @@ async function queryChatGpt(
   });
   const data = await response.json();
 
+  // TODO: handle quota error
+
   const rawResponse = data.choices[0]["message"]["content"];
 
   return JSON.parse(rawResponse);
@@ -130,7 +132,6 @@ function createBulletPoints(rawData: Data[], openaiApiKey: string) {
   );
 
   const isVideo = rawData[0].video_start_ms !== null;
-  console.log("isVideo", isVideo);
 
   const [prompt, system_prompt] = isVideo
     ? videoToBulletPoints(sorted)
