@@ -15,17 +15,15 @@ interface BulletPoint {
 export function BulletPoints({ roomId }: { roomId: string }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const queryClient = useQueryClient();
-  const [isGenerating, setIsGenerating] = React.useState<boolean>(false);
 
   const mutation = useMutation({
-    mutationFn: async (isGenerating: boolean) => {
-      if (isGenerating) return;
+    mutationFn: async () => {
       console.log("Creating new bullet points");
 
       return supabase.functions.invoke("bulletpoints", {
         body: {
           roomId,
-          openaiKey: "API_KEY_HERE",
+          openaiKey: "ADD_API_KEY",
         },
       });
     },
@@ -47,9 +45,8 @@ export function BulletPoints({ roomId }: { roomId: string }) {
         // If no bullet points are found
         if (data?.error) {
           // Create new bullet points
-          console.log("here", mutation.isLoading);
           if (mutation.isLoading) return;
-          mutation.mutate(isGenerating);
+          mutation.mutate();
         } else if (data?.data && typeof data.data.bulletpoints === "string") {
           const parsed = JSON.parse(data.data.bulletpoints);
           queryClient.setQueryData(["bulletpoints", roomId], {
@@ -59,6 +56,10 @@ export function BulletPoints({ roomId }: { roomId: string }) {
       },
     }
   );
+
+  const bulletPointsParsed = bulletPoints.data as
+    | { bulletpoints: BulletPoint[] }
+    | undefined;
 
   // If segments change, check if the last segment is on a new page
   const prevSegmentLength = React.useRef(segments.length || 0);
@@ -74,24 +75,21 @@ export function BulletPoints({ roomId }: { roomId: string }) {
 
       if (lastSegment.page !== secondLastSegment.page) {
         console.log("BulletPoints: page changed", lastSegment.page);
-        mutation.mutate(isGenerating);
-        setIsGenerating(true);
+        mutation.mutate();
         prevSegmentLength.current = segments.length;
       }
     }
   }, [segments.length]);
 
-  // TODO: fix TS error
-  React.useEffect(() => {
-    if (!bulletPoints.data?.bulletpoints) {
-      setIsGenerating(true);
-    } else {
-      setIsGenerating(false);
-    }
-  }, [bulletPoints.data?.bulletpoints]);
+  const bulletPointList = bulletPointsParsed?.bulletpoints || [];
+  const loading = bulletPoints.isLoading || mutation.isLoading;
 
-  const bulletPointList =
-    (bulletPoints.data?.bulletpoints as BulletPoint[] | undefined) || [];
+  const json = segments.map((row) => ({
+    text: row.data,
+    video_start_ms: row.video_start_ms,
+    video_end_ms: row.video_end_ms,
+  }));
+  console.log("json", json);
 
   return (
     <div>
@@ -99,12 +97,11 @@ export function BulletPoints({ roomId }: { roomId: string }) {
         <Button
           variant="outlined"
           onClick={() => {
-            mutation.mutate(isGenerating);
-            setIsGenerating(true);
+            mutation.mutate();
           }}
-          disabled={isGenerating}
+          disabled={loading}
         >
-          {isGenerating ? (
+          {loading ? (
             <>
               Updating
               <CircularProgress
