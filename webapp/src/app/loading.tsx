@@ -1,5 +1,6 @@
 "use client";
-import { CenteredLoading } from "@/common/components/general/CenteredLoading";
+
+import CenteredLoading from "@/common/Components/CenteredLoading";
 
 export default function loading() {
   return <CenteredLoading />;

@@ -1,11 +1,11 @@
 "use client";
-import { supabase } from "@/common/modules/supabase/supabaseClient";
-import { validateEmail } from "@/lib/utils/helper";
+import { supabase } from "@/common/Modules/SupabaseClient";
+import { validateEmail } from "@/utils/helper";
 import {
   useAuthSendPasswordResetEmail,
   useAuthSignInWithPassword,
   useAuthSignUpWithPassword,
-} from "@/lib/utils/supabase/supabaseAuth";
+} from "@/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
 import {
   Alert,

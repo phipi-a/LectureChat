@@ -1,7 +1,7 @@
 "use client";
-import { supabase } from "@/common/modules/supabase/supabaseClient";
-import { validateEmail } from "@/lib/utils/helper";
-import { useAuthSignUpWithPassword } from "@/lib/utils/supabase/supabaseAuth";
+import { supabase } from "@/common/Modules/SupabaseClient";
+import { validateEmail } from "@/utils/helper";
+import { useAuthSignUpWithPassword } from "@/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
 import { Box, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";

@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+module.exports = withBundleAnalyzer({
   webpack: (config, options) => {
     // Important: return the modified config
     config.module.rules.push({
@@ -13,6 +16,4 @@ const nextConfig = {
       transform: "@mui/icons-material/{{member}}",
     },
   },
-};
-
-module.exports = nextConfig;
+});

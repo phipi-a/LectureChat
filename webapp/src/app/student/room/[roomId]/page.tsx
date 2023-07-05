@@ -1,17 +1,32 @@
 "use client";
-import { MainContainerFallback } from "@/common/components/general/MainContainerFallback";
-import { PdfBulletpointContainer } from "@/common/components/general/PdfBulletpointContainer";
-import { VideoBulletPointContainer } from "@/common/components/general/VideoBulletpointContainer";
-import { RoomContext } from "@/common/context/RoomProvider";
-import { supabase } from "@/common/modules/supabase/supabaseClient";
-import { useGetData } from "@/lib/utils/supabase/supabaseData";
+import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
+import { supabase } from "@/common/Modules/SupabaseClient";
+import { useGetData } from "@/utils/supabase/supabaseData";
 import { Box, Typography } from "@mui/material";
-import React, { Suspense, useContext, useEffect, useRef } from "react";
-export default function Room({ params }: { params: { roomId: string } }) {
-  const [whisperUrl, setWhisperUrl] = React.useState<string>(
-    "http://localhost:9000"
-  );
+import { useContext, useEffect, useRef } from "react";
 
+import dynamic from "next/dynamic";
+
+const PdfBulletpointContainerSuspense = dynamic(
+  () =>
+    import(
+      "@/common/Components/MediaBulletPointContainers/PdfBulletpointContainer"
+    ),
+  {
+    ssr: false,
+  }
+);
+const VideoBulletPointContainerSuspense = dynamic(
+  () =>
+    import(
+      "@/common/Components/MediaBulletPointContainers/VideoBulletPointContainer"
+    ),
+  {
+    ssr: false,
+  }
+);
+
+export default function Room({ params }: { params: { roomId: string } }) {
   const getRoom = useGetData(
     [params.roomId, "room"],
     supabase
@@ -93,12 +108,10 @@ export default function Room({ params }: { params: { roomId: string } }) {
             {room.room_title} ({room.room_id})
           </Typography>
           <Box display={"flex"} flex={1} overflow={"auto"}>
-            <Suspense fallback={<MainContainerFallback />}>
-              <VideoBulletPointContainer
-                videoUrl={room!.room_video_url}
-                roomId={params.roomId}
-              />
-            </Suspense>
+            <VideoBulletPointContainerSuspense
+              videoUrl={room!.room_video_url}
+              roomId={params.roomId}
+            />
           </Box>
         </Box>
       ) : (
@@ -112,9 +125,7 @@ export default function Room({ params }: { params: { roomId: string } }) {
             {room?.room_title} ({room?.room_id})
           </Typography>
 
-          <Suspense fallback={<MainContainerFallback />}>
-            <PdfBulletpointContainer roomId={params.roomId} />
-          </Suspense>
+          <PdfBulletpointContainerSuspense roomId={params.roomId} />
         </Box>
       )}
     </>

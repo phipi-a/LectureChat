@@ -1,6 +1,9 @@
 "use client";
-import { OwnToolbar } from "@/common/components/general/OwnToolbar";
-import { AuthProvider } from "@/common/context/AuthProvider";
+import CenteredLoading from "@/common/Components/CenteredLoading";
+import OwnToolbar from "@/common/Components/OwnToolbar";
+import { AuthProvider } from "@/common/Contexts/AuthContext/AuthProvider";
+import { LoadingContext } from "@/common/Contexts/LoadingContext/LoadingContext";
+import { LoadingProvider } from "@/common/Contexts/LoadingContext/LoadingProvider";
 import {
   AppBar,
   Box,
@@ -8,12 +11,18 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { SnackbarProvider } from "notistack";
-import React from "react";
+import React, { useContext } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import "./globals.css";
+
+function InnerLoadingLayout({ children }: { children: any }) {
+  const { loading } = useContext(LoadingContext);
+  if (loading) {
+    return <CenteredLoading />;
+  }
+  return children;
+}
 
 export default function RootLayout({
   children,
@@ -34,7 +43,6 @@ export default function RootLayout({
       mode: "dark",
     },
   });
-  const router = useRouter();
 
   return (
     <html
@@ -60,26 +68,30 @@ export default function RootLayout({
           <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
             <QueryClientProvider client={queryClient}>
               <ReactQueryDevtools initialIsOpen={false} />
-              <AuthProvider>
-                <AppBar position="sticky">
-                  <OwnToolbar />
-                </AppBar>
-                <Box
-                  sx={{
-                    my: 2,
-                    m: 0,
-                    p: 2,
-                    maxWidth: "undefined",
-                    height: "100%",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "auto",
-                  }}
-                >
-                  {children}
-                </Box>
-              </AuthProvider>
+              <LoadingProvider>
+                <AuthProvider>
+                  <AppBar position="sticky">
+                    <OwnToolbar />
+                  </AppBar>
+                  <InnerLoadingLayout>
+                    <Box
+                      sx={{
+                        my: 2,
+                        m: 0,
+                        p: 2,
+                        maxWidth: "undefined",
+                        height: "100%",
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "auto",
+                      }}
+                    >
+                      {children}
+                    </Box>
+                  </InnerLoadingLayout>
+                </AuthProvider>
+              </LoadingProvider>
             </QueryClientProvider>
           </SnackbarProvider>
         </ThemeProvider>

@@ -1,20 +1,58 @@
 "use client";
-import { MainContainerFallback } from "@/common/components/general/MainContainerFallback";
-import { PdfBulletpointContainer } from "@/common/components/general/PdfBulletpointContainer";
-import { VideoBulletPointContainer } from "@/common/components/general/VideoBulletpointContainer";
-import { HostRoomHeader } from "@/common/components/host/roomPage/HostRoomHeader";
-import { LiveAudioTranscriptionBox } from "@/common/components/host/roomPage/LiveAudioTranscriptionBox";
-import { LiveAudioTranscriptionBoxFallback } from "@/common/components/host/roomPage/LiveAudioTranscriptionBoxFallback";
-import { VideoTranscriptionBox } from "@/common/components/host/roomPage/VideoTranscriptionBox";
-import { supabase } from "@/common/modules/supabase/supabaseClient";
-import { useGetData } from "@/lib/utils/supabase/supabaseData";
-import { Box } from "@mui/material";
-import React, { Suspense } from "react";
+import { supabase } from "@/common/Modules/SupabaseClient";
+import { useGetData } from "@/utils/supabase/supabaseData";
+import Box from "@mui/material/Box";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import "./page.css";
+
+const HostRoomHeader = dynamic(
+  () => import("@/common/PageComponents/host/room/[roomId]/_page/Header"),
+  {
+    ssr: false,
+  }
+);
+
+const PdfBulletpointContainerSuspense = dynamic(
+  () =>
+    import(
+      "@/common/Components/MediaBulletPointContainers/PdfBulletpointContainer"
+    ),
+  {
+    ssr: false,
+  }
+);
+const VideoBulletPointContainerSuspense = dynamic(
+  () =>
+    import(
+      "@/common/Components/MediaBulletPointContainers/VideoBulletPointContainer"
+    ),
+  {
+    ssr: false,
+  }
+);
+
+const LiveAudioTranscriptionBoxSuspense = dynamic(
+  () =>
+    import(
+      "@/common/PageComponents/host/room/[roomId]/_page/LiveAudioTranscriptionBox"
+    ),
+  {
+    ssr: false,
+  }
+);
+const VideoTranscriptionBoxSuspense = dynamic(
+  () =>
+    import(
+      "@/common/PageComponents/host/room/[roomId]/_page/VideoTranscriptionBox"
+    ),
+  {
+    ssr: false,
+  }
+);
+
 export default function Room({ params }: { params: { roomId: string } }) {
-  const [whisperUrl, setWhisperUrl] = React.useState<string>(
-    "http://localhost:9000"
-  );
+  const [whisperUrl, setWhisperUrl] = useState<string>("http://localhost:9000");
 
   const getRoom = useGetData(
     ["host", "room", params.roomId],
@@ -26,60 +64,32 @@ export default function Room({ params }: { params: { roomId: string } }) {
 
   return (
     <>
-      {room?.is_video_room ? (
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          flex={1}
-          overflow={"auto"}
-        >
-          <HostRoomHeader
-            title={room!.title}
-            roomId={room!.id}
-            password={room!.password}
-            whisperUrl={whisperUrl}
-            setWhisperUrl={setWhisperUrl}
-          />
-          <Suspense fallback={<></>}>
-            <VideoTranscriptionBox
+      <Box display={"flex"} flexDirection={"column"} flex={1} overflow={"auto"}>
+        <HostRoomHeader
+          title={room!.title}
+          roomId={room!.id}
+          password={room!.password}
+          whisperUrl={whisperUrl}
+          setWhisperUrl={setWhisperUrl}
+        />
+        {room?.is_video_room ? (
+          <>
+            <VideoTranscriptionBoxSuspense roomId={params.roomId} />
+            <VideoBulletPointContainerSuspense
+              videoUrl={room!.video_url}
+              roomId={params.roomId}
+            />
+          </>
+        ) : (
+          <>
+            <LiveAudioTranscriptionBoxSuspense
               roomId={params.roomId}
               whisperUrl={whisperUrl}
             />
-          </Suspense>
-          <Box display={"flex"} flex={1} overflow={"auto"}>
-            <Suspense fallback={<MainContainerFallback />}>
-              <VideoBulletPointContainer
-                videoUrl={room!.video_url}
-                roomId={params.roomId}
-              />
-            </Suspense>
-          </Box>
-        </Box>
-      ) : (
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          flex={1}
-          overflow={"auto"}
-        >
-          <HostRoomHeader
-            title={room!.title}
-            roomId={room!.id}
-            password={room!.password}
-            whisperUrl={whisperUrl}
-            setWhisperUrl={setWhisperUrl}
-          />
-          <Suspense fallback={<LiveAudioTranscriptionBoxFallback />}>
-            <LiveAudioTranscriptionBox
-              roomId={params.roomId}
-              whisperUrl={whisperUrl}
-            />
-          </Suspense>
-          <Suspense fallback={<MainContainerFallback />}>
-            <PdfBulletpointContainer roomId={params.roomId} />
-          </Suspense>
-        </Box>
-      )}
+            <PdfBulletpointContainerSuspense roomId={params.roomId} />
+          </>
+        )}
+      </Box>
     </>
   );
 }

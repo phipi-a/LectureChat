@@ -1,11 +1,11 @@
 "use client";
-import { HostStartpage } from "@/common/components/host/startpage/HostStartpage";
-import { PersonalizeStartPage } from "@/common/components/personalize/PersonalizeStartPage";
-import { StudentStartpage } from "@/common/components/student/startpage/StudentStartpage";
-import { AuthContext } from "@/common/context/AuthProvider";
-import { AppLogo } from "@/common/elements/AppLogo";
-import { startPageText } from "@/common/text/startpage";
 
+import AppLogo from "@/common/Components/AppLogo";
+import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
+import HostedRoomsBox from "@/common/PageComponents/_page/HostetRoomsBox";
+import JoinRoomsBox from "@/common/PageComponents/_page/JoinRoomsBox";
+import PersonalizeBox from "@/common/PageComponents/_page/PersonalizeBox";
+import { startPageText } from "@/common/Texts/startpage";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
@@ -16,6 +16,7 @@ export default function Home() {
   if (event === "PASSWORD_RECOVERY") {
     return router.replace("/update-password");
   }
+
   if (loggedIn) {
     return (
       <Container>
@@ -64,11 +65,11 @@ export default function Home() {
           }}
         >
           <Box flex={1}>
-            <HostStartpage />
+            <HostedRoomsBox />
           </Box>
           <Box flex={1}>
-            <StudentStartpage />
-            <PersonalizeStartPage />
+            <JoinRoomsBox />
+            <PersonalizeBox />
           </Box>
         </Box>
       </Container>

@@ -1,9 +1,9 @@
 "use client";
 
-import { LearningDifficulties } from "@/common/components/personalize/LearningDifficulties";
-import { LearningStyle } from "@/common/components/personalize/LearningStyle";
-import { PersonalInformation } from "@/common/components/personalize/PersonalInformation";
-import { Save } from "@/common/components/personalize/Save";
+import LearningDifficulties from "@/common/PageComponents/personalize/page/LearningDifficulties";
+import LearningStyle from "@/common/PageComponents/personalize/page/LearningStyle";
+import PersonalInformation from "@/common/PageComponents/personalize/page/PersonalInformation";
+import Save from "@mui/icons-material/Save";
 import {
   Box,
   Button,
