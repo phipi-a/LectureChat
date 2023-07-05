@@ -1,6 +1,7 @@
 "use client";
 import RoomAvatar from "@/common/Components/RoomAvatar";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { timeConverter } from "@/utils/helper";
 import { useGetData } from "@/utils/supabase/supabaseData";
@@ -12,7 +13,6 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
 export function HostedRoomsList() {
@@ -21,7 +21,7 @@ export function HostedRoomsList() {
     ["host_rooms", userId],
     supabase.from("room").select("*").order("created_at", { ascending: false })
   );
-  const router = useRouter();
+  const router = useOwnRouter();
 
   return (
     <Container

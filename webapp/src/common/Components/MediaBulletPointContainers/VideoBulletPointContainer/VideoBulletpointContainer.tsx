@@ -1,8 +1,8 @@
 "use client";
 
+import Link from "@/common/Components/Link";
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { Box, Typography } from "@mui/material";
-import Link from "next/link";
 import React, { useContext, useEffect } from "react";
 import ReactPlayer from "react-player";
 import DropFileBox from "../../DropFileBox";

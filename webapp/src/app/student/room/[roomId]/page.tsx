@@ -38,18 +38,20 @@ export default function Room({ params }: { params: { roomId: string } }) {
 
   const room = getRoom.data?.data!;
 
+  const { segments, setSegments } = useContext(RoomContext);
   const getInitData = useGetData(
     [room.room_id, "initData"],
     supabase!
       .from("data")
       .select("*")
       .eq("room_id", room.room_id)
-      .order("created_at", { ascending: true })
+      .order("created_at", { ascending: true }),
+    {
+      onSuccess: (data) => {
+        setSegments(data.data || []);
+      },
+    }
   );
-  useEffect(() => {
-    setSegments(getInitData.data?.data || []);
-  }, [getInitData.data?.data]);
-  const { segments, setSegments } = useContext(RoomContext);
   const dataRef = useRef(segments);
   useEffect(() => {
     dataRef.current = segments;
@@ -93,7 +95,10 @@ export default function Room({ params }: { params: { roomId: string } }) {
         }
       )
       .subscribe();
-  }, [supabase, room.room_id]);
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [room.room_id, setSegments]);
 
   return (
     <>

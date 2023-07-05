@@ -1,9 +1,10 @@
+"use client";
 import React from "react";
 
 export const LoadingContext = React.createContext<{
-  loading: boolean;
-  setLoading: (loading: boolean) => void;
+  isPending: boolean;
+  startTransition: (callback: () => void) => void;
 }>({
-  loading: false,
-  setLoading: () => {},
+  isPending: false,
+  startTransition: () => {},
 });

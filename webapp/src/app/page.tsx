@@ -2,16 +2,16 @@
 
 import AppLogo from "@/common/Components/AppLogo";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import HostedRoomsBox from "@/common/PageComponents/_page/HostetRoomsBox";
 import JoinRoomsBox from "@/common/PageComponents/_page/JoinRoomsBox";
 import PersonalizeBox from "@/common/PageComponents/_page/PersonalizeBox";
 import { startPageText } from "@/common/Texts/startpage";
 import { Box, Button, Container, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
 export default function Home() {
-  const router = useRouter();
+  const router = useOwnRouter();
   const { loggedIn, event } = useContext(AuthContext);
   if (event === "PASSWORD_RECOVERY") {
     return router.replace("/update-password");

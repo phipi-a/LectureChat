@@ -1,5 +1,6 @@
 import DropFileBox from "@/common/Components/DropFileBox";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import {
   useDeleteData,
   useInsertData,
@@ -16,7 +17,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useContext, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
@@ -41,7 +41,7 @@ export function CreateNewRoomDialog({}) {
   const transcriptionRef = useRef<Segment[]>([]);
   const { userId } = useContext(AuthContext);
   const roomId = useRef("");
-  const router = useRouter();
+  const router = useOwnRouter();
   const queryClient = useQueryClient();
 
   const deleteRoom = useDeleteData(supabase.from("room"));

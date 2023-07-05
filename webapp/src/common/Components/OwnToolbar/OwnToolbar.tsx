@@ -1,24 +1,17 @@
 "use client";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
-import { LoadingContext } from "@/common/Contexts/LoadingContext/LoadingContext";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { Box, Button, Toolbar as Tb, Typography } from "@mui/material";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect, useTransition } from "react";
+import { useContext } from "react";
 import { useQueryClient } from "react-query";
 import { supabase } from "../../Modules/SupabaseClient";
+import Link from "../Link";
 export function OwnToolbar() {
-  const router = useRouter();
   const { loggedIn } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
-  const { loading, setLoading } = useContext(LoadingContext);
-  const [isPending, startTransition] = useTransition();
-  useEffect(() => {
-    setLoading(isPending);
-  }, [isPending]);
+  const router = useOwnRouter();
 
-  console.log(isPending);
   return (
     <Tb>
       <Typography
@@ -66,7 +59,7 @@ export function OwnToolbar() {
           display: loggedIn ? "none" : "block",
         }}
         onClick={() => {
-          startTransition(() => router.push("/signin"));
+          router.push("/signin");
         }}
       >
         Sign in

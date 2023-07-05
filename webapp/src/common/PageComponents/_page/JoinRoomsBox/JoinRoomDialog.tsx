@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { useUpsertData } from "@/utils/supabase/supabaseData";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -11,14 +12,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
 import { useQueryClient } from "react-query";
 import CheckAuth from "../../../Components/CheckAuth/CheckAuth";
 import { supabase } from "../../../Modules/SupabaseClient";
 
 export function JoinRoomDialog() {
-  const router = useRouter();
+  const router = useOwnRouter();
   const { userId } = useContext(AuthContext);
   const [passwordHelperText, setPasswordHelperText] = React.useState("");
   const [roomIdHelperText, setRoomIdHelperText] = React.useState("");

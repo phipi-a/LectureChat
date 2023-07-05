@@ -1,6 +1,7 @@
 "use client";
 import RoomAvatar from "@/common/Components/RoomAvatar";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { timeConverter } from "@/utils/helper";
 import { useGetData } from "@/utils/supabase/supabaseData";
 import { MicOutlined, OndemandVideoOutlined } from "@mui/icons-material";
@@ -11,7 +12,6 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { supabase } from "../../../Modules/SupabaseClient";
 
@@ -25,7 +25,7 @@ export function JoinedRoomsList() {
     }
   );
 
-  const router = useRouter();
+  const router = useOwnRouter();
   return (
     <>
       <Container

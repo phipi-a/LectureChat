@@ -20,50 +20,53 @@ export function DropFileBox({
   disabled?: boolean;
 }) {
   const [file, setFile] = useState<any>(null);
-  const onDrop = useCallback((acceptedFiles: any) => {
-    if (disabled) {
-      return;
-    }
-    if (acceptedFiles.length > 1) {
-      //snackbar
-      enqueueSnackbar("Only one file is allowed", {
-        variant: "error",
-      });
-      return;
-    }
-    if (acceptedFiles.length === 0) {
-      //snackbar
-      enqueueSnackbar("No file was uploaded", {
-        variant: "error",
-      });
-      return;
-    }
-    if (dataType === "video") {
-      if (
-        acceptedFiles[0].type !== "video/mp4" &&
-        acceptedFiles[0].type !== "video/webm"
-      ) {
+  const onDrop = useCallback(
+    (acceptedFiles: any) => {
+      if (disabled) {
+        return;
+      }
+      if (acceptedFiles.length > 1) {
         //snackbar
-        enqueueSnackbar("Only Video files are allowed", {
+        enqueueSnackbar("Only one file is allowed", {
           variant: "error",
         });
         return;
       }
-    }
-    if (dataType === "pdf") {
-      if (acceptedFiles[0].type !== "application/pdf") {
+      if (acceptedFiles.length === 0) {
         //snackbar
-        enqueueSnackbar("Only PDF files are allowed", {
+        enqueueSnackbar("No file was uploaded", {
           variant: "error",
         });
         return;
       }
-    }
-    setFile(acceptedFiles[0]);
-    onFileChanged(acceptedFiles[0]);
+      if (dataType === "video") {
+        if (
+          acceptedFiles[0].type !== "video/mp4" &&
+          acceptedFiles[0].type !== "video/webm"
+        ) {
+          //snackbar
+          enqueueSnackbar("Only Video files are allowed", {
+            variant: "error",
+          });
+          return;
+        }
+      }
+      if (dataType === "pdf") {
+        if (acceptedFiles[0].type !== "application/pdf") {
+          //snackbar
+          enqueueSnackbar("Only PDF files are allowed", {
+            variant: "error",
+          });
+          return;
+        }
+      }
+      setFile(acceptedFiles[0]);
+      onFileChanged(acceptedFiles[0]);
 
-    // Do something with the files
-  }, []);
+      // Do something with the files
+    },
+    [dataType, disabled, onFileChanged, setFile]
+  );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
     <Box

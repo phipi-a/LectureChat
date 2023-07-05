@@ -1,18 +1,18 @@
 "use client";
+import Link from "@/common/Components/Link";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { validateEmail } from "@/utils/helper";
 import { useAuthSignUpWithPassword } from "@/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
 import { Box, Container, TextField, Typography } from "@mui/material";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import React from "react";
 
 export default function Home() {
   const [emailHelperText, setEmailHelperText] = React.useState("");
   const [passwordHelperText, setPasswordHelperText] = React.useState("");
-  const router = useRouter();
+  const router = useOwnRouter();
   const [confirmPasswordHelperText, setConfirmPasswordHelperText] =
     React.useState("");
   const createAccount = useAuthSignUpWithPassword(

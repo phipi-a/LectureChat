@@ -1,4 +1,6 @@
 "use client";
+import Link from "@/common/Components/Link";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { validateEmail } from "@/utils/helper";
 import {
@@ -16,13 +18,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useRef, useState } from "react";
 
 export default function Home() {
-  const router = useRouter();
+  const router = useOwnRouter();
   const [emailHelperText, setEmailHelperText] = useState("");
   const [passwordHelperText, setPasswordHelperText] = useState("");
   const [emailNotVerified, setEmailNotVerified] = useState(false);

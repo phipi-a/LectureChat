@@ -1,12 +1,12 @@
 "use client";
 import ColoredCircularProgress from "@/common/Components/ColoredCircularProgress";
 import PaperBox from "@/common/Components/PaperBox";
+import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { AutoAwesomeOutlined } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
 
 export function PersonalizeBox() {
-  const router = useRouter();
+  const router = useOwnRouter();
   return (
     <PaperBox
       title={"Personalize your experience"}
