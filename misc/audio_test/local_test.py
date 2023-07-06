@@ -4,7 +4,7 @@ import requests
 url = "http://localhost:9000/asr?lang=en&output=json"
 
 # This is the path to the audio file
-path = "/home/hjal/uni/DesignEd/LectureChat/misc/audio_test/conv.mp4"
+path = "/home/hjal/uni/DesignEd/LectureChat/misc/audio_test/example_lecture.mp4"
 
 # This is the request
 files = {'audio_file': open(path, 'rb')}
