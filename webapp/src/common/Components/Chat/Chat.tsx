@@ -1,3 +1,4 @@
+import { supabase } from "@/common/Modules/SupabaseClient";
 import { Send } from "@mui/icons-material";
 import {
   Box,
@@ -7,31 +8,67 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import React, { useEffect } from "react";
+import { useMutation } from "react-query";
+import { TypingIndicator } from "../TypingIndicator/TypingIndicator";
 
-export function Chat({ display }: { display: boolean }) {
-  const messages = [
+export function Chat({
+  init_bulletpoint,
+  roomId,
+}: {
+  init_bulletpoint: string | null;
+  roomId: string;
+}) {
+  const [currentMessage, setCurrentMessage] = React.useState("");
+  const [messages, setMessages] = React.useState([
     {
-      text: "Hey!",
-      ai: true,
+      role: "user",
+      content: "i want to talk about: " + init_bulletpoint,
     },
-    {
-      text: "How are you?",
-      ai: true,
+  ]);
+  useEffect(() => {
+    if (init_bulletpoint === null) {
+      return;
+    }
+    setMessages([
+      {
+        role: "user",
+        content: "i want to talk about: " + init_bulletpoint,
+      },
+    ]);
+  }, [init_bulletpoint]);
+
+  const mutation = useMutation({
+    mutationFn: async (newMessage: any) => {
+      console.log("Creating new bullet points");
+      messages.push(newMessage);
+      setMessages([...messages]);
+      setCurrentMessage("");
+      console.log("messages", messages);
+
+      return supabase.functions.invoke("chat", {
+        body: {
+          room_id: roomId,
+          messages: messages,
+        },
+      });
     },
-    {
-      text: "I am fine, thanks",
-      ai: false,
+    onSuccess: (res) => {
+      console.log("Chat: onSuccess", res);
+      if (res.data === null) return;
+      messages.push(res.data);
+      setMessages([...messages]);
     },
-    {
-      text: "What about youd sflkd sfdask jdökasfjld ksj dskfjdsklfjdas?",
-      ai: false,
-    },
-    {
-      text: "Awesome!",
-      ai: true,
-    },
-  ];
-  if (!display) {
+  });
+  let loadingArray: { role: string; content: string }[] = [];
+  if (mutation.isLoading) {
+    loadingArray.push({
+      role: "assistant",
+      content: "Loading...",
+    });
+  }
+
+  if (init_bulletpoint === null) {
     return <></>;
   }
   return (
@@ -44,15 +81,17 @@ export function Chat({ display }: { display: boolean }) {
       borderColor={"primary.main"}
       borderRadius={"10px"}
       flexDirection={"column"}
+      overflow={"auto"}
     >
       <Box flex={1} m={1}>
         <List>
-          {messages.map((message, index) => (
+          {messages.concat(loadingArray).map((message, index) => (
             <Box
-              key={message.text}
+              key={message.content}
               sx={{
                 display: "flex",
-                justifyContent: message.ai ? "flex-start" : "flex-end",
+                justifyContent:
+                  message.role === "assistant" ? "flex-start" : "flex-end",
                 mb: 1,
               }}
             >
@@ -60,17 +99,22 @@ export function Chat({ display }: { display: boolean }) {
                 variant="outlined"
                 sx={{
                   p: 1.3,
-                  borderRadius: message.ai
-                    ? "20px 20px 20px 5px"
-                    : "20px 20px 5px 20px",
+                  borderRadius:
+                    message.role === "assistant"
+                      ? "20px 20px 20px 5px"
+                      : "20px 20px 5px 20px",
                 }}
               >
-                <Typography
-                  variant="body2"
-                  textAlign={message.ai ? "left" : "right"}
-                >
-                  {message.text}
-                </Typography>
+                {message.content === "Loading..." ? (
+                  <TypingIndicator />
+                ) : (
+                  <Typography
+                    variant="body2"
+                    textAlign={message.role === "assistant" ? "left" : "right"}
+                  >
+                    {message.content}
+                  </Typography>
+                )}
               </Paper>
             </Box>
           ))}
@@ -79,13 +123,27 @@ export function Chat({ display }: { display: boolean }) {
       <TextField
         variant="standard"
         fullWidth
+        value={currentMessage}
+        onChange={(e) => {
+          setCurrentMessage(e.target.value);
+        }}
         label=""
         sx={{
           p: 1,
         }}
         InputProps={{
           endAdornment: (
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                if (mutation.isLoading) return;
+                const newMessage = {
+                  role: "user",
+                  content: currentMessage,
+                };
+
+                mutation.mutate(newMessage);
+              }}
+            >
               <Send color="primary" />
             </IconButton>
           ),

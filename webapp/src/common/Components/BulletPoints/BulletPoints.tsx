@@ -2,6 +2,7 @@ import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { useGetData } from "@/utils/supabase/supabaseData";
+import { Chat } from "@mui/icons-material";
 import { Button, CircularProgress } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
@@ -13,7 +14,13 @@ interface BulletPoint {
   video_end_ms: number | undefined;
 }
 
-export function BulletPoints({ roomId }: { roomId: string }) {
+export function BulletPoints({
+  roomId,
+  onOpenChat,
+}: {
+  roomId: string;
+  onOpenChat: (a: string) => void;
+}) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const queryClient = useQueryClient();
   const { userData } = useContext(AuthContext);
@@ -126,6 +133,12 @@ export function BulletPoints({ roomId }: { roomId: string }) {
             }}
           >
             {bulletPoint.bullet_point}
+            <Chat
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenChat(bulletPoint.bullet_point);
+              }}
+            />
           </li>
         ))}
       </ul>

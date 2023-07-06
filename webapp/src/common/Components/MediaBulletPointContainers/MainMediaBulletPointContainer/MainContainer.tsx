@@ -26,6 +26,10 @@ export function MainContainer({
 }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const [currentTab, setCurrentTab] = React.useState("1");
+  const [chatInitBulletpoint, setChatInitBulletpoint] = React.useState<
+    string | null
+  >(null);
+
   return (
     <Box
       overflow={"auto"}
@@ -107,7 +111,12 @@ export function MainContainer({
 
             <Box flex={1} alignItems={"center"} overflow={"auto"}>
               <TabPanel value="1">
-                <BulletPoints roomId={roomId} />
+                <BulletPoints
+                  roomId={roomId}
+                  onOpenChat={(a) => {
+                    setChatInitBulletpoint(a);
+                  }}
+                />
               </TabPanel>
               <TabPanel value="2">
                 <Typography variant="body2">
@@ -138,7 +147,7 @@ export function MainContainer({
             </Box>
           </Box>
         </Box>
-        <Chat display={false} />
+        <Chat init_bulletpoint={chatInitBulletpoint} roomId={roomId} />
       </TabContext>
     </Box>
   );
