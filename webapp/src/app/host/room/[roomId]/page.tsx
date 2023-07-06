@@ -69,8 +69,6 @@ export default function Room({ params }: { params: { roomId: string } }) {
           title={room!.title}
           roomId={room!.id}
           password={room!.password}
-          whisperUrl={whisperUrl}
-          setWhisperUrl={setWhisperUrl}
         />
         {room?.is_video_room ? (
           <>
@@ -82,10 +80,7 @@ export default function Room({ params }: { params: { roomId: string } }) {
           </>
         ) : (
           <>
-            <LiveAudioTranscriptionBoxSuspense
-              roomId={params.roomId}
-              whisperUrl={whisperUrl}
-            />
+            <LiveAudioTranscriptionBoxSuspense roomId={params.roomId} />
             <PdfBulletpointContainerSuspense roomId={params.roomId} />
           </>
         )}

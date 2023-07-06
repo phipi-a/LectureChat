@@ -1,14 +1,16 @@
 "use client";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { useOwnRouter } from "@/common/Modules/OwnRouter";
-import { Box, Button, Toolbar as Tb, Typography } from "@mui/material";
-import { useContext } from "react";
+import { Settings } from "@mui/icons-material";
+import { Box, Button, Dialog, Toolbar as Tb, Typography } from "@mui/material";
+import React, { useContext } from "react";
 import { useQueryClient } from "react-query";
-import { supabase } from "../../Modules/SupabaseClient";
 import Link from "../Link";
+import { SettingsDialog } from "./SettingsDialog";
 export function OwnToolbar() {
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn, session } = useContext(AuthContext);
   const queryClient = useQueryClient();
+  const [openSettings, setOpenSettings] = React.useState(false);
 
   const router = useOwnRouter();
 
@@ -41,17 +43,20 @@ export function OwnToolbar() {
           </Box>
         </Link>
       </Typography>
+      <Box sx={{ flexGrow: 1 }} />
+
       <Button
         sx={{
-          marginLeft: "auto",
           display: loggedIn ? "block" : "none",
         }}
         onClick={() => {
-          supabase.auth.signOut().then(() => {});
-          queryClient.invalidateQueries();
+          setOpenSettings(true);
         }}
       >
-        Sign out
+        <Box flexWrap={"nowrap"} flexDirection={"row"} display={"flex"}>
+          <Typography marginX={2}>{session?.user?.email}</Typography>
+          <Settings />
+        </Box>
       </Button>
       <Button
         sx={{
@@ -64,6 +69,17 @@ export function OwnToolbar() {
       >
         Sign in
       </Button>
+      <Dialog
+        open={openSettings}
+        onClose={() => setOpenSettings(false)}
+        fullWidth
+      >
+        <SettingsDialog
+          closeDialog={() => {
+            setOpenSettings(false);
+          }}
+        />
+      </Dialog>
     </Tb>
   );
 }
