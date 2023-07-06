@@ -1,29 +1,9 @@
-// Example input:
-// [
-//   {
-//     "created_at": "2023-07-02T15:35:04.694722+00:00",
-//     "data": " and hello justice",
-//     "room_id": "287832",
-//     "id": "d2f61f4f-170c-4d61-a20e-72498461fa33",
-//     "page": 1,
-//     "video_start_ms": null,
-//     "video_end_ms": null
-//   },
-//   {
-//     "created_at": "2023-07-02T21:07:28.443243+00:00",
-//     "data": " And what is the lecture about the Principle component analysis?",
-//     "room_id": "287832",
-//     "id": "3764d530-9630-48f8-8c62-4953e966c155",
-//     "page": 1,
-//     "video_start_ms": null,
-//     "video_end_ms": null
-//   }
-// ]
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { openai } from "https://deno.land/x/openai/mod.ts";
 import { corsHeaders } from "../_shared/cors.ts";
+import videoPrompt from "../_shared/prompts/video_prompt.ts";
+import pdfPrompt from "../_shared/prompts/video_prompt.ts";
+import { UnauthorizedError, BadRequestError } from "../_shared/errors.ts";
 
 interface Data {
   created_at: number;
@@ -35,62 +15,24 @@ interface Data {
   video_end_ms: number | null;
 }
 
-const videoPrompt = `You get a list of sorted subtitles from a video. Extract the main ideas from the video into bullet points.
-The input has the following format:
+const format_segments_video = (acc, curr) => {
+  return `${acc}${curr.data} [${curr.video_start_ms}] `;
+};
 
-[
-  {
-    "data": "Content of the subtitle",
-    "video_start_ms": null,
-    "video_end_ms": null
-  }
-]
-
-Return a json array of bullet points and the time in the video where they occur. For example:
-
-[
-  {
-    "data": "Bullet point 1",
-    "video_start_ms": 0,
-    "video_end_ms": 1000
-  }
-]
-
-You only can respond with json format.
-`;
-
-const pdfPrompt = `You get a list of sorted subtitles from a lecture with the page of the current slide of the presentation. Extract the main ideas into bullet points.
-The input has the following format:
-
-[
-  {
-    "data": "Content of subtitle",
-    "page": 1
-  }
-]
-
-Return a json array of bullet points and the time in the video where they occur. For example:
-
-[
-  {
-    "data": "hello justice",
-    "page": "1-2"
-  }
-]
-
-You only can respond with json format.
-`;
-
-const model_name = "gpt-3.5-turbo-0613";
+const format_segments_pdf = (acc, curr) => {
+  return `${acc}${curr.data} [${curr.page}] `;
+};
 
 async function queryChatGpt(
   prompt: string,
   system_prompt: string,
   openaiApiKey: string
 ) {
+  const numTokens = (prompt.length + system_prompt.length) / 4; // Token are roughly 4 characters long
+
   const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
     body: JSON.stringify({
-      model: model_name,
+      model: numTokens < 3000 ? "gpt-3.5-turbo" : "gpt-3.5-turbo-16k",
       messages: [
         { role: "system", content: system_prompt },
         { role: "user", content: prompt },
@@ -102,31 +44,30 @@ async function queryChatGpt(
     },
     method: "POST",
   });
+
   const data = await response.json();
 
-  // TODO: handle quota error
-
-  const rawResponse = data.choices[0]["message"]["content"];
-
-  return JSON.parse(rawResponse);
+  try {
+    const rawResponse = data.choices[0]["message"]["content"];
+    return JSON.parse(rawResponse);
+  } catch (e) {
+    console.error("Response", data);
+    console.error("Error", e);
+    throw new BadRequestError(
+      "Invalid response from OpenAI. Possible rate limit, insufficient tokens or invalid API key."
+    );
+  }
 }
 
 function pdfToBulletPoints(rawData: Data[]) {
-  const json = rawData.map((row) => ({ text: row.data, page: row.page }));
-  return [JSON.stringify(json), pdfPrompt];
+  return [rawData.reduce(format_segments_pdf, ""), videoPrompt];
 }
 
 function videoToBulletPoints(rawData: Data[]) {
-  const json = rawData.map((row) => ({
-    text: row.data,
-    video_start_ms: row.video_start_ms,
-    video_end_ms: row.video_end_ms,
-  }));
-
-  return [JSON.stringify(json), videoPrompt];
+  return [rawData.reduce(format_segments_video, ""), videoPrompt];
 }
 
-function createBulletPoints(rawData: Data[], openaiApiKey: string) {
+async function createBulletPoints(rawData: Data[], openaiApiKey: string) {
   const sorted = rawData.sort(
     (a: Data, b: Data) => a.created_at - b.created_at
   );
@@ -137,14 +78,8 @@ function createBulletPoints(rawData: Data[], openaiApiKey: string) {
     ? videoToBulletPoints(sorted)
     : pdfToBulletPoints(sorted);
 
-  return queryChatGpt(prompt, system_prompt, openaiApiKey);
-}
-
-class UnauthorizedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "UnauthorizedError";
-  }
+  const bulletpoints = await queryChatGpt(prompt, system_prompt, openaiApiKey);
+  return bulletpoints.map((bulletpoint, idx) => ({ ...bulletpoint, id: idx }));
 }
 
 serve(async (req) => {
@@ -230,6 +165,13 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("e", e);
+
+    if (e instanceof BadRequestError) {
+      return new Response(e.message, {
+        headers: corsHeaders,
+        status: 400,
+      });
+    }
 
     if (e instanceof UnauthorizedError) {
       return new Response("Unauthorized", {
