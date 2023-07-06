@@ -31,7 +31,20 @@ export interface Database {
           room_id?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "bulletpoints_room_id_fkey"
+            columns: ["room_id"]
+            referencedRelation: "room"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bulletpoints_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       data: {
         Row: {
@@ -98,7 +111,14 @@ export interface Database {
           user_id?: string
           video_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "room_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       room_access: {
         Row: {
@@ -146,26 +166,43 @@ export interface Database {
           }
         ]
       }
-      test: {
+      user: {
         Row: {
           created_at: string | null
-          id: number
+          id: string
+          openai_key: string | null
+          whisper_url: string | null
         }
         Insert: {
           created_at?: string | null
-          id?: number
+          id: string
+          openai_key?: string | null
+          whisper_url?: string | null
         }
         Update: {
           created_at?: string | null
-          id?: number
+          id?: string
+          openai_key?: string | null
+          whisper_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      deleteUser: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       password: {
         Args: Record<PropertyKey, never>
         Returns: string
