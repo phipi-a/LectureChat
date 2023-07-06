@@ -1,29 +1,19 @@
 "use client";
 
-import {
-  Settings,
-  VisibilityOffOutlined,
-  VisibilityOutlined,
-} from "@mui/icons-material";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
-import { HostRoomSettingsDialog } from "./HostRoomSettingsDialog";
 
 export function HostRoomHeader({
   title,
   roomId,
   password,
-  whisperUrl,
-  setWhisperUrl,
 }: {
   title: string;
   roomId: string;
   password: string;
-  whisperUrl: string;
-  setWhisperUrl: (value: string) => void;
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [openSettingsDialog, setOpenSettingsDialog] = useState(false);
   return (
     <Box display={"flex"} flexDirection={"row"} alignItems={"center"} mb={4}>
       <Typography variant={"h4"} flex={1}>
@@ -69,20 +59,6 @@ export function HostRoomHeader({
           }}
         />
       </IconButton>
-      <IconButton
-        size="small"
-        onClick={() => {
-          setOpenSettingsDialog(true);
-        }}
-      >
-        <Settings />
-      </IconButton>
-      <HostRoomSettingsDialog
-        openSettingsDialog={openSettingsDialog}
-        setOpenSettingsDialog={setOpenSettingsDialog}
-        whisperUrl={whisperUrl}
-        setWhisperUrl={setWhisperUrl}
-      />
     </Box>
   );
 }

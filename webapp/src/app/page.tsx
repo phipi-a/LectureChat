@@ -1,18 +1,20 @@
 "use client";
 
 import AppLogo from "@/common/Components/AppLogo";
+import PaperBox from "@/common/Components/PaperBox";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import HostedRoomsBox from "@/common/PageComponents/_page/HostetRoomsBox";
 import JoinRoomsBox from "@/common/PageComponents/_page/JoinRoomsBox";
 import PersonalizeBox from "@/common/PageComponents/_page/PersonalizeBox";
 import { startPageText } from "@/common/Texts/startpage";
+import { Masonry } from "@mui/lab";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useContext } from "react";
 
 export default function Home() {
   const router = useOwnRouter();
-  const { loggedIn, event } = useContext(AuthContext);
+  const { loggedIn, event, userData } = useContext(AuthContext);
   if (event === "PASSWORD_RECOVERY") {
     return router.replace("/update-password");
   }
@@ -57,21 +59,34 @@ export default function Home() {
             </Box>
           </Typography>
         </Box>
-        <Box
-          display={"flex"}
-          flexDirection={{
-            xs: "column",
-            md: "row-reverse",
+        <Masonry
+          columns={{
+            xs: 1,
+            md: 2,
           }}
         >
-          <Box flex={1}>
-            <HostedRoomsBox />
-          </Box>
-          <Box flex={1}>
-            <JoinRoomsBox />
-            <PersonalizeBox />
-          </Box>
-        </Box>
+          {userData?.openai_key === "" && (
+            <PaperBox title={"No OpenAI API Key"} warning>
+              <Typography variant="body1" color={"text.secondary"} m={2}>
+                You have not set an OpenAI API key yet. You can do this in the
+                settings. Without an API key, you cannot use the chatbot or
+                generate notes.
+              </Typography>
+            </PaperBox>
+          )}
+          {userData?.whisper_url === "" && (
+            <PaperBox title={"No Whisper URL"} warning>
+              <Typography variant="body1" color={"text.secondary"} m={2}>
+                You have not set a Whisper URL yet. You can do this in the
+                settings. Without a Whisper URL, you cannot transcribe your
+                lectures.
+              </Typography>
+            </PaperBox>
+          )}
+          <JoinRoomsBox />
+          <HostedRoomsBox />
+          <PersonalizeBox />
+        </Masonry>
       </Container>
     );
   } else {

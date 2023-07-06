@@ -172,3 +172,19 @@ export function useDeleteData<
     return awaitData(query.delete().eq(field, value));
   }, useMutationOptions);
 }
+
+export function useTriggerFunction<T>(
+  query: PostgrestFilterBuilder<any, any, T>,
+  useMutationOptions?: UseMutationOptions<
+    PostgrestSingleResponse<any>,
+    PostgrestError
+  >
+): UseMutationResult<PostgrestSingleResponse<T>, PostgrestError> {
+  useMutationOptions = addDefaultErrorHandling(
+    useMutationOptions,
+    enqueueSnackbar
+  );
+  return useMutation<PostgrestSingleResponse<T>, PostgrestError, any>(() => {
+    return awaitData(query);
+  }, useMutationOptions);
+}

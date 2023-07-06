@@ -39,7 +39,7 @@ export function CreateNewRoomDialog({}) {
   const [videoFile, setVideoFile] = useState<any>(null);
   const [videoUrl, setVideoUrl] = useState("");
   const transcriptionRef = useRef<Segment[]>([]);
-  const { userId } = useContext(AuthContext);
+  const { userId, userData } = useContext(AuthContext);
   const roomId = useRef("");
   const router = useOwnRouter();
   const queryClient = useQueryClient();
@@ -70,11 +70,10 @@ export function CreateNewRoomDialog({}) {
       },
     }
   );
-  const whisperUrl = "http://localhost:9000";
 
   const transcriptVideo = useMutation(
     (audioBlob: Blob) => {
-      const url = whisperUrl + "/asr?&output=json&language=en&";
+      const url = userData?.whisper_url! + "/asr?&output=json&language=en&";
 
       const formData = new FormData();
       formData.append("audio_file", audioBlob);
