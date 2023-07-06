@@ -5,8 +5,13 @@ import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { timeConverter } from "@/utils/helper";
 import { useGetData } from "@/utils/supabase/supabaseData";
-import { MicOutlined, OndemandVideoOutlined } from "@mui/icons-material";
 import {
+  CampaignOutlined,
+  MicOutlined,
+  OndemandVideoOutlined,
+} from "@mui/icons-material";
+import {
+  Box,
   Container,
   ListItemAvatar,
   ListItemButton,
@@ -53,6 +58,14 @@ export function HostedRoomsList() {
           {room.is_video_room ? <OndemandVideoOutlined /> : <MicOutlined />}
         </ListItemButton>
       ))}
+      {rooms.data?.data?.length! === 0 && (
+        <Box textAlign={"center"} my={3}>
+          <Typography color={"text.disabled"}>
+            Creating your first room!
+          </Typography>
+          <CampaignOutlined color="disabled" fontSize="large" />
+        </Box>
+      )}
     </Container>
   );
 }

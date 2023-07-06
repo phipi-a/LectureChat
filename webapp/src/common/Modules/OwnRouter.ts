@@ -4,7 +4,6 @@ import { LoadingContext } from "../Contexts/LoadingContext/LoadingContext";
 
 export function useOwnRouter() {
   const { isPending, startTransition } = useContext(LoadingContext);
-  console.log(isPending);
   const router = useRouter();
   const push = (url: string) => {
     startTransition(() => {

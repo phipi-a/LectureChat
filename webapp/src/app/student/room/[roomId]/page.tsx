@@ -46,12 +46,11 @@ export default function Room({ params }: { params: { roomId: string } }) {
       .select("*")
       .eq("room_id", room.room_id)
       .order("created_at", { ascending: true }),
-    {
-      onSuccess: (data) => {
-        setSegments(data.data || []);
-      },
-    }
+    {}
   );
+  useEffect(() => {
+    setSegments(getInitData.data?.data!);
+  }, [getInitData.data, setSegments]);
   const dataRef = useRef(segments);
   useEffect(() => {
     dataRef.current = segments;

@@ -31,14 +31,12 @@ export function LiveAudioTranscriptionBoxFallback() {
 }
 export function LiveAudioTranscriptionBoxSuspense({
   roomId,
-  whisperUrl,
 }: {
   roomId: string;
-  whisperUrl: string;
 }): React.ReactElement {
   return (
     <Suspense>
-      <LiveAudioTranscriptionBox roomId={roomId} whisperUrl={whisperUrl} />
+      <LiveAudioTranscriptionBox roomId={roomId} />
     </Suspense>
   );
 }

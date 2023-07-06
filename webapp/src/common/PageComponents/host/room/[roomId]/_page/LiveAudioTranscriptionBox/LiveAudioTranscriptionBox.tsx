@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import {
@@ -15,13 +16,8 @@ import { useMutation } from "react-query";
 import { TranscriptionEditBox } from "../TranscriptionEditBox/TranscriptionEditBox";
 import { AudioRecorder } from "./AudioRecorder";
 
-export function LiveAudioTranscriptionBox({
-  roomId,
-  whisperUrl,
-}: {
-  roomId: string;
-  whisperUrl: string;
-}) {
+export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
+  const { userData } = useContext(AuthContext);
   const { currentPage } = useContext(RoomContext);
   const [recordingState, setRecordingState] = React.useState<
     "recording" | "stoped"
@@ -41,7 +37,7 @@ export function LiveAudioTranscriptionBox({
 
   const uploadAudio = useMutation({
     mutationFn: (audioBlob: Blob) => {
-      const url = whisperUrl + "/asr?&output=json&language=en&";
+      const url = userData?.openai_key + "/asr?&output=json&language=en&";
 
       const formData = new FormData();
       formData.append("audio_file", audioBlob);

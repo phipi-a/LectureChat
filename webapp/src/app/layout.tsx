@@ -1,4 +1,5 @@
 "use client";
+import CenteredLoading from "@/common/Components/CenteredLoading";
 import OwnToolbar from "@/common/Components/OwnToolbar";
 import { AuthProvider } from "@/common/Contexts/AuthContext/AuthProvider";
 import { LoadingContext } from "@/common/Contexts/LoadingContext/LoadingContext";
@@ -8,7 +9,6 @@ import {
   Box,
   CssBaseline,
   ThemeProvider,
-  Typography,
   createTheme,
 } from "@mui/material";
 import { SnackbarProvider } from "notistack";
@@ -19,7 +19,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 function InnerLoadingLayout({ children }: { children: any }) {
   const { isPending } = useContext(LoadingContext);
   if (isPending) {
-    return <Typography>Loading...</Typography>;
+    return <CenteredLoading />;
   }
   return children;
 }

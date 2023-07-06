@@ -1,3 +1,4 @@
+import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { useGetData } from "@/utils/supabase/supabaseData";
@@ -6,7 +7,7 @@ import React, { useContext, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
 interface BulletPoint {
-  data: string;
+  bullet_point: string;
   page: string | undefined;
   video_start_ms: number | undefined;
   video_end_ms: number | undefined;
@@ -15,6 +16,7 @@ interface BulletPoint {
 export function BulletPoints({ roomId }: { roomId: string }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const queryClient = useQueryClient();
+  const { userData } = useContext(AuthContext);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -23,20 +25,18 @@ export function BulletPoints({ roomId }: { roomId: string }) {
       return supabase.functions.invoke("bulletpoints", {
         body: {
           roomId,
-          openaiKey: "ADD_API_KEY",
+          openaiKey: userData?.openai_key,
         },
       });
     },
     onSuccess: (res) => {
       if (!res) return;
-      queryClient.setQueryData(["bulletpoints", roomId], {
-        bulletpoints: res.data.data,
-      });
+      setBulletPoints(res.data.data);
     },
   });
 
   // Read bulletpoints from db
-  const bulletPoints = useGetData(
+  const bulletPointsData = useGetData(
     ["bulletpoints", roomId],
     supabase.from("bulletpoints").select("*").eq("room_id", roomId).single(),
     {
@@ -47,19 +47,15 @@ export function BulletPoints({ roomId }: { roomId: string }) {
           // Create new bullet points
           if (mutation.isLoading) return;
           mutation.mutate();
-        } else if (data?.data && typeof data.data.bulletpoints === "string") {
-          const parsed = JSON.parse(data.data.bulletpoints);
-          queryClient.setQueryData(["bulletpoints", roomId], {
-            bulletpoints: parsed,
-          });
         }
       },
     }
   );
-
-  const bulletPointsParsed = bulletPoints.data as
-    | { bulletpoints: BulletPoint[] }
-    | undefined;
+  const [bulletPoints, setBulletPoints] = React.useState<BulletPoint[] | null>(
+    bulletPointsData.data?.error === null
+      ? JSON.parse(bulletPointsData!.data!.data!.bulletpoints! as string)
+      : null
+  );
 
   // If segments change, check if the last segment is on a new page
   const prevSegmentLength = React.useRef(segments.length || 0);
@@ -81,15 +77,14 @@ export function BulletPoints({ roomId }: { roomId: string }) {
     }
   }, [segments.length]);
 
-  const bulletPointList = bulletPointsParsed?.bulletpoints || [];
-  const loading = bulletPoints.isLoading || mutation.isLoading;
+  const loading = bulletPointsData.isLoading || mutation.isLoading;
 
   const json = segments.map((row) => ({
     text: row.data,
     video_start_ms: row.video_start_ms,
     video_end_ms: row.video_end_ms,
   }));
-  console.log("json", json);
+  console.log("json", bulletPoints);
 
   return (
     <div>
@@ -114,10 +109,12 @@ export function BulletPoints({ roomId }: { roomId: string }) {
         </Button>
       </div>
       <ul>
-        {bulletPointList.map((bulletPoint: BulletPoint) => (
+        {bulletPoints!.map((bulletPoint: BulletPoint) => (
           <li
             key={
-              bulletPoint.data + bulletPoint.video_start_ms + bulletPoint.page
+              bulletPoint.bullet_point +
+              bulletPoint.video_start_ms +
+              bulletPoint.page
             }
             style={{ cursor: "pointer" }}
             onClick={() => {
@@ -128,7 +125,7 @@ export function BulletPoints({ roomId }: { roomId: string }) {
               }
             }}
           >
-            {bulletPoint.data}
+            {bulletPoint.bullet_point}
           </li>
         ))}
       </ul>

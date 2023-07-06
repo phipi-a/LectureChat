@@ -4,8 +4,13 @@ import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { timeConverter } from "@/utils/helper";
 import { useGetData } from "@/utils/supabase/supabaseData";
-import { MicOutlined, OndemandVideoOutlined } from "@mui/icons-material";
 import {
+  AssignmentTurnedInOutlined,
+  MicOutlined,
+  OndemandVideoOutlined,
+} from "@mui/icons-material";
+import {
+  Box,
   Container,
   ListItemAvatar,
   ListItemButton,
@@ -60,6 +65,14 @@ export function JoinedRoomsList() {
             )}
           </ListItemButton>
         ))}
+        {room_access.data?.data?.length! === 0 && (
+          <Box textAlign={"center"} my={3}>
+            <Typography color={"text.disabled"}>
+              Join a room created by your teacher!
+            </Typography>
+            <AssignmentTurnedInOutlined color="disabled" fontSize="large" />
+          </Box>
+        )}
       </Container>
     </>
   );
