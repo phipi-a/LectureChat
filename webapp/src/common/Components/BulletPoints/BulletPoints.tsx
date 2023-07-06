@@ -2,16 +2,12 @@ import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { useGetData } from "@/utils/supabase/supabaseData";
+import { LoadingButton } from "@mui/lab";
 import { Button, CircularProgress } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-interface BulletPoint {
-  bullet_point: string;
-  page: string | undefined;
-  video_start_ms: number | undefined;
-  video_end_ms: number | undefined;
-}
+import { BulletPoint, BulletPointI } from "./BulletPoint";
 
 export function BulletPoints({ roomId }: { roomId: string }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
@@ -31,7 +27,10 @@ export function BulletPoints({ roomId }: { roomId: string }) {
     },
     onSuccess: (res) => {
       if (!res) return;
-      setBulletPoints(res.data.data);
+
+      if (res.data) {
+        setBulletPoints(res.data.data);
+      }
     },
   });
 
@@ -41,7 +40,6 @@ export function BulletPoints({ roomId }: { roomId: string }) {
     supabase.from("bulletpoints").select("*").eq("room_id", roomId).single(),
     {
       onSuccess: (data) => {
-        console.log("BulletPoints: onSuccess", data);
         // If no bullet points are found
         if (data?.error) {
           // Create new bullet points
@@ -51,7 +49,8 @@ export function BulletPoints({ roomId }: { roomId: string }) {
       },
     }
   );
-  const [bulletPoints, setBulletPoints] = React.useState<BulletPoint[] | null>(
+
+  const [bulletPoints, setBulletPoints] = React.useState<BulletPointI[] | null>(
     bulletPointsData.data?.error === null
       ? JSON.parse(bulletPointsData!.data!.data!.bulletpoints! as string)
       : null
@@ -79,56 +78,30 @@ export function BulletPoints({ roomId }: { roomId: string }) {
 
   const loading = bulletPointsData.isLoading || mutation.isLoading;
 
-  const json = segments.map((row) => ({
-    text: row.data,
-    video_start_ms: row.video_start_ms,
-    video_end_ms: row.video_end_ms,
-  }));
-  console.log("json", bulletPoints);
-
   return (
     <div>
       <div style={{ display: "flex", alignItems: "end" }}>
-        <Button
+        <LoadingButton
           variant="outlined"
-          onClick={() => {
-            mutation.mutate();
-          }}
+          onClick={() => mutation.mutate()}
           disabled={loading}
         >
-          {loading ? (
-            <>
-              Updating
-              <CircularProgress
-                style={{ width: "16px", height: "16px", margin: "4px" }}
-              />
-            </>
-          ) : (
-            <>Update</>
-          )}
-        </Button>
+          {loading ? "Updating" : "Update"}
+        </LoadingButton>
       </div>
-      <ul>
-        {bulletPoints!.map((bulletPoint: BulletPoint) => (
-          <li
+      {bulletPoints &&
+        bulletPoints.map((bulletPoint: BulletPointI) => (
+          <BulletPoint
             key={
               bulletPoint.bullet_point +
               bulletPoint.video_start_ms +
               bulletPoint.page
             }
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              if (typeof bulletPoint.video_start_ms === "number") {
-                setPlayPosition({ pos: bulletPoint.video_start_ms! });
-              } else if (typeof bulletPoint.page === "string") {
-                setCurrentPage(parseInt(bulletPoint.page!));
-              }
-            }}
-          >
-            {bulletPoint.bullet_point}
-          </li>
+            bulletPoint={bulletPoint}
+            setPlayPosition={setPlayPosition}
+            setCurrentPage={setCurrentPage}
+          />
         ))}
-      </ul>
     </div>
   );
 }
