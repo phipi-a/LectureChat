@@ -1,4 +1,8 @@
-import { Send } from "@mui/icons-material";
+import { BulletPointI, ChatI, MessageI } from "@/common/Interfaces/Interfaces";
+import { Database } from "@/common/Interfaces/supabaseTypes";
+import { supabase } from "@/common/Modules/SupabaseClient";
+import { useGetDataN } from "@/utils/supabase/supabaseData";
+import { CloseOutlined, Send } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -7,90 +11,209 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import React, { useEffect } from "react";
+import { useMutation } from "react-query";
+import { TypingIndicator } from "../TypingIndicator/TypingIndicator";
 
-export function Chat({ display }: { display: boolean }) {
-  const messages = [
-    {
-      text: "Hey!",
-      ai: true,
+export function Chat({
+  onClose,
+  bulletpoint,
+  bulletPointsId,
+  roomId,
+}: {
+  onClose: () => void;
+  bulletpoint: BulletPointI | null;
+  bulletPointsId: number;
+  roomId: string;
+}) {
+  const [currentMessage, setCurrentMessage] = React.useState("");
+  const [messages, setMessages] = React.useState<ChatI>({
+    id: undefined,
+    messages: [],
+  });
+
+  const messagesData = useGetDataN<
+    ChatI,
+    Database["public"]["Tables"]["chat"]["Row"]
+  >(
+    ["chat", bulletpoint?.id, bulletPointsId],
+    supabase
+      .from("chat")
+      .select("*")
+      .eq("bulletpoint_id", bulletPointsId)
+      .eq("single_bulletpoint_id", bulletpoint?.id)
+      .single(),
+    (data) => {
+      if (data.data === null) {
+        return {
+          id: undefined,
+          messages: [
+            {
+              role: "user",
+              content: "i want to talk about: " + bulletpoint?.bullet_point,
+            },
+          ],
+        };
+      }
+      console.log("data", data);
+      const messages: MessageI[] = data.data!.content as unknown as MessageI[];
+
+      return {
+        id: data.data!.id,
+        messages: messages,
+      };
     },
     {
-      text: "How are you?",
-      ai: true,
+      onSuccess: (data) => {
+        console.log("Chat: onSuccess", data);
+      },
+    }
+  );
+  useEffect(() => {
+    if (messagesData.data === null) return;
+    setMessages(messagesData.data!);
+  }, [messagesData.data]);
+
+  const mutation = useMutation({
+    mutationFn: async (newMessage: MessageI) => {
+      console.log("Creating new bullet points");
+      messages.messages.push(newMessage);
+      setMessages({ ...messages });
+      setCurrentMessage("");
+      console.log("messages", messages);
+
+      return supabase.functions.invoke("chat", {
+        body: {
+          id: messages.id,
+          room_id: roomId,
+          messages: messages.messages,
+          bulletpoint_id: bulletPointsId,
+          single_bulletpoint_id: bulletpoint?.id,
+        },
+      });
     },
-    {
-      text: "I am fine, thanks",
-      ai: false,
+    onSuccess: (res) => {
+      console.log("Chat: onSuccess", res);
+      if (res.data === null) return;
+      messages.messages.push(res.data);
+      setMessages({ ...messages });
     },
-    {
-      text: "What about youd sflkd sfdask jdökasfjld ksj dskfjdsklfjdas?",
-      ai: false,
-    },
-    {
-      text: "Awesome!",
-      ai: true,
-    },
-  ];
-  if (!display) {
+  });
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  let loadingArray: MessageI[] = [];
+  if (mutation.isLoading) {
+    loadingArray.push({
+      role: "assistant",
+      content: "Loading...",
+    });
+  }
+  useEffect(() => {
+    console.log("scrollRef", scrollRef);
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  if (bulletpoint === null) {
     return <></>;
   }
+  function handleSendMessage() {
+    if (mutation.isLoading) return;
+    const newMessage: MessageI = {
+      role: "user",
+      content: currentMessage,
+    };
+
+    mutation.mutate(newMessage);
+  }
+
   return (
-    <Box
-      width={"300px"}
-      m={1}
-      height={"500px"}
-      display={"flex"}
-      border={"1px solid"}
-      borderColor={"primary.main"}
-      borderRadius={"10px"}
-      flexDirection={"column"}
-    >
-      <Box flex={1} m={1}>
-        <List>
-          {messages.map((message, index) => (
-            <Box
-              key={message.text}
-              sx={{
-                display: "flex",
-                justifyContent: message.ai ? "flex-start" : "flex-end",
-                mb: 1,
-              }}
-            >
-              <Paper
-                variant="outlined"
-                sx={{
-                  p: 1.3,
-                  borderRadius: message.ai
-                    ? "20px 20px 20px 5px"
-                    : "20px 20px 5px 20px",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  textAlign={message.ai ? "left" : "right"}
-                >
-                  {message.text}
-                </Typography>
-              </Paper>
-            </Box>
-          ))}
-        </List>
+    <Box display={"flex"} flexDirection={"column"} height={"100%"} p={3}>
+      <Box display={"flex"} alignItems={"center"} justifyContent={"flex-end"}>
+        <IconButton onClick={onClose}>
+          <CloseOutlined />
+        </IconButton>
       </Box>
-      <TextField
-        variant="standard"
-        fullWidth
-        label=""
-        sx={{
-          p: 1,
-        }}
-        InputProps={{
-          endAdornment: (
-            <IconButton>
-              <Send color="primary" />
-            </IconButton>
-          ),
-        }}
-      />
+      <Box overflow={"auto"} height={"100%"} flex={1} display={"flex"}>
+        <Box
+          maxHeight={"600px"}
+          flex={1}
+          height={"100%"}
+          display={"flex"}
+          border={"1px solid"}
+          borderColor={"primary.main"}
+          borderRadius={"10px"}
+          flexDirection={"column"}
+          overflow={"auto"}
+        >
+          <Box flex={1} m={1}>
+            <List>
+              {messages.messages.concat(loadingArray).map((message, index) => (
+                <Box
+                  key={message.content + index + bulletpoint.id}
+                  sx={{
+                    display: "flex",
+                    justifyContent:
+                      message.role === "assistant" ? "flex-start" : "flex-end",
+                    mb: 1,
+                  }}
+                >
+                  <Paper
+                    variant="outlined"
+                    ref={scrollRef}
+                    sx={{
+                      p: 1.3,
+                      borderRadius:
+                        message.role === "assistant"
+                          ? "20px 20px 20px 5px"
+                          : "20px 20px 5px 20px",
+                    }}
+                  >
+                    {message.content === "Loading..." ? (
+                      <TypingIndicator />
+                    ) : (
+                      <Typography
+                        variant="body2"
+                        textAlign={
+                          message.role === "assistant" ? "left" : "right"
+                        }
+                      >
+                        {message.content}
+                      </Typography>
+                    )}
+                  </Paper>
+                </Box>
+              ))}
+            </List>
+          </Box>
+          <TextField
+            variant="standard"
+            fullWidth
+            value={currentMessage}
+            onChange={(e) => {
+              setCurrentMessage(e.target.value);
+            }}
+            label=""
+            sx={{
+              p: 1,
+            }}
+            onKeyDown={(ev) => {
+              console.log(`Pressed keyCode ${ev.key}`);
+              if (ev.key === "Enter") {
+                handleSendMessage();
+                ev.preventDefault();
+              }
+            }}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handleSendMessage}>
+                  <Send color="primary" />
+                </IconButton>
+              ),
+            }}
+          />
+        </Box>
+      </Box>
     </Box>
   );
 }

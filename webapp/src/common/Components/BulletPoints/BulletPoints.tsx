@@ -3,13 +3,19 @@ import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { useGetData } from "@/utils/supabase/supabaseData";
 import { LoadingButton } from "@mui/lab";
-import { Button, CircularProgress } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import { BulletPoint, BulletPointI } from "./BulletPoint";
+import { BulletPointI } from "@/common/Interfaces/Interfaces";
+import { BulletPoint } from "./BulletPoint";
 
-export function BulletPoints({ roomId }: { roomId: string }) {
+export function BulletPoints({
+  roomId,
+  onOpenChat,
+}: {
+  roomId: string;
+  onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
+}) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const queryClient = useQueryClient();
   const { userData } = useContext(AuthContext);
@@ -97,7 +103,9 @@ export function BulletPoints({ roomId }: { roomId: string }) {
               bulletPoint.video_start_ms +
               bulletPoint.page
             }
+            bulletPointId={bulletPointsData.data?.data?.id!}
             bulletPoint={bulletPoint}
+            onOpenChat={onOpenChat}
             setPlayPosition={setPlayPosition}
             setCurrentPage={setCurrentPage}
           />

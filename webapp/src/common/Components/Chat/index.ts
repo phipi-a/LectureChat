@@ -1,3 +1,3 @@
-import { Chat } from "./Chat";
+import { ChatSuspense } from "./ChatFallback";
 
-export default Chat;
+export default ChatSuspense;

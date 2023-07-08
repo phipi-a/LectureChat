@@ -38,7 +38,6 @@ async function chat(
   const data = await response.json();
 
   // TODO: handle quota error
-  console.log(data);
 
   const rawResponse = {
     role: "assistant",
@@ -78,8 +77,11 @@ serve(async (req) => {
   try {
     // TODO: Save openai key in supabase
     const body = await req.json();
+    const id = body.id;
     const messages = body.messages;
     const room_id = body.room_id;
+    const bulletpoint_id = body.bulletpoint_id;
+    const single_bulletpoint_id = body.single_bulletpoint_id;
 
     if (!messages) {
       throw new BodyError("Missing messages");
@@ -113,6 +115,14 @@ serve(async (req) => {
     const system_prompt = await getSystemPrompt(room_id, supabaseClient);
 
     const res = await chat(messages, system_prompt, openaiKey);
+
+    const uploadResponse = await supabaseClient.from("chat").upsert({
+      id: id,
+      bulletpoint_id: bulletpoint_id,
+      single_bulletpoint_id: single_bulletpoint_id,
+      content: messages.concat(res),
+    });
+    console.log(uploadResponse);
 
     // Save the bullet points in the database
 

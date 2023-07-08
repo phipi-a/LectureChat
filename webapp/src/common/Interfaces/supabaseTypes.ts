@@ -46,6 +46,37 @@ export interface Database {
           }
         ]
       }
+      chat: {
+        Row: {
+          bulletpoint_id: number
+          content: Json
+          created_at: string | null
+          id: number
+          single_bulletpoint_id: number
+        }
+        Insert: {
+          bulletpoint_id: number
+          content: Json
+          created_at?: string | null
+          id?: number
+          single_bulletpoint_id: number
+        }
+        Update: {
+          bulletpoint_id?: number
+          content?: Json
+          created_at?: string | null
+          id?: number
+          single_bulletpoint_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_bulletpoint_id_fkey"
+            columns: ["bulletpoint_id"]
+            referencedRelation: "bulletpoints"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       data: {
         Row: {
           created_at: string | null
