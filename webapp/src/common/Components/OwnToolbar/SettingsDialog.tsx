@@ -4,6 +4,7 @@ import {
   useTriggerFunction,
   useUpsertData,
 } from "@/utils/supabase/supabaseData";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Accordion,
@@ -13,6 +14,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
+  InputAdornment,
   TextField,
 } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
@@ -21,6 +24,7 @@ import { useQueryClient } from "react-query";
 
 export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
   const { session, userId, userData } = useContext(AuthContext);
+  const [showOpenAiApiKey, setShowOpenAiApiKey] = useState(false);
 
   const queryClient = useQueryClient();
   const [whisperUrl, setWhisperUrl] = useState<string | null | undefined>(
@@ -102,8 +106,26 @@ export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
           onChange={(e) => {
             setOpenAiApiKey(e.target.value);
           }}
-          type="text"
+          type={showOpenAiApiKey ? "text" : "password"}
           fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => {
+                    setShowOpenAiApiKey(!showOpenAiApiKey);
+                  }}
+                >
+                  {showOpenAiApiKey ? (
+                    <VisibilityOffOutlined />
+                  ) : (
+                    <VisibilityOutlined />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
         <Button
