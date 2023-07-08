@@ -1,0 +1,22 @@
+[
+  {
+    "bullet_point": "Representation learning involves encoding data into a latent space.",
+    "longer_explanation": "Representation learning is the process of encoding data into a latent space, which is typically more abstract. The data can be images, sounds, or any observed data. The encoded representation is more easily expressible and can be used for compression, summarization, or finding joint subspaces between different modalities."
+  },
+  {
+    "bullet_point": "Latent space can be used for compression or summarization.",
+    "longer_explanation": "The latent space, which is the abstract representation of the data, can be used for compression or summarization of the original data. By encoding the data into a lower-dimensional latent space, it becomes more easily representable or summarizable."
+  },
+  {
+    "bullet_point": "Latent space can extract factors or components from the data.",
+    "longer_explanation": "The latent space can be used to extract factors or independent components from the data. For example, in the case of images, the latent space can capture the composition of the image in terms of edges or other independent components. This can be achieved through methods like CCA and ICA."
+  },
+  {
+    "bullet_point": "Latent space can be built to extract high-level features for specific tasks.",
+    "longer_explanation": "The latent space can also be designed to extract more high-level features that are directly related to specific tasks. For example, in image classification, the latent space can be built to capture features that are relevant to the classification task. This allows for more efficient and effective learning."
+  },
+  {
+    "bullet_point": "PCA is a basic method for representation learning.",
+    "longer_explanation": "PCA (Principal Component Analysis) is a basic method for representation learning. It aims to find a representation or projection of the data where the variance is maximized. The first few principal components provide a good summarization of the data and can be used for various tasks."
+  }
+]

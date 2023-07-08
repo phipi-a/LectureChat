@@ -1,0 +1,13 @@
+[
+  {
+    "title": "Introduction to Representation Learning",
+    "start": "0:00",
+    "end": "2:05"
+  },
+  { "title": "Sparse Coding", "start": "2:05", "end": "14:17" },
+  { "title": "Autoencoders", "start": "14:17", "end": "21:13" },
+  { "title": "Transfer Learning", "start": "21:13", "end": "24:58" },
+  { "title": "Self-Supervised Learning", "start": "24:58", "end": "28:04" },
+  { "title": "Learning Transformations", "start": "28:04", "end": "32:03" },
+  { "title": "Summary", "start": "32:03", "end": "35:22" }
+]

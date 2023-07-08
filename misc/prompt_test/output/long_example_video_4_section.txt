@@ -1,0 +1,60 @@
+[25:00]
+And so forth. And then basically you get your nice topological spars coding where you can have a nice overview of the dictionary elements, which direction they take and how similar the different dictionary elements are.
+
+[25:18]
+Now we come to the implementation of spars coding.
+
+[25:28]
+And so the first observation we can make is that there might be different cases.
+
+[25:39]
+So sometimes you might have large number of data points. And the whole source code, which is of size n times h, might not fit on in memory.
+
+[25:47]
+So if you have a very large image data set, you can pose a 1 million images.
+
+[25:53]
+This might not fit in memory. And there are other cases, which is when n is small.
+
+[26:01]
+And in that case you might fit all the data in memory in all the source codes.
+
+[26:08]
+So for the first case, there is something, the approach, natural approach is to have a batch algorithm where you basically initialize all your vector and source code.
+
+[26:20]
+And then you can just update the source elements and dictionary one after the other until convergence.
+
+[26:27]
+For the online version, you cannot do that. You first have to initialize, basically you can only keep track of the dictionary.
+
+[26:35]
+But at every step, you basically need to take a selection of source code, because you cannot do this for all of them at the same time.
+
+[26:52]
+Which means that at every time step, because the W has changed, you need to recalculate for a given ID to might have chosen randomly the source code SI.
+
+[27:06]
+So this can take some time. And then you can update W approximately from SI, basically something like stochastic written descent.
+
+[27:15]
+And here, I didn't mention whether we have to how we do these updates and inferences.
+
+[27:22]
+This could be done lively using gradient descent, but in fact there are many much more efficient implementations of sparse code image.
+
+[27:29]
+And there is a paper by Lee et al 2006 that explains different ways of computing these quantities efficiently.
+
+[27:47]
+Okay, so now we will look at related model, which is auto encoder. And if we remember one difficulty of sparse coding is that we always need to infer the source codes when learning dictionary.
+
+[28:10]
+And we can facilitate our sole address this problem with an encoding function that we would also train at the same time.
+
+[28:20]
+And so the simplest encoding function we can think of would be simply a linear projection that maps our data into the source code.
+
+[28:28]
+And then if we basically replace SI by the encoding function, we arrive at a similar objective sparse coding that we can see here.
+

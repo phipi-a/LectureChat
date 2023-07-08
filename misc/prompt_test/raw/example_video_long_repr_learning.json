@@ -1,0 +1,4151 @@
+[
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Okay, so hello everyone. Today is the last lecture of the series of lecture on component",
+    "room_id": "139909",
+    "id": "4746342d-2541-4199-821d-56d28dd02712",
+    "page": null,
+    "video_start_ms": 0,
+    "video_end_ms": 9.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " analysis. So we've seen CCA, ICA, and today we look at some more general, which is representation",
+    "room_id": "139909",
+    "id": "b39f3958-d94f-4f71-9641-862ea141d9a8",
+    "page": null,
+    "video_start_ms": 9.68,
+    "video_end_ms": 19.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " learning. So to set up the ID, basically you have an observation space, which can be, for",
+    "room_id": "139909",
+    "id": "d5cd65bf-067b-4b94-8e1a-b997474bed9c",
+    "page": null,
+    "video_start_ms": 19.64,
+    "video_end_ms": 28.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " example, images, but this could also be sounds or any data you observe. And what you would",
+    "room_id": "139909",
+    "id": "3e5aacdf-ba9b-4fcb-a456-fdb85808a95d",
+    "page": null,
+    "video_start_ms": 28.52,
+    "video_end_ms": 35.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " like to do is to encode this data into some latent space, which is typically more abstract,",
+    "room_id": "139909",
+    "id": "e529b0ee-0aab-4e04-a8a5-4549cca8ddd1",
+    "page": null,
+    "video_start_ms": 35.8,
+    "video_end_ms": 43.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which could be, for example, vectors. And then from this latent space, space we can go",
+    "room_id": "139909",
+    "id": "79a7d12e-d55e-4681-a816-9b5b15ac8d41",
+    "page": null,
+    "video_start_ms": 43.76,
+    "video_end_ms": 50.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " back to the observation space using some decoding. And there are many reasons why we would like",
+    "room_id": "139909",
+    "id": "f8949c4c-b444-49c1-a485-8ee78f85f401",
+    "page": null,
+    "video_start_ms": 50.28,
+    "video_end_ms": 57.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to do this representation learning. And in some cases, the latent space might be, for",
+    "room_id": "139909",
+    "id": "ee314b83-eb37-4723-909a-bdbc61ae9a0f",
+    "page": null,
+    "video_start_ms": 57.44,
+    "video_end_ms": 65.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " example, lower dimensional or more easily, more easy to express. And this could be used",
+    "room_id": "139909",
+    "id": "c5df4de4-daaa-4b3f-b167-34d14e88e3d2",
+    "page": null,
+    "video_start_ms": 65.32,
+    "video_end_ms": 71.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " for compression or summarization. In some cases, the goal of the latent space is to try",
+    "room_id": "139909",
+    "id": "ee56cf01-a6b0-4020-a42b-12c8763f7a6f",
+    "page": null,
+    "video_start_ms": 71.28,
+    "video_end_ms": 79.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to find a joint subspace between different modalities. And we have seen that in the",
+    "room_id": "139909",
+    "id": "d5212625-3348-4000-835c-494dc7edbf8c",
+    "page": null,
+    "video_start_ms": 79.04,
+    "video_end_ms": 85.22
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " lecture on CCA, sometimes the purpose of the latent space is to extract factors that",
+    "room_id": "139909",
+    "id": "4509eb96-4372-471c-82b5-147fa32de925",
+    "page": null,
+    "video_start_ms": 85.22,
+    "video_end_ms": 92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " are basically a decent thing of the data, for example, in the case of images, and the",
+    "room_id": "139909",
+    "id": "a6497ebb-1c90-4578-97f4-ed43a852fec3",
+    "page": null,
+    "video_start_ms": 92,
+    "video_end_ms": 98.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " composition in terms of edges or some independent components. And we've shown some examples",
+    "room_id": "139909",
+    "id": "2cc74301-b76e-4c79-8a21-26830712b281",
+    "page": null,
+    "video_start_ms": 98.52,
+    "video_end_ms": 106.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " last week when discussing ICA. And finally, something we'll also look at today is that",
+    "room_id": "139909",
+    "id": "890dbd7b-9d83-46df-90bf-f7651fcd690e",
+    "page": null,
+    "video_start_ms": 106.12,
+    "video_end_ms": 114.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " we can build this latent space to try to extract more high level features that are more",
+    "room_id": "139909",
+    "id": "92324841-1954-43c2-9526-73d7b3a7bfe9",
+    "page": null,
+    "video_start_ms": 114.12,
+    "video_end_ms": 121.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " closely related to the task we would like to solve, which might be, for example, some",
+    "room_id": "139909",
+    "id": "5d34563b-5900-417c-9382-caf5c66c5294",
+    "page": null,
+    "video_start_ms": 121.4,
+    "video_end_ms": 125.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " image classification task or something else, which is a high level.",
+    "room_id": "139909",
+    "id": "7df8a7ec-4766-4db7-8387-4f273987d6f2",
+    "page": null,
+    "video_start_ms": 125.88,
+    "video_end_ms": 133.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So far, we've already served a number of methods for representation learning. And the",
+    "room_id": "139909",
+    "id": "39532e42-1870-45f4-af95-109f76cdad6a",
+    "page": null,
+    "video_start_ms": 133.44,
+    "video_end_ms": 140.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " simplest one, and if we have already seen in the very beginning of machine learning one,",
+    "room_id": "139909",
+    "id": "7c10f99c-e8ca-4359-af7c-1ea94f274873",
+    "page": null,
+    "video_start_ms": 140.92,
+    "video_end_ms": 145.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " was a principle component analysis or PCA. And basically, PCA tries to find a representation",
+    "room_id": "139909",
+    "id": "e3d31730-80f0-49c5-b702-e168d3601a2c",
+    "page": null,
+    "video_start_ms": 145.72,
+    "video_end_ms": 154.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " or a projection of the data where the variance is maximized. And the idea is that the main",
+    "room_id": "139909",
+    "id": "f4db12ea-489c-42ff-bc30-d92c017545f3",
+    "page": null,
+    "video_start_ms": 154.76,
+    "video_end_ms": 162.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and the first few principal components provide a good summarization of your data. We've",
+    "room_id": "139909",
+    "id": "108a566f-122a-474d-9dbc-095ee528d603",
+    "page": null,
+    "video_start_ms": 162.36,
+    "video_end_ms": 169.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " also looked at canonical correlation analysis or CCA machine learning too, as well as ICA.",
+    "room_id": "139909",
+    "id": "29efc758-0ea6-4514-a676-2d9b1ffc9119",
+    "page": null,
+    "video_start_ms": 169.6,
+    "video_end_ms": 177.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And today we will continue with a few more of this analysis, and we will introduce,",
+    "room_id": "139909",
+    "id": "061fb9d5-3a7e-4f20-bf6f-c9d9f13b4b13",
+    "page": null,
+    "video_start_ms": 177.88,
+    "video_end_ms": 183.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " we'll present in particular a sparse coding and auto encoders. And then we will look at",
+    "room_id": "139909",
+    "id": "218ba16d-8ee2-464c-91fe-63c47469b2d4",
+    "page": null,
+    "video_start_ms": 183.72,
+    "video_end_ms": 190.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " a few more ideas, for example, transfer learning, etc. So what is sparse coding? So sparse",
+    "room_id": "139909",
+    "id": "5e61ea7a-987f-4f3c-902a-aec36d763807",
+    "page": null,
+    "video_start_ms": 190.16,
+    "video_end_ms": 204.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " coding aims to represent the data in a way that in the latent representation many elements",
+    "room_id": "139909",
+    "id": "b6614382-e9fa-4765-9142-d5ee6b21c84a",
+    "page": null,
+    "video_start_ms": 204.32,
+    "video_end_ms": 213.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " are zero. And the idea is so basically that's the definition of sparse, and contrary to",
+    "room_id": "139909",
+    "id": "09ea65c5-b424-41a9-9ff4-5a8e7f0088e9",
+    "page": null,
+    "video_start_ms": 213.56,
+    "video_end_ms": 222.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " dense, sparse basically is something which only contains a few elements, and so the rest",
+    "room_id": "139909",
+    "id": "9e42a63d-8621-435c-a1f5-c2e4b1ffe03a",
+    "page": null,
+    "video_start_ms": 222.44,
+    "video_end_ms": 228.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is assumed to be zero. And then the data can be reconstructed from this sparse code using",
+    "room_id": "139909",
+    "id": "d5725577-1944-441f-9bc2-2adf5d165d7b",
+    "page": null,
+    "video_start_ms": 228.6,
+    "video_end_ms": 235.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " a dictionary. And here you can see a cartoon on the left. And basically you can think of",
+    "room_id": "139909",
+    "id": "1689c2ed-3d35-42d1-b7e6-10bafab54ada",
+    "page": null,
+    "video_start_ms": 235.2,
+    "video_end_ms": 243.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " your source vector, which is an abstract vector of some dimensions. And each dimension is",
+    "room_id": "139909",
+    "id": "12273237-fbed-48b3-886a-228b67d7bd74",
+    "page": null,
+    "video_start_ms": 243.36,
+    "video_end_ms": 250.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " associated some filter or some basically basis, and this set of basis form a dictionary",
+    "room_id": "139909",
+    "id": "3db49bd5-532e-4d47-93b0-107fd89d8721",
+    "page": null,
+    "video_start_ms": 250.8,
+    "video_end_ms": 260.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that's called W. And then basically if you take the non-zero element of the source vectors,",
+    "room_id": "139909",
+    "id": "a17d4ce8-0c9f-43d2-ae18-ab7c9711eee2",
+    "page": null,
+    "video_start_ms": 260.36,
+    "video_end_ms": 266.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " so here those that are highlighted in red, and you sum them up, then basically you arrive",
+    "room_id": "139909",
+    "id": "ce0a6d59-4569-495a-aca2-936ffa06c1cb",
+    "page": null,
+    "video_start_ms": 266.76,
+    "video_end_ms": 274.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " at some reconstructed data which basically corresponds to the image represented by",
+    "room_id": "139909",
+    "id": "1dd3f571-f222-46cd-8a65-47d5a778d8ca",
+    "page": null,
+    "video_start_ms": 274.16,
+    "video_end_ms": 282.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this source vector S. And sparse coding has several advantages compared to dense coding,",
+    "room_id": "139909",
+    "id": "303f06b8-718a-4573-a77a-be43d3645c87",
+    "page": null,
+    "video_start_ms": 282.24,
+    "video_end_ms": 292.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and the first one is a low storage cost. So a vector with many zeros can be represented",
+    "room_id": "139909",
+    "id": "958c6ff1-a00f-48bf-820e-d02708dcca88",
+    "page": null,
+    "video_start_ms": 292.64,
+    "video_end_ms": 300.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " completely. For example, if you have a vector of this type where the big red one would be",
+    "room_id": "139909",
+    "id": "a95cb2e2-efa3-4056-b0f9-5713ce73623f",
+    "page": null,
+    "video_start_ms": 300.32,
+    "video_end_ms": 307.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " like 12, here 0, here 7, and then 0 0 again, you don't need to encode every individual",
+    "room_id": "139909",
+    "id": "321db3df-8bea-492a-bbd9-b4743c31c5b8",
+    "page": null,
+    "video_start_ms": 307.12,
+    "video_end_ms": 315.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " entries of this vector. You can use a collection of this index value pairs where basically you",
+    "room_id": "139909",
+    "id": "08777158-921b-4d4b-9888-4e49b828cc32",
+    "page": null,
+    "video_start_ms": 315.84,
+    "video_end_ms": 324.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " write the index and then the value. So for example, here we have index 0, you have a value",
+    "room_id": "139909",
+    "id": "0d043cda-c8cc-47f2-86d7-bd41b2d11441",
+    "page": null,
+    "video_start_ms": 324.44,
+    "video_end_ms": 329.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of 12. Then you skip this one because 0, then you jump directly to index 2. So here index",
+    "room_id": "139909",
+    "id": "922bd510-5ec6-4987-b5df-dbf1ffee5acc",
+    "page": null,
+    "video_start_ms": 329.24,
+    "video_end_ms": 335.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " 2, you write 7, and then you skip index 3 and 4 because they are also 0. And so here,",
+    "room_id": "139909",
+    "id": "5cc61457-f658-416c-9094-62cdb7dbf5e3",
+    "page": null,
+    "video_start_ms": 335.72,
+    "video_end_ms": 343.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " instead of having like 5 entries, you only have 4 of them, and if you have higher dimensional",
+    "room_id": "139909",
+    "id": "fc4f60fa-73f3-45bc-9d3b-1f46c0624526",
+    "page": null,
+    "video_start_ms": 343.48,
+    "video_end_ms": 348.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " vectors that have higher sparsity, it becomes clearly more efficient. So that's one advantage",
+    "room_id": "139909",
+    "id": "dff99edc-c0e7-4c7f-be55-f4fe304797ce",
+    "page": null,
+    "video_start_ms": 348.44,
+    "video_end_ms": 355.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of sparse coding. And a second advantage is that it is actually more interpretable. So",
+    "room_id": "139909",
+    "id": "bd06a593-6bee-44b2-a1bb-a0145041005c",
+    "page": null,
+    "video_start_ms": 355.32,
+    "video_end_ms": 361.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " it's nice to be able to think of your data as a combination of few factors, and then",
+    "room_id": "139909",
+    "id": "0188968c-0e5f-4907-8d0d-31311710502b",
+    "page": null,
+    "video_start_ms": 361.24,
+    "video_end_ms": 369.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you can think of basically just the data being like the reconstruction or the superposition",
+    "room_id": "139909",
+    "id": "64da203d-5720-430e-b14e-471a5e5e133b",
+    "page": null,
+    "video_start_ms": 369.6,
+    "video_end_ms": 376.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of a few additional elements. So the first model we will look at is a linear sparse coding.",
+    "room_id": "139909",
+    "id": "bd72541f-96ea-48bb-902e-e5e58bc0a608",
+    "page": null,
+    "video_start_ms": 376.6,
+    "video_end_ms": 387.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And here we'll assume that we have a vector and basically a data vector x, which is some",
+    "room_id": "139909",
+    "id": "018c4660-94b6-47fb-bd43-d54dd897c123",
+    "page": null,
+    "video_start_ms": 387.64,
+    "video_end_ms": 394.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " abstract D-dimensional space. So if we think of an image with just the image matrix, then",
+    "room_id": "139909",
+    "id": "b7ef6604-3643-4331-a31e-d0b0016cbfcb",
+    "page": null,
+    "video_start_ms": 394.96,
+    "video_end_ms": 403.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " we flatten it and we make a vector out of it. And so this image maybe it's like 32,",
+    "room_id": "139909",
+    "id": "4c069437-e631-44a1-ba1c-1117755deb77",
+    "page": null,
+    "video_start_ms": 403.72,
+    "video_end_ms": 410.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " 32, or if you flatten it, it's a vector of size of 1024. And then we'll have our source",
+    "room_id": "139909",
+    "id": "ed9db208-3c5d-4bb1-8a8d-eb8ba84c046d",
+    "page": null,
+    "video_start_ms": 410.96,
+    "video_end_ms": 421
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " code, which is again a vector in rH with H different than D. And usually in PCA H was",
+    "room_id": "139909",
+    "id": "51b5d1b1-9dcf-495a-aab1-70ea316b1607",
+    "page": null,
+    "video_start_ms": 421,
+    "video_end_ms": 429.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " much smaller than D. But in sparse coding it can be actually much smaller. It can be the",
+    "room_id": "139909",
+    "id": "b904869a-f9db-4cf0-a139-e23cd39dc2e7",
+    "page": null,
+    "video_start_ms": 429.72,
+    "video_end_ms": 438.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " same size or also larger. In that case we talk about an over-complete representation.",
+    "room_id": "139909",
+    "id": "614925fe-635c-473e-960d-035f27af78c1",
+    "page": null,
+    "video_start_ms": 438.52,
+    "video_end_ms": 444.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And this doesn't really cause a problem because many of these elements will be zero. So if",
+    "room_id": "139909",
+    "id": "00b322a3-6e40-4b0f-b7de-05696939c815",
+    "page": null,
+    "video_start_ms": 444.92,
+    "video_end_ms": 452.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you think of trying to describe, for example, in terms of an image in terms of worlds, there",
+    "room_id": "139909",
+    "id": "35a8e4d4-d310-48a5-bd27-0ec57712e644",
+    "page": null,
+    "video_start_ms": 452.68,
+    "video_end_ms": 460
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " might be many more worlds that would potentially describe an image than the number of pixels",
+    "room_id": "139909",
+    "id": "c761e0d3-895f-4f4d-9475-2898061523ca",
+    "page": null,
+    "video_start_ms": 460,
+    "video_end_ms": 468.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that formed the image. So it's not a problem to have H larger than D. And in fact, we will",
+    "room_id": "139909",
+    "id": "4799b933-406b-437a-81bf-4149244de309",
+    "page": null,
+    "video_start_ms": 468.48,
+    "video_end_ms": 477.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " typically prefer indicative sparse coding to have large, high dimensional source vectors.",
+    "room_id": "139909",
+    "id": "515397f8-5398-4b25-8a59-45439caac837",
+    "page": null,
+    "video_start_ms": 477.2,
+    "video_end_ms": 486.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Okay, then the dictionary W. So this is basically a matrix of size d times H. Or it can",
+    "room_id": "139909",
+    "id": "e6b71909-bfba-4427-a3d6-4e3e7a7343e0",
+    "page": null,
+    "video_start_ms": 486.68,
+    "video_end_ms": 496.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " sometimes be H times D. It depends on how you write the formulas, I think in the programming",
+    "room_id": "139909",
+    "id": "c58fe5f5-dcc0-4d6d-97c6-f9b4c626f9cb",
+    "page": null,
+    "video_start_ms": 496.88,
+    "video_end_ms": 501.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " exercise, it's of size H times D. But basically it's the collection of all the basis in input",
+    "room_id": "139909",
+    "id": "a00ffd7a-1cee-4f66-8503-42732a408cd3",
+    "page": null,
+    "video_start_ms": 501.76,
+    "video_end_ms": 510.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " space. So basically each basis is a vector of dimension D. And if you just stack them,",
+    "room_id": "139909",
+    "id": "2601c691-d764-428b-a2d6-68691fc5859d",
+    "page": null,
+    "video_start_ms": 510.88,
+    "video_end_ms": 518.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you get a matrix of size d times H. And linear sparse coding reconstructs approximately",
+    "room_id": "139909",
+    "id": "bf0c1b1e-15b9-4d18-8be2-799b47a331b7",
+    "page": null,
+    "video_start_ms": 518.88,
+    "video_end_ms": 527.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the data from the source code. Basically using this matrix multiplication. So you take S,",
+    "room_id": "139909",
+    "id": "4d27d122-78fb-446c-bc43-63ec6d99f8e1",
+    "page": null,
+    "video_start_ms": 527.24,
+    "video_end_ms": 536.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is a vector, RH, then you multiply it by this matrix. And then you get some X hat",
+    "room_id": "139909",
+    "id": "44e45673-5bf2-4d5b-bb0a-7fa49e8d1d97",
+    "page": null,
+    "video_start_ms": 536.08,
+    "video_end_ms": 543.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " where X hat is the reconstructed data. And this is basically a matrix multiplication.",
+    "room_id": "139909",
+    "id": "8f3d8b14-fbee-4b21-b829-42ffeb972072",
+    "page": null,
+    "video_start_ms": 543.76,
+    "video_end_ms": 552.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " This is actually the dense formulation, but because many of these vectors elements are",
+    "room_id": "139909",
+    "id": "f0ee8c3b-078b-4eb2-ad4c-f0e0dff17b6a",
+    "page": null,
+    "video_start_ms": 552.4,
+    "video_end_ms": 558.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " sparse in practice, it's inefficient. Or you can basically have more efficient formulation",
+    "room_id": "139909",
+    "id": "a458f4a3-b070-4515-9b35-f1968fa85870",
+    "page": null,
+    "video_start_ms": 558.64,
+    "video_end_ms": 566.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " by basically summing over the nonzero indices. And here basically by this we mean the",
+    "room_id": "139909",
+    "id": "e7e015c0-1863-4908-8eba-9cad596a28f2",
+    "page": null,
+    "video_start_ms": 566.64,
+    "video_end_ms": 577.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " its column of the matrix W. That we then multiply with a entry SI of the source vector.",
+    "room_id": "139909",
+    "id": "f20076f8-b25a-4fe3-881b-f36e1106b572",
+    "page": null,
+    "video_start_ms": 577.2,
+    "video_end_ms": 587.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And we just sum them up. So if we have like only like one percent of the source vectors",
+    "room_id": "139909",
+    "id": "de08c9f6-108a-4ad8-ad5a-b7d884d2cc55",
+    "page": null,
+    "video_start_ms": 587.6,
+    "video_end_ms": 594.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that are, let's say if you have like a source vector of size 200. And on the two of these",
+    "room_id": "139909",
+    "id": "608a9ed3-26cc-4186-b83c-ef11edd2899b",
+    "page": null,
+    "video_start_ms": 594.36,
+    "video_end_ms": 601
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " elements are active. Instead of running this big matrix multiplication, you just have",
+    "room_id": "139909",
+    "id": "1199a956-6578-4226-87f9-cbfa2743263d",
+    "page": null,
+    "video_start_ms": 601,
+    "video_end_ms": 605.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to sum over two elements and apply basically sum over two vectors. So that's basically the",
+    "room_id": "139909",
+    "id": "69a64945-69f6-40a3-88cb-8eb52920de88",
+    "page": null,
+    "video_start_ms": 605.8,
+    "video_end_ms": 614.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " way the model is defined. And now the big question will be how do we learn the dictionary",
+    "room_id": "139909",
+    "id": "05ac6a1f-d0d6-4aa1-98e3-c0b02ddef02d",
+    "page": null,
+    "video_start_ms": 614.92,
+    "video_end_ms": 619.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " with W as well as the sparse code S1 until Sn. If we have some data sets X1 until Xn. So",
+    "room_id": "139909",
+    "id": "74e06364-79f5-487b-9280-33b69d88ed7d",
+    "page": null,
+    "video_start_ms": 619.76,
+    "video_end_ms": 629.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " when no nether of them, we don't know the dictionary query, we like to learn it. And the sparse",
+    "room_id": "139909",
+    "id": "3f70e0e0-1d79-4edf-8ffe-41d663c74b4f",
+    "page": null,
+    "video_start_ms": 629.04,
+    "video_end_ms": 635.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " codes we also need to learn them. So we'll first start with the L0 formulation, which",
+    "room_id": "139909",
+    "id": "4570e5a4-24b2-4901-b178-8325712027e2",
+    "page": null,
+    "video_start_ms": 635.56,
+    "video_end_ms": 645.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is like theoretically optimal, but which is not practically, which cannot be optimized",
+    "room_id": "139909",
+    "id": "310cd22e-dfc0-4c70-a390-beeb55d067f5",
+    "page": null,
+    "video_start_ms": 645.6,
+    "video_end_ms": 651.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " practically. Or at least not with simple methods. And we will have basically our data set",
+    "room_id": "139909",
+    "id": "b0e9e207-5cca-4f3d-87d3-c7a982b5c887",
+    "page": null,
+    "video_start_ms": 651.52,
+    "video_end_ms": 658.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is composed of our collection of vectors in Rd. Then we will have our associated sources,",
+    "room_id": "139909",
+    "id": "baef36fe-cce7-4a97-870e-042d670dbcd4",
+    "page": null,
+    "video_start_ms": 658.36,
+    "video_end_ms": 666.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is basically a collection of vectors in Rh. And then we will finally have W, which",
+    "room_id": "139909",
+    "id": "6aad4459-2a07-4f3b-b6c3-06e91a881120",
+    "page": null,
+    "video_start_ms": 666.6,
+    "video_end_ms": 674.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is our dictionary that reconstruct the data from the sources. And now we will try to implement",
+    "room_id": "139909",
+    "id": "b8793d45-cd30-4c05-9e2f-5c47adf6d689",
+    "page": null,
+    "video_start_ms": 674.64,
+    "video_end_ms": 681.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the following objective, which is basically the mean square error between the data and",
+    "room_id": "139909",
+    "id": "4d3b5795-563b-48a5-9d08-c8624a3cc75c",
+    "page": null,
+    "video_start_ms": 681.92,
+    "video_end_ms": 693.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the reconstruction. Right. It's a reconstruction error. And in addition, we want to reconstruct",
+    "room_id": "139909",
+    "id": "7791aea9-5739-4ea9-8c8b-a6d3d0899db1",
+    "page": null,
+    "video_start_ms": 693.92,
+    "video_end_ms": 703.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the source vector sparse. And one way to implement that is to apply the zero norm with",
+    "room_id": "139909",
+    "id": "b17fb9d2-6339-428a-94a7-8eabce535f13",
+    "page": null,
+    "video_start_ms": 703.32,
+    "video_end_ms": 715.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " norm in quotes, because it's not a norm actually, but it's just basically a generalization",
+    "room_id": "139909",
+    "id": "d189232c-99a1-4fe5-90c0-24267e996053",
+    "page": null,
+    "video_start_ms": 715.36,
+    "video_end_ms": 720.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of the p-norm with p equal to zero. And what this zero norm does is that it counts the",
+    "room_id": "139909",
+    "id": "71c36f7c-2c02-43b2-9a3c-f1dc6931a215",
+    "page": null,
+    "video_start_ms": 720.84,
+    "video_end_ms": 727.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " number of non-zero elements in the vector. So here, for example, if you have this vector,",
+    "room_id": "139909",
+    "id": "dbe54bec-2562-4144-99ec-274df5af4ad5",
+    "page": null,
+    "video_start_ms": 727.52,
+    "video_end_ms": 734.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the zero norm would be simply 2. And so if you minimize that, you have an objective",
+    "room_id": "139909",
+    "id": "47259383-43da-46d3-8204-92264b3ab12a",
+    "page": null,
+    "video_start_ms": 734.52,
+    "video_end_ms": 743.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which tries to reconstruct and at the same time, try to create source vectors that are",
+    "room_id": "139909",
+    "id": "ae289936-b4ee-4afe-a0f3-56865611dc48",
+    "page": null,
+    "video_start_ms": 743.08,
+    "video_end_ms": 750.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " as sparse as possible. So if we could optimize this, that would be very good. But the problem",
+    "room_id": "139909",
+    "id": "3bdc15a5-965d-4536-ad6a-767f34891b71",
+    "page": null,
+    "video_start_ms": 750.08,
+    "video_end_ms": 758.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is that the zero norm is a non-convex and not differentiable, which makes it hard to optimize.",
+    "room_id": "139909",
+    "id": "85b42570-c491-448a-880e-67d6a10e3c12",
+    "page": null,
+    "video_start_ms": 758.4,
+    "video_end_ms": 770.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So one idea is to apply what we call an L1 relaxation. And the idea is to replace the zero",
+    "room_id": "139909",
+    "id": "6ac928b2-d2ff-4c13-85e7-f0e77fc6bd1f",
+    "page": null,
+    "video_start_ms": 770.96,
+    "video_end_ms": 782
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " norm by one norm. And one norm is basically sometimes called the Manhattan distance between",
+    "room_id": "139909",
+    "id": "15f18c98-6103-4945-8c57-5b5808403c55",
+    "page": null,
+    "video_start_ms": 782,
+    "video_end_ms": 793.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " SE and the origin. And here, basically, the only thing that changes from the previous",
+    "room_id": "139909",
+    "id": "a4000187-6e33-4548-9189-dacff740467e",
+    "page": null,
+    "video_start_ms": 793.2,
+    "video_end_ms": 799.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " optimization problem is that we have a one here. And the nice thing about the L1 norm,",
+    "room_id": "139909",
+    "id": "aa7cc939-d1bb-4e1d-87de-30dc1c38d926",
+    "page": null,
+    "video_start_ms": 799.12,
+    "video_end_ms": 807.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the one norm is that it's complex. So and also, it is the differentiable almost everywhere,",
+    "room_id": "139909",
+    "id": "bfebfbaf-339e-49c0-9a37-080bb32aa114",
+    "page": null,
+    "video_start_ms": 807.64,
+    "video_end_ms": 815.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " except at the hinges of the norm, but most likely, we will never be exactly at that point.",
+    "room_id": "139909",
+    "id": "b30e2e0c-9585-4090-82ba-9173c08adf7b",
+    "page": null,
+    "video_start_ms": 815.96,
+    "video_end_ms": 828.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So basically now we have a convex optimization problem. We can, for example, solve it",
+    "room_id": "139909",
+    "id": "baac5610-8b55-4f51-a20c-80530c6387e1",
+    "page": null,
+    "video_start_ms": 828.24,
+    "video_end_ms": 833.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " by gradient descent or by something more efficient. But there is actually a problem with",
+    "room_id": "139909",
+    "id": "a09eb911-a3ad-44f8-a6ef-7b6d33925f42",
+    "page": null,
+    "video_start_ms": 833.72,
+    "video_end_ms": 840.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this. Okay, first of all, the limitation is that we are not optimizing the exact L0 formulation",
+    "room_id": "139909",
+    "id": "c1955866-dc9c-4537-b7c7-04e8dff045c6",
+    "page": null,
+    "video_start_ms": 840.04,
+    "video_end_ms": 850.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of sparse coding. So we will not get the maximally, like the optimally sparse solution, but",
+    "room_id": "139909",
+    "id": "2eff7b3c-4132-4126-b141-65963a927a3b",
+    "page": null,
+    "video_start_ms": 850.36,
+    "video_end_ms": 857.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " something like a sparse solution. In practice, it will be most of the time sufficient. But",
+    "room_id": "139909",
+    "id": "796514db-78ff-44e7-a3d5-9b78ed6b4630",
+    "page": null,
+    "video_start_ms": 857.24,
+    "video_end_ms": 865.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " yes, there are actually some approach to sparse coding that try to go beyond L1 norm and",
+    "room_id": "139909",
+    "id": "66cbeef6-7911-4b70-bfff-848290e25b86",
+    "page": null,
+    "video_start_ms": 865.2,
+    "video_end_ms": 872.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " try to use something non convex, which is closer to the zero norm. And there is another",
+    "room_id": "139909",
+    "id": "818faef7-e51b-4b7f-932f-ebe7ad682491",
+    "page": null,
+    "video_start_ms": 872.24,
+    "video_end_ms": 882.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " problem. And this one is actually more severe, is that if you scale up W and scale down",
+    "room_id": "139909",
+    "id": "0e988a9e-98e8-4632-a895-8e5cf9f6cd15",
+    "page": null,
+    "video_start_ms": 882.32,
+    "video_end_ms": 892.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " SI accordingly, then this term does not change. Let's say if you multiply W by 2 and you",
+    "room_id": "139909",
+    "id": "81ce834c-4b80-4c30-97b6-16910ea4d8f9",
+    "page": null,
+    "video_start_ms": 892.16,
+    "video_end_ms": 899.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " divide SI by 2. This doesn't change, but this thing decreases by effect or 2. So you can",
+    "room_id": "139909",
+    "id": "93d211e8-2b6c-461f-95f9-e0efcfbd9897",
+    "page": null,
+    "video_start_ms": 899.56,
+    "video_end_ms": 907.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " just keep scaling up and scaling down these two terms. And at the end, the sparse term",
+    "room_id": "139909",
+    "id": "74e6dde6-1206-41df-b4f4-bb85c36226e9",
+    "page": null,
+    "video_start_ms": 907.44,
+    "video_end_ms": 914.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " becomes almost zero. And essentially, you get a sparse theory term which is not effective.",
+    "room_id": "139909",
+    "id": "50607660-abb6-45cf-9cd0-083c9bbe9871",
+    "page": null,
+    "video_start_ms": 914.92,
+    "video_end_ms": 922.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " You can always create an optimally reconstructing solution optimally sparse by choosing",
+    "room_id": "139909",
+    "id": "990dba38-24c7-4ee1-8dc2-e134cf1b1ea1",
+    "page": null,
+    "video_start_ms": 922.76,
+    "video_end_ms": 928.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " a dictionary with very large weights. So we don't want that because we want to, we have some",
+    "room_id": "139909",
+    "id": "7bc73411-5add-44f6-9fc1-153011f3746e",
+    "page": null,
+    "video_start_ms": 928.96,
+    "video_end_ms": 937.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " effective sparse city. And for this, we will add a regularization terms on the weights",
+    "room_id": "139909",
+    "id": "6f4f35ab-7bfc-472e-91cb-b62b4e607215",
+    "page": null,
+    "video_start_ms": 937.36,
+    "video_end_ms": 948.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of the dictionary, which can be, for example, simply eta times the Frobenius norm of the",
+    "room_id": "139909",
+    "id": "6681a72d-e268-451b-b3dd-a10dd123198e",
+    "page": null,
+    "video_start_ms": 948.36,
+    "video_end_ms": 957.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " dictionary W. So basically, what is the Frobenius norm square is the sum of all the square values",
+    "room_id": "139909",
+    "id": "2ac211ca-ea03-4c28-b775-b1ed60701408",
+    "page": null,
+    "video_start_ms": 957.04,
+    "video_end_ms": 965.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of the matrix. There are different formulations, a different way to incorporate this constraint.",
+    "room_id": "139909",
+    "id": "5e42f036-c0e6-4247-b9df-7cea4c7e9821",
+    "page": null,
+    "video_start_ms": 965.52,
+    "video_end_ms": 973.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Here it's a additive term, but sometimes you can also see in the literature this constraint",
+    "room_id": "139909",
+    "id": "36de5e00-b03f-432a-b521-016c1312dfb5",
+    "page": null,
+    "video_start_ms": 973.32,
+    "video_end_ms": 980.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " enforce some actual constraint. The norm of the weights have to be smaller than some parameter",
+    "room_id": "139909",
+    "id": "f3c55a3f-cdb3-4b00-8099-ec9b00723333",
+    "page": null,
+    "video_start_ms": 980.52,
+    "video_end_ms": 990.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " C. So there are different formulations. But in any case, this serves to address the problem",
+    "room_id": "139909",
+    "id": "52874d34-36b2-495a-93be-dc0099b2601f",
+    "page": null,
+    "video_start_ms": 990.96,
+    "video_end_ms": 1000.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of making the sparse-determe effective. Okay, so now to illustrate what sparse coding",
+    "room_id": "139909",
+    "id": "ff09a1a7-b219-4bca-a8fb-872c3c2a36f0",
+    "page": null,
+    "video_start_ms": 1000.32,
+    "video_end_ms": 1012.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " does, we will look at the toy example. We have some data sets of N data points in",
+    "room_id": "139909",
+    "id": "a28aa3de-256c-42d0-97a8-de59298abe6d",
+    "page": null,
+    "video_start_ms": 1012.28,
+    "video_end_ms": 1018.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " R2. And then we will perform source coding with sources in R3. And after optimization, most",
+    "room_id": "139909",
+    "id": "f96dc2bc-759b-4e19-b100-dc38d8439750",
+    "page": null,
+    "video_start_ms": 1018.48,
+    "video_end_ms": 1030.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of the data points will be sparse in a source space. And align with the coordinate system.",
+    "room_id": "139909",
+    "id": "5aa98bb8-dbd2-413d-949e-0e479f9ff0e3",
+    "page": null,
+    "video_start_ms": 1030.44,
+    "video_end_ms": 1041.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So basically, this is like a simulation. So here we have taken some input data. We have",
+    "room_id": "139909",
+    "id": "6ab08105-7347-4d25-8814-3a984d6d915f",
+    "page": null,
+    "video_start_ms": 1041.96,
+    "video_end_ms": 1050.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " fixed dictionary to be, to be basically optimal. And then we run basically this sum gradient",
+    "room_id": "139909",
+    "id": "b265d5de-5a2b-4f74-9906-dc33074838a8",
+    "page": null,
+    "video_start_ms": 1050.24,
+    "video_end_ms": 1057.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " descent over sources. And this is what we find. So basically if we apply the L1 norm, then",
+    "room_id": "139909",
+    "id": "da37f76d-8e90-4e3d-b955-2286b11336ca",
+    "page": null,
+    "video_start_ms": 1057.4,
+    "video_end_ms": 1064.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the sources naturally converge towards either the origin or not the origin, but as close",
+    "room_id": "139909",
+    "id": "cd58097c-2269-4024-8cd0-c447db8415f9",
+    "page": null,
+    "video_start_ms": 1064.24,
+    "video_end_ms": 1071.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " as possible to the canonical coordinate system. So we get this kind of cloud of data points.",
+    "room_id": "139909",
+    "id": "c41efe92-9499-4e9d-a417-0ad5e4430a8a",
+    "page": null,
+    "video_start_ms": 1071.64,
+    "video_end_ms": 1080.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And then if you project back on the dictionary, then basically this thing maps there. This",
+    "room_id": "139909",
+    "id": "7d506517-2209-4f30-b276-c9cbb61af924",
+    "page": null,
+    "video_start_ms": 1080.48,
+    "video_end_ms": 1089.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " thing maps there. And this one maps there. And then basically we get some reconstruction",
+    "room_id": "139909",
+    "id": "969e80a6-b46f-4e9c-89ea-59620de0c10c",
+    "page": null,
+    "video_start_ms": 1089.76,
+    "video_end_ms": 1094.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of our input data, which is not optimal, but still quite acceptable. So for example,",
+    "room_id": "139909",
+    "id": "38939169-e20f-4846-92a2-c15585ac0d09",
+    "page": null,
+    "video_start_ms": 1094.64,
+    "video_end_ms": 1105.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " most of these points will map to this region of the input space. So probably the ones that",
+    "room_id": "139909",
+    "id": "af53d05a-b3e8-4f70-96ee-a6774450435e",
+    "page": null,
+    "video_start_ms": 1105.4,
+    "video_end_ms": 1112.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " are close to this line will map exactly there. And only the few points that are far away",
+    "room_id": "139909",
+    "id": "6ba2e10e-aabf-489c-b552-79e2c07a3446",
+    "page": null,
+    "video_start_ms": 1112.44,
+    "video_end_ms": 1118.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " will be left over there. And then there's the question of the parameter lambda. So if you",
+    "room_id": "139909",
+    "id": "a6c377b5-fd23-4841-b965-3f3eae03290e",
+    "page": null,
+    "video_start_ms": 1118.76,
+    "video_end_ms": 1129.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " remember in this optimization problem, there is a factor lambda, which basically determines",
+    "room_id": "139909",
+    "id": "f6f99ca0-c2e9-49b5-af68-58f90c3ed616",
+    "page": null,
+    "video_start_ms": 1129.88,
+    "video_end_ms": 1135.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " who strongly we apply this participinality. And it's interesting to see the effect of the",
+    "room_id": "139909",
+    "id": "c799bab1-791a-4d7d-9dce-b9da723a4bd4",
+    "page": null,
+    "video_start_ms": 1135.08,
+    "video_end_ms": 1143.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " parameter lambda. So if you use a small parameter lambda, then basically nothing happens.",
+    "room_id": "139909",
+    "id": "7bf28fda-fa9e-4892-b05d-bdc2035df626",
+    "page": null,
+    "video_start_ms": 1143.12,
+    "video_end_ms": 1150.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So you just have perfect reconstruction and no sparsity at all. If you increase lambda",
+    "room_id": "139909",
+    "id": "f25e98cc-a816-4615-b21c-d891f4b4cce0",
+    "page": null,
+    "video_start_ms": 1150.48,
+    "video_end_ms": 1159.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " a little bit, then you start to see that a few points start to agglomerate them in a region",
+    "room_id": "139909",
+    "id": "9ec1a06b-62af-481c-a390-91125d2811b7",
+    "page": null,
+    "video_start_ms": 1159.24,
+    "video_end_ms": 1168.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of sparsity. So we're only one of the element is zero. One element is known zero. If you",
+    "room_id": "139909",
+    "id": "3e8eb6c8-70ad-45f8-bbd0-66b53550a55c",
+    "page": null,
+    "video_start_ms": 1168.84,
+    "video_end_ms": 1179.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " keep increasing lambda, then most of the points start to align with the canonical coordinate",
+    "room_id": "139909",
+    "id": "6e075416-a5cf-4413-b0f7-b29dac263be0",
+    "page": null,
+    "video_start_ms": 1179.92,
+    "video_end_ms": 1187.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " system in the source space and then project back onto this direction of the dictionary.",
+    "room_id": "139909",
+    "id": "bad058f8-23ea-49a1-812e-a56b89b57a8c",
+    "page": null,
+    "video_start_ms": 1187.24,
+    "video_end_ms": 1198.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And if you just keep increasing lambda, for example, lambda equals six, then you try to",
+    "room_id": "139909",
+    "id": "2187fcde-93b2-4cbe-98a7-d9613bc7a369",
+    "page": null,
+    "video_start_ms": 1198.32,
+    "video_end_ms": 1203.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " have even more sparsity. And in the very end, the the problem, the strongest sparsity is",
+    "room_id": "139909",
+    "id": "7472e168-8710-4056-b119-810624fd86c1",
+    "page": null,
+    "video_start_ms": 1203.44,
+    "video_end_ms": 1208.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " just to set everything to zero. And then basically, then you have the most spars possible solution,",
+    "room_id": "139909",
+    "id": "07f5172b-898c-4ae5-ac73-a574c0a5d720",
+    "page": null,
+    "video_start_ms": 1208.32,
+    "video_end_ms": 1215
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is basically solution, all the sources are zero. But the problem is that it does not",
+    "room_id": "139909",
+    "id": "95fab072-25be-491e-82d5-c15ac65165fb",
+    "page": null,
+    "video_start_ms": 1215,
+    "video_end_ms": 1220.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " reconstruct well the data anymore. And so in practice, you always want to have some",
+    "room_id": "139909",
+    "id": "cbbdcc64-77d6-435d-8446-a07433c3a723",
+    "page": null,
+    "video_start_ms": 1220.68,
+    "video_end_ms": 1231.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " intermediate value of lambda to get a nice trade off. So here, probably, n equals zero.",
+    "room_id": "139909",
+    "id": "4dfaa602-b34c-4b72-b868-e3938aca3afe",
+    "page": null,
+    "video_start_ms": 1231.08,
+    "video_end_ms": 1237.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Six might be good, or n equals zero. Two might be good. It very much depends on the exact",
+    "room_id": "139909",
+    "id": "8f3eabab-2eab-40c8-846b-c0f314913564",
+    "page": null,
+    "video_start_ms": 1237.56,
+    "video_end_ms": 1243.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " applications. So you want a strong compression. Or what are you want to keep the data, basically",
+    "room_id": "139909",
+    "id": "a1e7f1e3-0df5-4942-852f-1f976f6bfe07",
+    "page": null,
+    "video_start_ms": 1243.6,
+    "video_end_ms": 1252.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to do better preserved property of the data. So that was for basic spars coding. And now",
+    "room_id": "139909",
+    "id": "c7983533-cd37-4cd4-97dc-197215d624c3",
+    "page": null,
+    "video_start_ms": 1252.48,
+    "video_end_ms": 1264.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " there are many extensions of spars coding. And one which is interesting is convolutional",
+    "room_id": "139909",
+    "id": "adb7288a-8a57-4bc1-a8c4-9bc938cd61ee",
+    "page": null,
+    "video_start_ms": 1264.08,
+    "video_end_ms": 1268.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " spars coding. So we haven't looked at convolution so much yet, just a little bit machine learning",
+    "room_id": "139909",
+    "id": "13aa42c2-86a6-4be1-9603-68bc5d75d257",
+    "page": null,
+    "video_start_ms": 1268.56,
+    "video_end_ms": 1274.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " one in the context of neural networks. But here, the idea is that you can have some kind",
+    "room_id": "139909",
+    "id": "4a491744-e692-4665-981c-e477e70084fd",
+    "page": null,
+    "video_start_ms": 1274.56,
+    "video_end_ms": 1282.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of structured feature map or structured source code that consists of basically source",
+    "room_id": "139909",
+    "id": "e3155e92-3344-407b-b3b0-6fe077ac671c",
+    "page": null,
+    "video_start_ms": 1282.56,
+    "video_end_ms": 1296.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " elements. And then they are not simple scalars. They are actually images. And at these images,",
+    "room_id": "139909",
+    "id": "ae4ad51d-ef6f-42f3-a61a-2869a88167c5",
+    "page": null,
+    "video_start_ms": 1296.72,
+    "video_end_ms": 1303.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you have some points that are known zero. And then the idea is that each of these images,",
+    "room_id": "139909",
+    "id": "a5202c45-e151-4620-a51b-e85f071b12e8",
+    "page": null,
+    "video_start_ms": 1303.72,
+    "video_end_ms": 1310.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " then you can evolve them with a convolution filter. And then you add them up for all",
+    "room_id": "139909",
+    "id": "16e16168-9e5e-41b5-a195-14f98f187ed9",
+    "page": null,
+    "video_start_ms": 1310.56,
+    "video_end_ms": 1315.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " these feature maps. And then you get the coded image. And the nice thing about it, so one",
+    "room_id": "139909",
+    "id": "3bc43901-ce33-473c-aa61-71d8f72f68ea",
+    "page": null,
+    "video_start_ms": 1315.64,
+    "video_end_ms": 1322.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " first nice thing is that you can actually have even more interesting representation of",
+    "room_id": "139909",
+    "id": "8b7ed125-438f-4016-986f-753d31aec93b",
+    "page": null,
+    "video_start_ms": 1322.32,
+    "video_end_ms": 1328.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " your source vector. Or you can basically only encode the non-zero maps and the non-zero",
+    "room_id": "139909",
+    "id": "d42fee21-2233-499c-9b25-7aa68adfca70",
+    "page": null,
+    "video_start_ms": 1328.24,
+    "video_end_ms": 1340.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " locations in the map. So it's actually can be even higher compression. And another nice",
+    "room_id": "139909",
+    "id": "1ce81597-b242-420e-b766-4585c1a746ae",
+    "page": null,
+    "video_start_ms": 1340.08,
+    "video_end_ms": 1351.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " thing is that you don't need to build like one dictionary element for every location in",
+    "room_id": "139909",
+    "id": "ecb8ba56-74ae-4894-b3ee-b0ee69ff62f3",
+    "page": null,
+    "video_start_ms": 1351.32,
+    "video_end_ms": 1361.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the input space. So if you look at the previous dictionary, which was there, then basically",
+    "room_id": "139909",
+    "id": "d4c26c29-de2a-4c92-88a2-493e0181e600",
+    "page": null,
+    "video_start_ms": 1361.2,
+    "video_end_ms": 1366.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you have these filters that detect edges with everywhere in the input space. With convolutional",
+    "room_id": "139909",
+    "id": "ec4fc750-fe43-4872-ac38-264f7e3abdcf",
+    "page": null,
+    "video_start_ms": 1366.52,
+    "video_end_ms": 1373.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " spars coding, you don't have to do that. You just have to learn these filter once. And",
+    "room_id": "139909",
+    "id": "c22e7672-8b0c-4ab3-bb0a-5a8000e74216",
+    "page": null,
+    "video_start_ms": 1373.28,
+    "video_end_ms": 1380.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " naturally it will be at the middle of the convolution filters. And then the position of the dictionary",
+    "room_id": "139909",
+    "id": "414096a2-27df-450e-878c-0558099f9389",
+    "page": null,
+    "video_start_ms": 1380.44,
+    "video_end_ms": 1386.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " element is not encoded by the exact index of your source vector, but by the position within",
+    "room_id": "139909",
+    "id": "24c3e6aa-5554-4050-851b-9302f0c51dca",
+    "page": null,
+    "video_start_ms": 1386.16,
+    "video_end_ms": 1395.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " a given index. So to compare standard spars coding and convolutional spars coding, so this",
+    "room_id": "139909",
+    "id": "9126194b-bd7f-4f94-9fd1-fb1c6fc68362",
+    "page": null,
+    "video_start_ms": 1395.68,
+    "video_end_ms": 1405.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is what you see. So this is basically when you build some decomposition as spars code",
+    "room_id": "139909",
+    "id": "ce57e6ba-7e8e-4867-9680-e4cea7906d22",
+    "page": null,
+    "video_start_ms": 1405.72,
+    "video_end_ms": 1411.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of image patches. And if you apply spars coding, you get this kind of decomposition in the dictionary,",
+    "room_id": "139909",
+    "id": "721a4254-2343-482c-ba37-406b40e6b056",
+    "page": null,
+    "video_start_ms": 1411.84,
+    "video_end_ms": 1418.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is basically a bunch of oriented edges at a different location. If you apply convolutional",
+    "room_id": "139909",
+    "id": "5cf1bb2a-8f26-4eea-a933-a7786ee93644",
+    "page": null,
+    "video_start_ms": 1418.28,
+    "video_end_ms": 1424.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " spars coding, then the edges you still have oriented edges, but you don't need to encode",
+    "room_id": "139909",
+    "id": "3d086ab7-b13d-404e-a82f-59970bc02dcc",
+    "page": null,
+    "video_start_ms": 1424.64,
+    "video_end_ms": 1431.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " all the shifts. So you can in fact use the capacity of your dictionary to encode some",
+    "room_id": "139909",
+    "id": "161550f0-1b82-46f7-bc6a-4555ff626219",
+    "page": null,
+    "video_start_ms": 1431.32,
+    "video_end_ms": 1442.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " richer features. And here you see, for example, you don't have only edges. You also have",
+    "room_id": "139909",
+    "id": "f266f846-234a-40e1-91f6-83a6dce57756",
+    "page": null,
+    "video_start_ms": 1442.76,
+    "video_end_ms": 1447.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " circles. You have cross. You have some interesting texture filters. So much, much more variety.",
+    "room_id": "139909",
+    "id": "5c952d45-698e-463f-81cd-bb9520ee9bf3",
+    "page": null,
+    "video_start_ms": 1447.44,
+    "video_end_ms": 1461.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Compared to standard spars coding. There is one more extension of spars coding, which is",
+    "room_id": "139909",
+    "id": "d8959279-445c-40b4-b97f-310b0bd021fd",
+    "page": null,
+    "video_start_ms": 1461.24,
+    "video_end_ms": 1469.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " topological spars coding. And here are the ideas that you can add to your spars coding objective",
+    "room_id": "139909",
+    "id": "ce7db3a0-1321-41cd-b188-ace9efda90a1",
+    "page": null,
+    "video_start_ms": 1469.56,
+    "video_end_ms": 1477.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " constraints that source dimensions must correlate on some pretty fine two-degree. So basically",
+    "room_id": "139909",
+    "id": "c83fa130-ad3d-4efc-ae6d-2cb455bdb1de",
+    "page": null,
+    "video_start_ms": 1477.16,
+    "video_end_ms": 1485.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you add this constraint. You force basically this source code, as I said, to see two dictionary",
+    "room_id": "139909",
+    "id": "93a93150-473a-485d-b411-66c3ac75058e",
+    "page": null,
+    "video_start_ms": 1485.8,
+    "video_end_ms": 1493.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " elements to be correlated. And you do the same for this one, for this one, for this one,",
+    "room_id": "139909",
+    "id": "eb304d7a-7c81-4bc4-bc2f-64e3f4a481db",
+    "page": null,
+    "video_start_ms": 1493.92,
+    "video_end_ms": 1500.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and so on. And so forth. And then basically you get your nice topological spars coding",
+    "room_id": "139909",
+    "id": "37b17884-d3dc-4a8c-bf22-7ea544b10b4a",
+    "page": null,
+    "video_start_ms": 1500.64,
+    "video_end_ms": 1512.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " where you can have a nice overview of the dictionary elements, which direction they take",
+    "room_id": "139909",
+    "id": "22b2269e-44fb-4081-8888-80cb790f7760",
+    "page": null,
+    "video_start_ms": 1512.8,
+    "video_end_ms": 1518.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and how similar the different dictionary elements are. Now we come to the implementation",
+    "room_id": "139909",
+    "id": "dede3e0d-3cfa-4b49-b782-7edafec56e45",
+    "page": null,
+    "video_start_ms": 1518.88,
+    "video_end_ms": 1528.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of spars coding. And so the first observation we can make is that there might be different",
+    "room_id": "139909",
+    "id": "df781761-8115-4f24-8440-0891d1e85a3e",
+    "page": null,
+    "video_start_ms": 1528.76,
+    "video_end_ms": 1539.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " cases. So sometimes you might have large number of data points. And the whole source",
+    "room_id": "139909",
+    "id": "d6f31f1d-a1ed-4d8a-974d-e181a9079a04",
+    "page": null,
+    "video_start_ms": 1539.48,
+    "video_end_ms": 1547.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " code, which is of size n times h, might not fit on in memory. So if you have a very large",
+    "room_id": "139909",
+    "id": "45b4a09b-c7bc-47d9-ab98-5e7233dbeb7a",
+    "page": null,
+    "video_start_ms": 1547.84,
+    "video_end_ms": 1553.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " image data set, you can pose a 1 million images. This might not fit in memory. And there",
+    "room_id": "139909",
+    "id": "a21a1aa5-1035-4a01-8a54-91e4cb84002f",
+    "page": null,
+    "video_start_ms": 1553.52,
+    "video_end_ms": 1561.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " are other cases, which is when n is small. And in that case you might fit all the data",
+    "room_id": "139909",
+    "id": "86d0d562-973f-4b22-aae4-63f5f5fcf19b",
+    "page": null,
+    "video_start_ms": 1561.52,
+    "video_end_ms": 1568.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " in memory in all the source codes. So for the first case, there is something, the approach,",
+    "room_id": "139909",
+    "id": "4fa3656f-7faa-4e55-a6ff-619a9ccf6a05",
+    "page": null,
+    "video_start_ms": 1568.16,
+    "video_end_ms": 1573.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " natural approach is to have a batch algorithm where you basically initialize all your vector",
+    "room_id": "139909",
+    "id": "22313fd6-edbd-44b0-b65a-1981e335b086",
+    "page": null,
+    "video_start_ms": 1573.84,
+    "video_end_ms": 1580.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and source code. And then you can just update the source elements and dictionary one after",
+    "room_id": "139909",
+    "id": "c6953c3f-ed85-4256-96d3-fc59f1706fcb",
+    "page": null,
+    "video_start_ms": 1580.36,
+    "video_end_ms": 1587.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the other until convergence. For the online version, you cannot do that. You first have",
+    "room_id": "139909",
+    "id": "24a2c366-6be3-4446-82b2-5896b89b3740",
+    "page": null,
+    "video_start_ms": 1587.36,
+    "video_end_ms": 1595.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to initialize, basically you can only keep track of the dictionary. But at every step,",
+    "room_id": "139909",
+    "id": "e4a90a32-e48b-4cbd-af12-543c21ca9de2",
+    "page": null,
+    "video_start_ms": 1595.36,
+    "video_end_ms": 1604.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you basically need to take a selection of source code, because you cannot do this for all",
+    "room_id": "139909",
+    "id": "7ec6ff7d-6258-43e9-ba2f-b5220ce90d1e",
+    "page": null,
+    "video_start_ms": 1604.16,
+    "video_end_ms": 1612.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of them at the same time. Which means that at every time step, because the W has changed,",
+    "room_id": "139909",
+    "id": "d9137e5f-70a6-48ec-8465-d4754e46cbff",
+    "page": null,
+    "video_start_ms": 1612.24,
+    "video_end_ms": 1618.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you need to recalculate for a given ID to might have chosen randomly the source code",
+    "room_id": "139909",
+    "id": "1762bd2e-5a58-4d4d-afc6-65e88e52f809",
+    "page": null,
+    "video_start_ms": 1618.88,
+    "video_end_ms": 1626.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " SI. So this can take some time. And then you can update W approximately from SI, basically",
+    "room_id": "139909",
+    "id": "35d37ac6-ea57-4779-967e-0543146ac7ee",
+    "page": null,
+    "video_start_ms": 1626.28,
+    "video_end_ms": 1635.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " something like stochastic written descent. And here, I didn't mention whether we have to",
+    "room_id": "139909",
+    "id": "e91feddc-2649-4542-88af-33e5df6840d7",
+    "page": null,
+    "video_start_ms": 1635.4,
+    "video_end_ms": 1642.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " how we do these updates and inferences. This could be done lively using gradient descent,",
+    "room_id": "139909",
+    "id": "1d4c632b-c837-479f-b56d-589a3404da03",
+    "page": null,
+    "video_start_ms": 1642.28,
+    "video_end_ms": 1649.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " but in fact there are many much more efficient implementations of sparse code image. And",
+    "room_id": "139909",
+    "id": "6a85bc53-b490-4038-88fc-b9739408a42c",
+    "page": null,
+    "video_start_ms": 1649.36,
+    "video_end_ms": 1655.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " there is a paper by Lee et al 2006 that explains different ways of computing these quantities",
+    "room_id": "139909",
+    "id": "b6107fc6-92d9-4881-b928-db908887dcc7",
+    "page": null,
+    "video_start_ms": 1655.04,
+    "video_end_ms": 1667.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " efficiently. Okay, so now we will look at related model, which is auto encoder. And if we",
+    "room_id": "139909",
+    "id": "61473cfc-66a8-4fcf-bc13-747f016eb896",
+    "page": null,
+    "video_start_ms": 1667.64,
+    "video_end_ms": 1681.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " remember one difficulty of sparse coding is that we always need to infer the source codes",
+    "room_id": "139909",
+    "id": "a562e04c-d895-4c69-8d1d-8cd3829c34d9",
+    "page": null,
+    "video_start_ms": 1681.12,
+    "video_end_ms": 1690
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " when learning dictionary. And we can facilitate our sole address this problem with an encoding",
+    "room_id": "139909",
+    "id": "66dd2218-8445-4ace-82a9-7b45ac366828",
+    "page": null,
+    "video_start_ms": 1690,
+    "video_end_ms": 1700.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " function that we would also train at the same time. And so the simplest encoding function",
+    "room_id": "139909",
+    "id": "58f73155-668d-4c53-968d-69646623520d",
+    "page": null,
+    "video_start_ms": 1700.64,
+    "video_end_ms": 1708.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " we can think of would be simply a linear projection that maps our data into the source code.",
+    "room_id": "139909",
+    "id": "5132ad41-8302-4176-9eb5-ef389b1bad4d",
+    "page": null,
+    "video_start_ms": 1708.56,
+    "video_end_ms": 1718.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And then if we basically replace SI by the encoding function, we arrive at a similar objective",
+    "room_id": "139909",
+    "id": "baf9ebfe-bc8d-4d2d-87d2-f0ac768934cc",
+    "page": null,
+    "video_start_ms": 1718.32,
+    "video_end_ms": 1730.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " sparse coding that we can see here. And here now we do not minimize over W and SI. We minimize",
+    "room_id": "139909",
+    "id": "12f5169d-6ce8-47d5-b018-d5b68f6a6be9",
+    "page": null,
+    "video_start_ms": 1730.4,
+    "video_end_ms": 1739.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " over W and V and SI does not appear. So this objective function only depends on these",
+    "room_id": "139909",
+    "id": "ce98f3c9-e4d9-4363-a663-9691fb7b49d2",
+    "page": null,
+    "video_start_ms": 1739.16,
+    "video_end_ms": 1750.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " two matrices and this can be learned via a stochastic gradient descent. So there is a problem",
+    "room_id": "139909",
+    "id": "2ed9fc44-e76f-4608-9efc-30fd0afb01aa",
+    "page": null,
+    "video_start_ms": 1750.8,
+    "video_end_ms": 1759.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " with this potential problem with this formulation is that we are not sure that encoding function",
+    "room_id": "139909",
+    "id": "de257cd3-f205-4ac8-9c44-1f4240be0e1d",
+    "page": null,
+    "video_start_ms": 1759.36,
+    "video_end_ms": 1766.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " actually arrive manages to produce these sparse vectors. And because there is nothing the",
+    "room_id": "139909",
+    "id": "addcf2b5-d38e-4f6f-b41e-c557ae1faf0b",
+    "page": null,
+    "video_start_ms": 1766.16,
+    "video_end_ms": 1776.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " linear function that induces any sparsity. And so one idea is to use an linear encoding",
+    "room_id": "139909",
+    "id": "04cd872e-2189-4350-92e3-081834138e19",
+    "page": null,
+    "video_start_ms": 1776.72,
+    "video_end_ms": 1785.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " function which is basically applying a rectifying function to the output of the linear projection.",
+    "room_id": "139909",
+    "id": "6c7c94d3-db2e-4b2b-8231-52fcd0ddbb59",
+    "page": null,
+    "video_start_ms": 1785.68,
+    "video_end_ms": 1798.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Basically it's a value of an linearity which we apply element wise. And the nice thing with",
+    "room_id": "139909",
+    "id": "fe6d9a80-1b40-4ff0-88c5-da3aaba9a746",
+    "page": null,
+    "video_start_ms": 1798.88,
+    "video_end_ms": 1806.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this linear function is that it produces values that are exactly zero for every negative input.",
+    "room_id": "139909",
+    "id": "9550f085-5270-4938-973d-d73fb0f6fe2a",
+    "page": null,
+    "video_start_ms": 1806.12,
+    "video_end_ms": 1813.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So if you want to increase sparsity, basically we need to make sure that our projection V",
+    "room_id": "139909",
+    "id": "6aafc6f7-7bd2-4fd8-a367-ed8bde6cd157",
+    "page": null,
+    "video_start_ms": 1813.64,
+    "video_end_ms": 1820.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " XI produces maps to something negative. And this can be even more facilitated by also",
+    "room_id": "139909",
+    "id": "8ebe79a0-fb3b-4541-ac04-3ab0d0dd9944",
+    "page": null,
+    "video_start_ms": 1820.96,
+    "video_end_ms": 1830.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " having bias here. So V XI plus B. And then you get we can basically choose B to be negative",
+    "room_id": "139909",
+    "id": "58be26c4-cf7a-4f6a-8304-a41891436e98",
+    "page": null,
+    "video_start_ms": 1830.56,
+    "video_end_ms": 1841.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and it will induce some sparsity. So if now you inject this function into basically the",
+    "room_id": "139909",
+    "id": "b04b7625-57e1-4075-b844-3c2a50c1c62f",
+    "page": null,
+    "video_start_ms": 1841.72,
+    "video_end_ms": 1851.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " objective, you have this, you have this. So W max zero V XI plus lambda S I, normal one.",
+    "room_id": "139909",
+    "id": "457406fa-d4af-49ff-847b-ff577a2988e7",
+    "page": null,
+    "video_start_ms": 1851.68,
+    "video_end_ms": 1862.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " There haven't developed this quantity but you can just replace S I by the maximum. And",
+    "room_id": "139909",
+    "id": "54fba5e3-e11d-46ad-8946-c0d40f23cf11",
+    "page": null,
+    "video_start_ms": 1862.76,
+    "video_end_ms": 1873.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this is very close to an auto encoder that people would use in practice. And there is",
+    "room_id": "139909",
+    "id": "80297c56-9766-4b81-851e-0a0bb2790e60",
+    "page": null,
+    "video_start_ms": 1873.84,
+    "video_end_ms": 1882
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " actually one small problem with this auto encoder is that if we apply, if this sparse",
+    "room_id": "139909",
+    "id": "77dfdab2-0c68-422a-8a1e-cd91fd8ecc9b",
+    "page": null,
+    "video_start_ms": 1882,
+    "video_end_ms": 1890.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " tip nLT works too well, basically the S I will go to zero. And what happens if S I zero",
+    "room_id": "139909",
+    "id": "46f9af62-597a-4278-ab7b-c671f60c8357",
+    "page": null,
+    "video_start_ms": 1890.8,
+    "video_end_ms": 1900.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " basically it means that this thing is zero. And there is no gradient information left.",
+    "room_id": "139909",
+    "id": "af051db4-4e14-45df-b71d-bb2974ba86a3",
+    "page": null,
+    "video_start_ms": 1900.36,
+    "video_end_ms": 1906.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And this is a problem called dead units sometimes. Where basically at some point the sparsity",
+    "room_id": "139909",
+    "id": "9d3fbb84-ebc3-4a23-ba39-38e8f02c60a4",
+    "page": null,
+    "video_start_ms": 1906.76,
+    "video_end_ms": 1915.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " has had its effects and then there is no way to recuperate the units because it has been",
+    "room_id": "139909",
+    "id": "b53b1062-e2e4-4d51-a2a2-facf1cc4a487",
+    "page": null,
+    "video_start_ms": 1915.2,
+    "video_end_ms": 1922.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " driven to zero. And it has no gradient anymore. And to avoid creating dead units, we can add",
+    "room_id": "139909",
+    "id": "579b4085-b34e-414b-8b9f-9bd364b7fc8d",
+    "page": null,
+    "video_start_ms": 1922.2,
+    "video_end_ms": 1929.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " some entropy term which basically forces each unit to activate at least a few times. I didn't",
+    "room_id": "139909",
+    "id": "05ea4c2c-7f3e-44da-8fa7-36cacb773f5d",
+    "page": null,
+    "video_start_ms": 1929.2,
+    "video_end_ms": 1937.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " write the formula here but in the programming homework this entropy term or something similar",
+    "room_id": "139909",
+    "id": "fb925cd9-9612-433b-b45a-bb56dffcfe51",
+    "page": null,
+    "video_start_ms": 1937.2,
+    "video_end_ms": 1944.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is included. So this is how the auto encoder looks like. So first we have your original data.",
+    "room_id": "139909",
+    "id": "87e6faaa-93c0-4422-86cc-7604b9d09924",
+    "page": null,
+    "video_start_ms": 1944.2,
+    "video_end_ms": 1952.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Then you pass it through this encoder function which is like multiplication by symmetric",
+    "room_id": "139909",
+    "id": "ecf63f72-9ed3-429a-aef6-72cea82794da",
+    "page": null,
+    "video_start_ms": 1952.72,
+    "video_end_ms": 1957.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " SV plus our compose with some RELU in linearity which gives you your vector S. And then you",
+    "room_id": "139909",
+    "id": "4295c16d-e405-46d9-a81b-81409aec4597",
+    "page": null,
+    "video_start_ms": 1957.56,
+    "video_end_ms": 1971.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " map it into some decoder function w. And then you get your reconstruction X hat. And it",
+    "room_id": "139909",
+    "id": "8bbc2be6-bc2b-4c01-91b4-84e06d74a9ed",
+    "page": null,
+    "video_start_ms": 1971.92,
+    "video_end_ms": 1981.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " looks very much like neural network because you have basically one linear layer, one",
+    "room_id": "139909",
+    "id": "f9a1d8e1-5f61-47f9-af68-9ab3c5a31361",
+    "page": null,
+    "video_start_ms": 1981.32,
+    "video_end_ms": 1986.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " RELU layer and then one linear layer. You have outputs with an input. And then basically",
+    "room_id": "139909",
+    "id": "7adca447-6959-4fd3-a871-e51d09ccdddf",
+    "page": null,
+    "video_start_ms": 1986.64,
+    "video_end_ms": 1991.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you can define some objective and basically back propagates at least a reconstruction error.",
+    "room_id": "139909",
+    "id": "89624094-196f-4523-8cc8-70bff8fc05a7",
+    "page": null,
+    "video_start_ms": 1991.44,
+    "video_end_ms": 1997.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " You can for example learn the parameter v by back propagating through that network.",
+    "room_id": "139909",
+    "id": "a0f71fc0-540b-4b49-9801-93e8fe85ad82",
+    "page": null,
+    "video_start_ms": 1997.96,
+    "video_end_ms": 2007.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So taking this neural network view, you can then generalize the auto encoder. You can",
+    "room_id": "139909",
+    "id": "5d115dd8-c7a6-42a2-906b-96b357f0da3b",
+    "page": null,
+    "video_start_ms": 2007.84,
+    "video_end_ms": 2017.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " create deep auto encoders. And this was successfully applied in 2006 on some complex data sets.",
+    "room_id": "139909",
+    "id": "d1679c1e-c70c-4048-9dae-2a1015c2999a",
+    "page": null,
+    "video_start_ms": 2017.64,
+    "video_end_ms": 2027.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And here the motivation is that a simple linear encoder function might not have to be sufficient",
+    "room_id": "139909",
+    "id": "16388eec-e73c-46b5-8129-9e1ab2b63a11",
+    "page": null,
+    "video_start_ms": 2027.68,
+    "video_end_ms": 2033.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to produce a meaningful source code. Because sometimes you have like the data is complex",
+    "room_id": "139909",
+    "id": "12cfb21b-29d5-4c70-9bff-d6582bd6db9c",
+    "page": null,
+    "video_start_ms": 2033.36,
+    "video_end_ms": 2039.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and to extract meaningful dictionary elements that might have a bit of invariance for example",
+    "room_id": "139909",
+    "id": "2fa61504-643e-4f68-9112-f5310657149b",
+    "page": null,
+    "video_start_ms": 2039.6,
+    "video_end_ms": 2047.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you need to apply more transformation. And so which means that now you can think of the",
+    "room_id": "139909",
+    "id": "3d62c532-1ef8-4e07-ba6c-7902c75a3da6",
+    "page": null,
+    "video_start_ms": 2047.96,
+    "video_end_ms": 2054.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " encoder as a function g, which can be any function g, which is like one layer of multiple",
+    "room_id": "139909",
+    "id": "242e99d4-167b-400e-96de-08aef425981d",
+    "page": null,
+    "video_start_ms": 2054.24,
+    "video_end_ms": 2062.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " layers or something else. And you have some decoder, which is some function f. And then",
+    "room_id": "139909",
+    "id": "f90bccbf-98b6-46e3-bc1a-da4d23f86653",
+    "page": null,
+    "video_start_ms": 2062.04,
+    "video_end_ms": 2068.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this objective is consists of minimizing X minus composition of f and g plus some sparsity",
+    "room_id": "139909",
+    "id": "136397bc-7b5c-44d5-8565-70c978db62e9",
+    "page": null,
+    "video_start_ms": 2068.08,
+    "video_end_ms": 2079.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " term that will apply to your intermediate layer basically plus some regularization which",
+    "room_id": "139909",
+    "id": "8fd2b960-29aa-4967-88a0-8c0292653014",
+    "page": null,
+    "video_start_ms": 2079.28,
+    "video_end_ms": 2087.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " will basically force the decoder to basically not produce like you. Yeah, to not produce",
+    "room_id": "139909",
+    "id": "160bc5a1-c735-407b-83f6-64e05bd3ade5",
+    "page": null,
+    "video_start_ms": 2087.28,
+    "video_end_ms": 2099.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " large values if this was code is very small. So yeah, here again this deep auto encoder",
+    "room_id": "139909",
+    "id": "40893398-1703-4d87-9a76-127a0a7e05b9",
+    "page": null,
+    "video_start_ms": 2099.2,
+    "video_end_ms": 2108.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " can be trained using back propagation. So you start at least for the reconstruction term",
+    "room_id": "139909",
+    "id": "b0565ab2-32cd-4f69-b01d-2f7d7a11245e",
+    "page": null,
+    "video_start_ms": 2108.52,
+    "video_end_ms": 2113.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you start here. Then you back propagate the error reconstruction error through the network.",
+    "room_id": "139909",
+    "id": "65a16a06-d95d-49b8-a534-6059482b99d7",
+    "page": null,
+    "video_start_ms": 2113.72,
+    "video_end_ms": 2121.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And then you can update the parameters of the decoder and encoder. For the sparsity term",
+    "room_id": "139909",
+    "id": "d13dd6cc-29e6-4f41-bf15-f5dd5900fece",
+    "page": null,
+    "video_start_ms": 2121.8,
+    "video_end_ms": 2127.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is defined here, then in fact you would start here, define some additional error",
+    "room_id": "139909",
+    "id": "68d75fe5-452a-4369-ba71-880869e5e2b1",
+    "page": null,
+    "video_start_ms": 2127.6,
+    "video_end_ms": 2134.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " term here and then back propagate through this branch and you might actually update some",
+    "room_id": "139909",
+    "id": "b46f69f0-4e00-48cd-a682-1926daa12da4",
+    "page": null,
+    "video_start_ms": 2134.24,
+    "video_end_ms": 2140.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " parameters of the encoder. And for the regularization, typically this will be some function on",
+    "room_id": "139909",
+    "id": "aa75f2f5-8da8-48e5-9ab3-ae9c5e3c16df",
+    "page": null,
+    "video_start_ms": 2140.28,
+    "video_end_ms": 2145.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of this. And you can again, as a, it's a simple regularization term which only involves",
+    "room_id": "139909",
+    "id": "a6786293-1471-4bb4-b3f3-b078f78f2db0",
+    "page": null,
+    "video_start_ms": 2145.92,
+    "video_end_ms": 2153.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the parameters or if it's more complex, you can again lose some back propagation. But",
+    "room_id": "139909",
+    "id": "d4a7f6a7-0c71-4920-90e0-2abfe61b5c2b",
+    "page": null,
+    "video_start_ms": 2153.28,
+    "video_end_ms": 2160.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " in practice, there are some efficient frameworks, for example, by torches or then torflow that",
+    "room_id": "139909",
+    "id": "34f91e21-3b4f-4c53-99d7-3cc3be943741",
+    "page": null,
+    "video_start_ms": 2160.64,
+    "video_end_ms": 2171.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " allow you to not have to implement the back propagation yourself. It uses automatic differentiation",
+    "room_id": "139909",
+    "id": "3a615ea6-2c94-4a51-96a3-b49d179fcb6c",
+    "page": null,
+    "video_start_ms": 2171.04,
+    "video_end_ms": 2179.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which basically requires you only to specify the objective or the forward pass. Basically",
+    "room_id": "139909",
+    "id": "dcb38903-af83-4fae-a28c-c7573d6a59d7",
+    "page": null,
+    "video_start_ms": 2179.28,
+    "video_end_ms": 2185.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you need to write this and then you can basically call backward and it kind of pushes to create",
+    "room_id": "139909",
+    "id": "67e8dd72-c9e3-4b3a-ba81-547ee6eef5bd",
+    "page": null,
+    "video_start_ms": 2185.64,
+    "video_end_ms": 2192.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " derivatives back into the network and collect the gradients wherever you need them.",
+    "room_id": "139909",
+    "id": "ca542940-8768-4f38-9a97-6015d88fb797",
+    "page": null,
+    "video_start_ms": 2192.72,
+    "video_end_ms": 2205.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So far we have mostly looked at autoencoder for the purpose of producing some spars or",
+    "room_id": "139909",
+    "id": "fcb1eaf6-257b-4fe5-99da-c5ca025a2429",
+    "page": null,
+    "video_start_ms": 2205.2,
+    "video_end_ms": 2218.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " low dimensional representation which you might use for example for a storage solution.",
+    "room_id": "139909",
+    "id": "dab268b3-0f88-45fa-b6e0-5eecb8919662",
+    "page": null,
+    "video_start_ms": 2218.44,
+    "video_end_ms": 2226.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " But in practice, in fact it's also something that one has, that's in the paper on autoencoders",
+    "room_id": "139909",
+    "id": "f5d54669-fc98-4bef-86ed-502b58582489",
+    "page": null,
+    "video_start_ms": 2226.12,
+    "video_end_ms": 2234.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " was studied. We would like to learn abstract representation. And what are these abstract",
+    "room_id": "139909",
+    "id": "8fdb25da-18aa-4c42-9f3a-f19e62e93adc",
+    "page": null,
+    "video_start_ms": 2234.24,
+    "video_end_ms": 2240.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " representations? It's a presentation that might have built some level of invariance or",
+    "room_id": "139909",
+    "id": "e07c7226-0185-4fb2-9367-ec17839bc1cf",
+    "page": null,
+    "video_start_ms": 2240.8,
+    "video_end_ms": 2246.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " extract some features that are useful for some prediction task of interest. So for example",
+    "room_id": "139909",
+    "id": "1d204bf1-8889-43d2-abdd-ac3d80474166",
+    "page": null,
+    "video_start_ms": 2246.72,
+    "video_end_ms": 2256.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " in the case of face data, you might want to predict the age or male female. And in that",
+    "room_id": "139909",
+    "id": "0dcc4b9c-bc2d-4421-bd79-7ad96f8410bb",
+    "page": null,
+    "video_start_ms": 2256.4,
+    "video_end_ms": 2265.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " case, the representation should ideally only keep the factors in the data that are relevant",
+    "room_id": "139909",
+    "id": "e1bfb781-e705-46e9-b6b4-4987b4a0930e",
+    "page": null,
+    "video_start_ms": 2265.16,
+    "video_end_ms": 2272.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " for the task. And room removed those that are irrelevant. So for example, you might",
+    "room_id": "139909",
+    "id": "2c0bb2c6-a4b7-451d-b55d-50aa61126744",
+    "page": null,
+    "video_start_ms": 2272.2,
+    "video_end_ms": 2278.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " want the factor as Z which is basically representation to be invariant to some more translation",
+    "room_id": "139909",
+    "id": "9d1c4bec-6e54-4d97-9af7-64aed8bf9d96",
+    "page": null,
+    "video_start_ms": 2278.28,
+    "video_end_ms": 2286.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " or rotation of the image because you know that's applying such transformation, should not",
+    "room_id": "139909",
+    "id": "ad817795-e385-4486-a925-e171b09fdb80",
+    "page": null,
+    "video_start_ms": 2286.84,
+    "video_end_ms": 2295.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " change a prediction. And for this, basically we not necessarily want to perfectly reconstruct",
+    "room_id": "139909",
+    "id": "1bba8453-eeb3-4168-8b9d-7f2b2ce0b304",
+    "page": null,
+    "video_start_ms": 2295.92,
+    "video_end_ms": 2313.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " any more. We might want to, in fact, lose a bit of reconstruction accuracy for the",
+    "room_id": "139909",
+    "id": "30254dc0-6875-44e4-9efc-8586f85bab98",
+    "page": null,
+    "video_start_ms": 2313.32,
+    "video_end_ms": 2322.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " purpose of building these different invariances. So some examples that can trade a bit of",
+    "room_id": "139909",
+    "id": "5bd25bac-10f1-4335-abfb-849cc6738768",
+    "page": null,
+    "video_start_ms": 2322.32,
+    "video_end_ms": 2334.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " reconstruction error in favor of something like in favor of building some invariance.",
+    "room_id": "139909",
+    "id": "838138c7-6f11-4108-b117-2ce1f46fc3ae",
+    "page": null,
+    "video_start_ms": 2334.04,
+    "video_end_ms": 2341.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " You have the bottleneck autoencoder. So basically it's an autoencoder that has a middle layer",
+    "room_id": "139909",
+    "id": "6e969020-ba03-4f3b-b410-d61067354e11",
+    "page": null,
+    "video_start_ms": 2341.72,
+    "video_end_ms": 2348.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is as very low dimensionality. And it will basically capture the essential element",
+    "room_id": "139909",
+    "id": "9a5217e4-d537-4011-8efb-f65fca273c70",
+    "page": null,
+    "video_start_ms": 2348.04,
+    "video_end_ms": 2357.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of the data and discard the rest. And this is basically a generalization of the PCA ID.",
+    "room_id": "139909",
+    "id": "646ececa-14b4-4fc0-b9ba-8d2e0d73ac50",
+    "page": null,
+    "video_start_ms": 2357.04,
+    "video_end_ms": 2363.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " In fact, there is a special connection between the autoencoder and PCA. It's that if you",
+    "room_id": "139909",
+    "id": "a8657426-f739-4fe3-ba59-6be2d627860c",
+    "page": null,
+    "video_start_ms": 2363.68,
+    "video_end_ms": 2371.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " have a linear autoencoder, so basically there is no linearity in the middle layer. With",
+    "room_id": "139909",
+    "id": "bddc63ba-b932-4d36-b624-476d9f419418",
+    "page": null,
+    "video_start_ms": 2371.4,
+    "video_end_ms": 2378.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " a bottleneck layer, H is more or equal to 2. Then basically it will learn a solution that",
+    "room_id": "139909",
+    "id": "04a6b17d-e9c7-4dec-9e86-bde3d098f4b2",
+    "page": null,
+    "video_start_ms": 2378.52,
+    "video_end_ms": 2383.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " spans the PCA space. And this was shown already a long time ago. Then there is another approach",
+    "room_id": "139909",
+    "id": "94dedc0e-5816-4bf5-9b05-91e671a850dd",
+    "page": null,
+    "video_start_ms": 2383.36,
+    "video_end_ms": 2391.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " which is denosing autoencoder, where basically you will learn to reconstruct images that have",
+    "room_id": "139909",
+    "id": "16260897-41b1-4bd8-b231-7a57ddb4a4cc",
+    "page": null,
+    "video_start_ms": 2391.96,
+    "video_end_ms": 2400.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " been artificially corrupted by noise, for example, alitif, caution noise. And it will show",
+    "room_id": "139909",
+    "id": "f38ca6d1-23b1-4cc0-826b-b9518426735b",
+    "page": null,
+    "video_start_ms": 2400.96,
+    "video_end_ms": 2406.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " an example just after. And by doing so, the representation will become less sensitive",
+    "room_id": "139909",
+    "id": "186bc053-edf0-47da-ba9c-7f48c697d91e",
+    "page": null,
+    "video_start_ms": 2406.28,
+    "video_end_ms": 2415.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to noise components in the data. So because it has to reconstruct, basically it has to",
+    "room_id": "139909",
+    "id": "e6456353-3168-48b1-afcb-01d891bb7f38",
+    "page": null,
+    "video_start_ms": 2415.36,
+    "video_end_ms": 2422.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " remove noise from the image. The representation will tend to learn direction in input space",
+    "room_id": "139909",
+    "id": "b4ddbd05-e621-4d5d-8fae-49e7aaffcff4",
+    "page": null,
+    "video_start_ms": 2422.76,
+    "video_end_ms": 2430.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that are orthogonal to this noise. And so as a result, you also simplify and filter",
+    "room_id": "139909",
+    "id": "466acd93-f201-4ade-a637-89a9a516da06",
+    "page": null,
+    "video_start_ms": 2430.24,
+    "video_end_ms": 2438.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " some component of the data while expressing some others. That might be more task relevance.",
+    "room_id": "139909",
+    "id": "5beae2e7-80dd-4f3a-81a6-35758d24b09b",
+    "page": null,
+    "video_start_ms": 2438.92,
+    "video_end_ms": 2447.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And the last approach, one more approach is the contractive autoencoder. And here the",
+    "room_id": "139909",
+    "id": "c031a980-a2a6-4631-9380-c7688d684695",
+    "page": null,
+    "video_start_ms": 2447.48,
+    "video_end_ms": 2453.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " idea is to take your encoder function, G, and say, OK, I want my representation to be",
+    "room_id": "139909",
+    "id": "4dc142fe-6e8b-44e3-bc0f-116bcc29f974",
+    "page": null,
+    "video_start_ms": 2453.4,
+    "video_end_ms": 2461.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " invariant to small variation in the data. At least where my data is. And you can basically",
+    "room_id": "139909",
+    "id": "0954396b-3956-4573-9579-3376636ed761",
+    "page": null,
+    "video_start_ms": 2461.92,
+    "video_end_ms": 2472.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " define this take your outputs, apply the gradient, you can get some Jacobian matrix. And add",
+    "room_id": "139909",
+    "id": "cd973ec1-a62d-4778-88d5-10a8bcab1f9e",
+    "page": null,
+    "video_start_ms": 2472.56,
+    "video_end_ms": 2482.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " it to the objective so that it penalizes a strong variation of the encoding function.",
+    "room_id": "139909",
+    "id": "1d7c5f5e-9304-48dc-b6e1-fee7ed8ac6ce",
+    "page": null,
+    "video_start_ms": 2482.4,
+    "video_end_ms": 2492.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And this can also be done now with modern automatic differentiation software. So I was",
+    "room_id": "139909",
+    "id": "e371be5e-6fbe-4ee2-8ce7-1468eee8fa01",
+    "page": null,
+    "video_start_ms": 2492.12,
+    "video_end_ms": 2503.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " mentioning the denosing autoencoder. So this is basically how it works. There are different",
+    "room_id": "139909",
+    "id": "7258cd01-c8ca-4aa8-98b6-66a46cca068f",
+    "page": null,
+    "video_start_ms": 2503.12,
+    "video_end_ms": 2508.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " ways of syncing about it. But a simpler one is to sync it off a simple autoencoder where",
+    "room_id": "139909",
+    "id": "b202e5b7-0cd1-481d-90e0-13176796fa72",
+    "page": null,
+    "video_start_ms": 2508.16,
+    "video_end_ms": 2514
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you hard code a first layer of noise into your network. So if you have the original data,",
+    "room_id": "139909",
+    "id": "dfba4dc7-7324-40e9-9b12-b044cfc4a97f",
+    "page": null,
+    "video_start_ms": 2514,
+    "video_end_ms": 2522.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " then you have this green layer which can be cannot train with just adds noise. So basically",
+    "room_id": "139909",
+    "id": "90d9df62-bcfa-409b-b96a-baa44c169261",
+    "page": null,
+    "video_start_ms": 2522.32,
+    "video_end_ms": 2531.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " makes the task more complicated. And then you have encoder and decoder that basically",
+    "room_id": "139909",
+    "id": "29695bda-15ad-4326-9a40-31e5c07272ff",
+    "page": null,
+    "video_start_ms": 2531.84,
+    "video_end_ms": 2536.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " try to reconstruct your data. And because you've added noise, you cannot reconstruct perfectly.",
+    "room_id": "139909",
+    "id": "aad61d64-65a8-4f09-a78c-e5082a92338e",
+    "page": null,
+    "video_start_ms": 2536.96,
+    "video_end_ms": 2542.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " But ideally, you've kept some of the main information about the task.",
+    "room_id": "139909",
+    "id": "46d356f3-b907-466a-ba63-e9b3d39c9099",
+    "page": null,
+    "video_start_ms": 2542.8,
+    "video_end_ms": 2554.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Okay, so there is actually the limitation of this lossy reconstruction model that we've",
+    "room_id": "139909",
+    "id": "b35880d1-7947-4407-ab13-4fb4a92efcb3",
+    "page": null,
+    "video_start_ms": 2554.12,
+    "video_end_ms": 2571.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " presented above. Whether it's the bottleneck layer denosing autoencoder or conflicted autoencoders.",
+    "room_id": "139909",
+    "id": "b0208624-9648-47b6-b8cf-50e18e05d329",
+    "page": null,
+    "video_start_ms": 2571.12,
+    "video_end_ms": 2578.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " It is that also you are incorporating these constraints which basically try to build",
+    "room_id": "139909",
+    "id": "c5690b11-4d60-45ef-9f30-ff731c375972",
+    "page": null,
+    "video_start_ms": 2578.56,
+    "video_end_ms": 2587.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " abstraction in addition to the reconstruction error. It's still essentially learning a",
+    "room_id": "139909",
+    "id": "2dd4c1e7-4009-4782-ae85-c9e0b2a1c845",
+    "page": null,
+    "video_start_ms": 2587.56,
+    "video_end_ms": 2595.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " representation that optimizes the reconstruction error under these constraints. So you still",
+    "room_id": "139909",
+    "id": "916847b8-05a2-4824-9ddd-8ffa79f07498",
+    "page": null,
+    "video_start_ms": 2595.48,
+    "video_end_ms": 2601.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " have basically this reconstruction term which will kind of force the network to preserve",
+    "room_id": "139909",
+    "id": "47556621-de91-43c2-ab44-48e4d08fed94",
+    "page": null,
+    "video_start_ms": 2601.68,
+    "video_end_ms": 2610.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " everything in the bottleneck. So basically you have like a model that's try to solve to",
+    "room_id": "139909",
+    "id": "7898f439-0276-45dd-b592-484400c22262",
+    "page": null,
+    "video_start_ms": 2610.16,
+    "video_end_ms": 2618.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " construct contradictory objectives, one which is to build some kind of robustness or",
+    "room_id": "139909",
+    "id": "5a95ffc8-aedd-41b5-9a65-a19b78384e9f",
+    "page": null,
+    "video_start_ms": 2618.2,
+    "video_end_ms": 2626.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " invariance and at the same time trying to reconstruct the data. And now we look at models",
+    "room_id": "139909",
+    "id": "f7027235-f103-4baf-b9de-e894a13de870",
+    "page": null,
+    "video_start_ms": 2626.24,
+    "video_end_ms": 2634.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that overcome this possible conflict and which really are designed to learn high level",
+    "room_id": "139909",
+    "id": "2c3e6265-c5e4-42de-86e1-c457910afb5c",
+    "page": null,
+    "video_start_ms": 2634.44,
+    "video_end_ms": 2644.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " features and discard low level features. And the first idea is to take an autoencoder and",
+    "room_id": "139909",
+    "id": "04f5b1a1-3ba8-41c8-870d-cc3128f9323e",
+    "page": null,
+    "video_start_ms": 2644.72,
+    "video_end_ms": 2655.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " add some shortcut connections. And what is the purpose of a shortcut connection? It basically",
+    "room_id": "139909",
+    "id": "98467d24-0361-482d-a2a9-911b1258ad54",
+    "page": null,
+    "video_start_ms": 2655.08,
+    "video_end_ms": 2661.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to let some of the information flows directly from low level to the low level and just basically",
+    "room_id": "139909",
+    "id": "52e81a8b-8c6d-46ae-8b88-9a7c8e3cdaa3",
+    "page": null,
+    "video_start_ms": 2661.36,
+    "video_end_ms": 2676.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " so that's not all the information has to pass through our vector Z. And if we design",
+    "room_id": "139909",
+    "id": "d5eeb6ca-2b4d-4778-9dd7-2436395e5c05",
+    "page": null,
+    "video_start_ms": 2676.68,
+    "video_end_ms": 2684.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " things properly then Z would only preserve more abstract components of the image whereas",
+    "room_id": "139909",
+    "id": "9e81b999-0d77-43a9-a764-f9942d6ac2cd",
+    "page": null,
+    "video_start_ms": 2684.2,
+    "video_end_ms": 2691.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the shortcut connection would rather focus on everything which is low level. So the idea",
+    "room_id": "139909",
+    "id": "5f9ccbd6-b7d1-4715-bfad-1da44df74f58",
+    "page": null,
+    "video_start_ms": 2691.16,
+    "video_end_ms": 2696.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is that Z would kind of represent the abstract structure of the image. For example like concept",
+    "room_id": "139909",
+    "id": "b054b06b-4416-4633-b1d4-4f05eb82c325",
+    "page": null,
+    "video_start_ms": 2696.32,
+    "video_end_ms": 2704.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " like whether you have like the different concepts that are composing this image and short",
+    "room_id": "139909",
+    "id": "e464b363-bb8b-495c-b85b-e2f9fa5bc3ff",
+    "page": null,
+    "video_start_ms": 2704.88,
+    "video_end_ms": 2710.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " connection would rather do something like fine alignments or fine rotation of the image",
+    "room_id": "139909",
+    "id": "d2061bb5-f217-429e-8329-dfc9d6009d77",
+    "page": null,
+    "video_start_ms": 2710.6,
+    "video_end_ms": 2719.84
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to and then you kind of merge the two to reconstruct the data accurately. And there are many",
+    "room_id": "139909",
+    "id": "5ce0a87e-614a-4c54-9e4b-c3c3697ac704",
+    "page": null,
+    "video_start_ms": 2719.84,
+    "video_end_ms": 2730.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " models that have been proposed that implement this idea. Maybe the very popular one is a unit",
+    "room_id": "139909",
+    "id": "022e7fae-0f12-4466-af52-52fa71c6ee50",
+    "page": null,
+    "video_start_ms": 2730.28,
+    "video_end_ms": 2737.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that has been used for the task of segmentation. But we also have this sort of connection. And",
+    "room_id": "139909",
+    "id": "81c2a03c-1e68-4384-af56-cf680566a571",
+    "page": null,
+    "video_start_ms": 2737.36,
+    "video_end_ms": 2748.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " one like two models that really explicitly try to build more abstract to presentation",
+    "room_id": "139909",
+    "id": "31381ea7-e242-4604-b56d-768ecf462f23",
+    "page": null,
+    "video_start_ms": 2748.12,
+    "video_end_ms": 2754.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " or at least this one in particular the ladder network has this structure and then also",
+    "room_id": "139909",
+    "id": "29b88d48-3dda-4753-bd40-49f3fe39acf3",
+    "page": null,
+    "video_start_ms": 2754.04,
+    "video_end_ms": 2761.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " plug some supervised objective to basically get a better classification model. And the",
+    "room_id": "139909",
+    "id": "604a5c6e-b5ae-4aaf-a205-ec868d1402b2",
+    "page": null,
+    "video_start_ms": 2761.8,
+    "video_end_ms": 2772.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " deep model in both the machine which is some probabilistic model which also includes",
+    "room_id": "139909",
+    "id": "c44f66b5-73a1-4799-9cae-3e3f761005e1",
+    "page": null,
+    "video_start_ms": 2772.88,
+    "video_end_ms": 2778.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " a short connection not explicitly like in any networks but via a special design of the",
+    "room_id": "139909",
+    "id": "9b50153f-c2c5-4672-bb06-c8df8189ae45",
+    "page": null,
+    "video_start_ms": 2778.4,
+    "video_end_ms": 2785.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " probability function. So this is the ladder network. So it's paper written in 2015 where",
+    "room_id": "139909",
+    "id": "48e68439-52bd-4e96-b20e-b94b58de80cf",
+    "page": null,
+    "video_start_ms": 2785.28,
+    "video_end_ms": 2798.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " basically the task is semi-supervised learning. So basically it's a setting we have a lot",
+    "room_id": "139909",
+    "id": "e714e2bf-483c-45cf-b85f-979953d6117c",
+    "page": null,
+    "video_start_ms": 2798.24,
+    "video_end_ms": 2803.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of supervised data and very little supervised data. And the idea in this paper was to have",
+    "room_id": "139909",
+    "id": "c3a00fc3-6b61-48ea-abce-d36e77065945",
+    "page": null,
+    "video_start_ms": 2803.8,
+    "video_end_ms": 2814.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this auto encoder which is here shown by this end shape with some shortcut connection.",
+    "room_id": "139909",
+    "id": "3f9daaf4-043f-4552-9a7d-6336960b9a8d",
+    "page": null,
+    "video_start_ms": 2814.08,
+    "video_end_ms": 2826.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And then basically having and basically with this shortcut connection you will allow this",
+    "room_id": "139909",
+    "id": "1faa61fb-d868-43fc-b0c7-f035f38d34a6",
+    "page": null,
+    "video_start_ms": 2826.16,
+    "video_end_ms": 2835.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " top layer presentation to be more abstract. And then the idea is that you have next to",
+    "room_id": "139909",
+    "id": "b669ffc2-2ccc-41dc-84e5-be09d4cac7a5",
+    "page": null,
+    "video_start_ms": 2835.92,
+    "video_end_ms": 2841.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " it some supervised models so it's turned out a feedforward network, a similar to the one",
+    "room_id": "139909",
+    "id": "4aafd034-f2b7-4fbe-8c59-1562d966bbc2",
+    "page": null,
+    "video_start_ms": 2841.04,
+    "video_end_ms": 2845.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that you've seen in machine learning one. And in addition to the prediction cost you",
+    "room_id": "139909",
+    "id": "d6fca9ee-6915-4bef-98d5-451cc9e2dda7",
+    "page": null,
+    "video_start_ms": 2845.6,
+    "video_end_ms": 2852.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " add this cost function at this level that can tie the representation to the one that",
+    "room_id": "139909",
+    "id": "43e201d6-1ca0-4bb7-a003-65a81b8f6d48",
+    "page": null,
+    "video_start_ms": 2852.16,
+    "video_end_ms": 2858.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " have been built by the auto encoder. And if you train the whole thing jointly then basically",
+    "room_id": "139909",
+    "id": "4cf6a40f-2ce2-4b80-be11-308bc475fefc",
+    "page": null,
+    "video_start_ms": 2858.92,
+    "video_end_ms": 2866.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you get this abstractions that are built from a large amount of data and you try to synchronize",
+    "room_id": "139909",
+    "id": "b44cbcbf-2fc1-4229-bf7b-ffcfd4cc8d56",
+    "page": null,
+    "video_start_ms": 2866.28,
+    "video_end_ms": 2871.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " them with abstractions that are required for the classifier. And with this approach it's",
+    "room_id": "139909",
+    "id": "d8e49ec8-39bd-401d-a3ab-3492ddeba351",
+    "page": null,
+    "video_start_ms": 2871.92,
+    "video_end_ms": 2880.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " actually a very good model for super-supervised learning. It produced state-of-the-art",
+    "room_id": "139909",
+    "id": "282f4eb2-a462-4db1-81d9-6613cbb08bc6",
+    "page": null,
+    "video_start_ms": 2880.76,
+    "video_end_ms": 2885.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " results on the task with strong manifold structure and particular amnesty where with very",
+    "room_id": "139909",
+    "id": "56594a48-583d-4cb9-8452-1261abd7d3aa",
+    "page": null,
+    "video_start_ms": 2885.72,
+    "video_end_ms": 2893.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " few labels you get very high accuracy. So now we move a little bit away from the idea",
+    "room_id": "139909",
+    "id": "cef67755-ff3e-4a2d-a5d1-baee939f1a35",
+    "page": null,
+    "video_start_ms": 2893.12,
+    "video_end_ms": 2907.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " for auto encoders and discuss other approach for representation learning. Always with",
+    "room_id": "139909",
+    "id": "1c0acf43-47cd-4b5d-b077-94d17737aa2c",
+    "page": null,
+    "video_start_ms": 2907.08,
+    "video_end_ms": 2916.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the goal to try to build representations that are useful for some prediction task. And",
+    "room_id": "139909",
+    "id": "e237f514-7f5f-448a-8618-fe4497d94818",
+    "page": null,
+    "video_start_ms": 2916.24,
+    "video_end_ms": 2923.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " one such approach which is very popular and very often used in practice it's a transfer",
+    "room_id": "139909",
+    "id": "6ef074f4-209e-4fcc-860b-e09c5a6cf640",
+    "page": null,
+    "video_start_ms": 2923.96,
+    "video_end_ms": 2931.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " learning. And here instead of constructing the data we make use of an auxiliary task",
+    "room_id": "139909",
+    "id": "394612c2-bde6-4203-9911-3affbed1bda1",
+    "page": null,
+    "video_start_ms": 2931.04,
+    "video_end_ms": 2939.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " scheme. And this auxiliary task would be something that you're not interested in but",
+    "room_id": "139909",
+    "id": "1dc15403-899d-4b2b-961c-3afed51b1eb1",
+    "page": null,
+    "video_start_ms": 2939.28,
+    "video_end_ms": 2947.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that for which we might have some labels for example you might have some data set of",
+    "room_id": "139909",
+    "id": "52b8d4cd-5f8e-4ad6-9558-af10aebae1c8",
+    "page": null,
+    "video_start_ms": 2947.48,
+    "video_end_ms": 2952.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " phases with some information that identifies these phases and might for example train a",
+    "room_id": "139909",
+    "id": "b652e1c3-6b9e-4671-b9de-8a8c76ffe0b6",
+    "page": null,
+    "video_start_ms": 2952.12,
+    "video_end_ms": 2962.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " network that does that. And if you think that the task would actually be the features that",
+    "room_id": "139909",
+    "id": "343e3e96-3f4b-4817-a416-a35cdd8ff3e5",
+    "page": null,
+    "video_start_ms": 2962.48,
+    "video_end_ms": 2969.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " have been learned in some intermediate layer are useful for your real task which might",
+    "room_id": "139909",
+    "id": "4d059d92-1c81-4760-8f85-625d7239456c",
+    "page": null,
+    "video_start_ms": 2969.48,
+    "video_end_ms": 2973.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " be for example age prediction then you can take this part of the network and take away",
+    "room_id": "139909",
+    "id": "1126fc7d-656a-4400-af48-2d3ad9a83d37",
+    "page": null,
+    "video_start_ms": 2973.24,
+    "video_end_ms": 2980.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the rest of the blue parts and then connect add the two more layers here the green layers",
+    "room_id": "139909",
+    "id": "48190171-ade4-42f5-8d27-3da4dd541c33",
+    "page": null,
+    "video_start_ms": 2980.92,
+    "video_end_ms": 2987.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " then say okay this is my new neural network composing five layers and I fine tune the",
+    "room_id": "139909",
+    "id": "dd606e0b-f5a7-40aa-8925-0594e2fe53e7",
+    "page": null,
+    "video_start_ms": 2987.32,
+    "video_end_ms": 2992.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " whole thing on my task of interest. And for transfer learning to work it is important",
+    "room_id": "139909",
+    "id": "cabd95ef-7849-4a63-a623-c1b8553dae47",
+    "page": null,
+    "video_start_ms": 2992.56,
+    "video_end_ms": 3001.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that's the auxiliary task is related to the target task which means that it has to share",
+    "room_id": "139909",
+    "id": "989c07af-3d66-46a6-917f-10161708a73e",
+    "page": null,
+    "video_start_ms": 3001.92,
+    "video_end_ms": 3008.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " some common features and also that it is more general. So for example the task is more",
+    "room_id": "139909",
+    "id": "1dbc7532-7f37-4ea6-8652-bb453acf608c",
+    "page": null,
+    "video_start_ms": 3008.28,
+    "video_end_ms": 3015
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " difficult or has more classes. And transfer learning for example in the context of images",
+    "room_id": "139909",
+    "id": "34ab9ae8-75a2-4c68-9a31-7a24bcc52b90",
+    "page": null,
+    "video_start_ms": 3015,
+    "video_end_ms": 3022.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " so typically you will take you will start with the data set which is very large with a",
+    "room_id": "139909",
+    "id": "e09fd38b-7d15-414b-8842-d3c05be3aa2f",
+    "page": null,
+    "video_start_ms": 3022.12,
+    "video_end_ms": 3030.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " lot of labels in the context of image classification you have for example the image net data sets",
+    "room_id": "139909",
+    "id": "0a039c2f-fb3e-4f52-9b58-3c3134656f89",
+    "page": null,
+    "video_start_ms": 3030.4,
+    "video_end_ms": 3037.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " for specifically this ILS of your C bench mark which has millions of images and 1000 classes",
+    "room_id": "139909",
+    "id": "9537bc84-d1d4-40f2-a7f4-e03a3e5abdc2",
+    "page": null,
+    "video_start_ms": 3037.52,
+    "video_end_ms": 3046.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and with this we can build pretty general features and then you can transfer it on some",
+    "room_id": "139909",
+    "id": "6f40a3ba-edc7-40d4-8649-4e725ab50f3a",
+    "page": null,
+    "video_start_ms": 3046.36,
+    "video_end_ms": 3053.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " more specific tasks which might contain let's say only two or three classes but that you",
+    "room_id": "139909",
+    "id": "2b61b31c-f41f-4b6a-bcd4-a7e7bbb8b9ca",
+    "page": null,
+    "video_start_ms": 3053.8,
+    "video_end_ms": 3059.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " might be interested in for your application. Now we move to another approach which is",
+    "room_id": "139909",
+    "id": "c99e1f28-036e-47e1-a48b-c77d713b0df3",
+    "page": null,
+    "video_start_ms": 3059.28,
+    "video_end_ms": 3069.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " basically between autoencoder and the transfer learning it's self-supervised learning and",
+    "room_id": "139909",
+    "id": "91a31c7c-e8be-490f-a573-cfea40190fb6",
+    "page": null,
+    "video_start_ms": 3069.52,
+    "video_end_ms": 3082.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the idea is to generate if you don't have a noxular task like in the transfer learning scenario",
+    "room_id": "139909",
+    "id": "5d41f03c-5ddc-4756-99dd-eac6bf9990bf",
+    "page": null,
+    "video_start_ms": 3082.04,
+    "video_end_ms": 3090.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you can still generate an artificial task for learning the representation and the task",
+    "room_id": "139909",
+    "id": "d6f77663-5e28-44b1-b92b-1d332fe1886b",
+    "page": null,
+    "video_start_ms": 3090.72,
+    "video_end_ms": 3097.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is really complex enough so that's holding it produces useful features. So one example",
+    "room_id": "139909",
+    "id": "f83d4eeb-6a83-4721-b0ef-bd4d07bf72fe",
+    "page": null,
+    "video_start_ms": 3097.96,
+    "video_end_ms": 3104.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of a auction task for image classification might be to say okay I will try to play a game",
+    "room_id": "139909",
+    "id": "08b8d549-5855-44e5-99fa-aa53c7bf2fab",
+    "page": null,
+    "video_start_ms": 3104.52,
+    "video_end_ms": 3112.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " I take an image I take a little square of the image out and then my prediction task is",
+    "room_id": "139909",
+    "id": "8a4aeff8-8c61-4337-a4ac-8b309b27edb8",
+    "page": null,
+    "video_start_ms": 3112.64,
+    "video_end_ms": 3120.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to impain the image. So it's not exactly the same as reconstruct as an autoencoder because",
+    "room_id": "139909",
+    "id": "6dc7d052-1ca3-4d93-a87c-4e20e6f2231c",
+    "page": null,
+    "video_start_ms": 3120.76,
+    "video_end_ms": 3128.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you really like take one part out and you just require to reconstruct the missing parts",
+    "room_id": "139909",
+    "id": "f401766f-9cab-4e71-875f-90bb1fbafc19",
+    "page": null,
+    "video_start_ms": 3128.32,
+    "video_end_ms": 3136.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of the image and if the missing part of the image is large then somehow you expect that",
+    "room_id": "139909",
+    "id": "62630f73-aa0f-4e2a-a35d-5c1e58be3c0f",
+    "page": null,
+    "video_start_ms": 3136.28,
+    "video_end_ms": 3146.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the network has to learn some, has to build some understanding of the image to be able",
+    "room_id": "139909",
+    "id": "71635acd-3c75-45bb-8766-e93254a42bdb",
+    "page": null,
+    "video_start_ms": 3146.44,
+    "video_end_ms": 3151.72
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " to know what should be filled at the given missing parts of the image. Another popular",
+    "room_id": "139909",
+    "id": "41471754-18aa-464c-9904-12fb79931317",
+    "page": null,
+    "video_start_ms": 3151.72,
+    "video_end_ms": 3160.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " autoencoder task which is to learn to colorize an image. So here we play another game which",
+    "room_id": "139909",
+    "id": "70160a39-b716-463f-b089-327224bee00c",
+    "page": null,
+    "video_start_ms": 3160.64,
+    "video_end_ms": 3165.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " is that you take your RGB image like color images you make it artificially gray scale and",
+    "room_id": "139909",
+    "id": "eddebcb2-f541-49d5-98ca-591d8b9ff2fc",
+    "page": null,
+    "video_start_ms": 3165.28,
+    "video_end_ms": 3174.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " then you train a neural network to predict the color image from the gray scale image. So",
+    "room_id": "139909",
+    "id": "e15e7edd-2ce9-4447-861f-2376680e8cf5",
+    "page": null,
+    "video_start_ms": 3174.64,
+    "video_end_ms": 3183.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this is something that human can do pretty well. So if you see for example this image you",
+    "room_id": "139909",
+    "id": "1be743ea-7386-41e1-9c02-49c556afc480",
+    "page": null,
+    "video_start_ms": 3183.56,
+    "video_end_ms": 3189.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " might say okay I recognize this fish and in fact I know that this fish is yellow and",
+    "room_id": "139909",
+    "id": "e70fe5d6-f043-4034-b4a2-07cbcd8aa44d",
+    "page": null,
+    "video_start_ms": 3189.56,
+    "video_end_ms": 3196.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " they are the head and the blue in the middle. And for the network to be able to do the proper colorization",
+    "room_id": "139909",
+    "id": "8e616d80-543d-447d-b918-5a66302c9485",
+    "page": null,
+    "video_start_ms": 3196.68,
+    "video_end_ms": 3204.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " it has to recognize the fish in the first place. Same for the classes. There are other",
+    "room_id": "139909",
+    "id": "a4477b40-da77-420c-9e22-05b8af16a481",
+    "page": null,
+    "video_start_ms": 3204.48,
+    "video_end_ms": 3214.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " autoencoder tasks you can for example learn to predict whether two images are related or",
+    "room_id": "139909",
+    "id": "4350fa19-94d7-45e1-9154-c3317789c9c3",
+    "page": null,
+    "video_start_ms": 3214.92,
+    "video_end_ms": 3220.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " not. Or you can try to solve some deep clustering tasks where you learn to map images into",
+    "room_id": "139909",
+    "id": "a4d12024-b398-4b1d-81d7-1b133741e5a4",
+    "page": null,
+    "video_start_ms": 3220.28,
+    "video_end_ms": 3229.16
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " dense and well separated clusters. And for all of these self supervised tasks no labels are",
+    "room_id": "139909",
+    "id": "82e2a90a-eec2-440a-941a-f785552977f0",
+    "page": null,
+    "video_start_ms": 3229.16,
+    "video_end_ms": 3237.28
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " needed. So the only thing you need is creativity in setting up these self supervised tasks. And",
+    "room_id": "139909",
+    "id": "f30bc1d1-2ab6-4afb-baef-d852d1e70741",
+    "page": null,
+    "video_start_ms": 3237.28,
+    "video_end_ms": 3246.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " self supervised learning is a hot topic currently in machine learning. Okay so now we look at",
+    "room_id": "139909",
+    "id": "5207d608-02a2-491b-aa39-020b70eda8fa",
+    "page": null,
+    "video_start_ms": 3246.2,
+    "video_end_ms": 3255.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the last topic for today which is how to represent transformation. So here the idea is that we",
+    "room_id": "139909",
+    "id": "272d92f5-1492-499d-8aad-06e21d9c44d5",
+    "page": null,
+    "video_start_ms": 3255.2,
+    "video_end_ms": 3264.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " would like our network to predict not the input image itself but the transformation between",
+    "room_id": "139909",
+    "id": "a545dbda-4977-4ac2-9aa6-86d209c7a1aa",
+    "page": null,
+    "video_start_ms": 3264.96,
+    "video_end_ms": 3273
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " two images or two data points. And basically the question is can we represent the way to",
+    "room_id": "139909",
+    "id": "0e6a6317-af7e-4bff-b5ee-74d68c50000f",
+    "page": null,
+    "video_start_ms": 3273,
+    "video_end_ms": 3281.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " images are they form rather than the content of the image itself. And in other words can we learn",
+    "room_id": "139909",
+    "id": "4174a569-0696-45bf-95f4-1d3a58ae2ac1",
+    "page": null,
+    "video_start_ms": 3281.88,
+    "video_end_ms": 3289.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " representation of transformation for example of translation which is invariant to the actual",
+    "room_id": "139909",
+    "id": "8c479479-ff25-4bf9-a4c0-d28cd4f74c9e",
+    "page": null,
+    "video_start_ms": 3289.32,
+    "video_end_ms": 3296.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " image content. So we might for example want to learn a translation model on some handwritten digits.",
+    "room_id": "139909",
+    "id": "583ec90a-efa2-4868-8229-cd2752375eaf",
+    "page": null,
+    "video_start_ms": 3296.92,
+    "video_end_ms": 3303.24
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " And then without having ever seen some auto type of data for example real images we would like",
+    "room_id": "139909",
+    "id": "e02302cf-dcc6-4f8a-8cdb-73c74e4c6e95",
+    "page": null,
+    "video_start_ms": 3304.12,
+    "video_end_ms": 3311
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " our translation model to work on these images as well. And this is an example for and so basically",
+    "room_id": "139909",
+    "id": "716c6c22-393d-42ea-8b7e-e2d9de49ee5a",
+    "page": null,
+    "video_start_ms": 3311,
+    "video_end_ms": 3321.08
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " we can do that with with techniques similar to auto encoders. And this is illustration of the",
+    "room_id": "139909",
+    "id": "706a617c-7eea-4891-a362-0f10d06dcc66",
+    "page": null,
+    "video_start_ms": 3321.08,
+    "video_end_ms": 3327.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " idea in the context of translation. So translation are typically detected using a convolution. So",
+    "room_id": "139909",
+    "id": "182a5722-7c3c-48d7-b29c-458d914323c6",
+    "page": null,
+    "video_start_ms": 3327.56,
+    "video_end_ms": 3337.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " you take your two images x and y then you convolve them and at some and basically you will see a",
+    "room_id": "139909",
+    "id": "dac0e28a-2cda-43d5-84f4-e61d39a8f2a1",
+    "page": null,
+    "video_start_ms": 3337.56,
+    "video_end_ms": 3346.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " peak here in basically your convolution. That corresponds to the shift of the two images. So if",
+    "room_id": "139909",
+    "id": "e0b10021-c64f-41b7-8790-7e3ab4ee7b9e",
+    "page": null,
+    "video_start_ms": 3346.76,
+    "video_end_ms": 3358.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " x and y are two translated images basically the convolution will produce a maximum",
+    "room_id": "139909",
+    "id": "a8171b04-0c53-4466-972f-30b628998453",
+    "page": null,
+    "video_start_ms": 3358.04,
+    "video_end_ms": 3365
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " word to two function overlap. And the same operation can be computed as a product. So you know",
+    "room_id": "139909",
+    "id": "abb8919d-1414-4efd-a51a-89c83c67465a",
+    "page": null,
+    "video_start_ms": 3365,
+    "video_end_ms": 3374.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " from the four-year chart theorem that you can rewrite a convolution as mapping to four-year space",
+    "room_id": "139909",
+    "id": "585ebad6-1f34-4b40-a69d-49ec3bc65b9c",
+    "page": null,
+    "video_start_ms": 3374.76,
+    "video_end_ms": 3380.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " of the two modalities of the two data points taking the products and then taking the inverse",
+    "room_id": "139909",
+    "id": "d2e65498-37b7-48c2-a97b-e51c65dad69e",
+    "page": null,
+    "video_start_ms": 3382.76,
+    "video_end_ms": 3387.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " four-year transform and then you get basically your the convolution. And now the idea is that we will",
+    "room_id": "139909",
+    "id": "95fa9de1-e8ef-4094-a341-5e5eb0411cb9",
+    "page": null,
+    "video_start_ms": 3388.12,
+    "video_end_ms": 3398.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " learn f from the data and we will hard-code this product structure into our auto encoder.",
+    "room_id": "139909",
+    "id": "ecd01ac4-0b32-4d7d-a01e-aa31c07dc932",
+    "page": null,
+    "video_start_ms": 3398.76,
+    "video_end_ms": 3408.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So this is basically a toy case from translation scenario but then the idea will be that",
+    "room_id": "139909",
+    "id": "6048923e-9b50-4067-909b-7e3fcf79d0c1",
+    "page": null,
+    "video_start_ms": 3410.2,
+    "video_end_ms": 3416.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " we might not know exactly what is the transform that produce a certain type of deformation which",
+    "room_id": "139909",
+    "id": "b0bf8867-29f9-4f07-b88b-7d450dd6223c",
+    "page": null,
+    "video_start_ms": 3417.64,
+    "video_end_ms": 3424.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " might be not translation will still use the same structure and then we will get different basis.",
+    "room_id": "139909",
+    "id": "d97be719-892d-4aed-97af-380a258cacb3",
+    "page": null,
+    "video_start_ms": 3424.04,
+    "video_end_ms": 3428.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " It will start with translation just to illustrate the concept. So the auto encoder now consists of two parts",
+    "room_id": "139909",
+    "id": "61b8da75-6689-4bb8-b711-c23a8d9ee7a9",
+    "page": null,
+    "video_start_ms": 3430.2,
+    "video_end_ms": 3437.32
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and an encoder which produced the shift. So basically this is what we've shown here but except",
+    "room_id": "139909",
+    "id": "1c1deca9-762b-4878-b84b-f5dcc8a12415",
+    "page": null,
+    "video_start_ms": 3438.2,
+    "video_end_ms": 3445.64
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " that here we don't apply the four-year transform directly but just some encoding function that you",
+    "room_id": "139909",
+    "id": "b19a577e-52e5-451b-ac6c-b89e97ebf65a",
+    "page": null,
+    "video_start_ms": 3445.64,
+    "video_end_ms": 3452.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " have to learn and then you apply a dot product and then basically we get some shift representation.",
+    "room_id": "139909",
+    "id": "033f78f0-d9c9-47a4-a9be-7b3fb02c3f92",
+    "page": null,
+    "video_start_ms": 3452.36,
+    "video_end_ms": 3460.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " So it's not exactly like a number of pixels but it's like a vector which encodes the shift",
+    "room_id": "139909",
+    "id": "1497a2bc-9e74-4c61-9038-2d580ed864a7",
+    "page": null,
+    "video_start_ms": 3460.2,
+    "video_end_ms": 3465.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " and then the idea is to know how a second part which is a decoder which take your encoder inputs",
+    "room_id": "139909",
+    "id": "bfe0d187-7669-4614-be68-db1592f14eb5",
+    "page": null,
+    "video_start_ms": 3466.68,
+    "video_end_ms": 3474.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " then apply the shift and multiply again and then have a decoding function that produces the",
+    "room_id": "139909",
+    "id": "c886bf47-9f7a-4ddc-b0b2-4f30c8a582c2",
+    "page": null,
+    "video_start_ms": 3474.04,
+    "video_end_ms": 3481
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " translated image. So now you can compose the two so basically you connect these two things,",
+    "room_id": "139909",
+    "id": "d6fda526-4303-43d8-ba0b-60ffcd105b39",
+    "page": null,
+    "video_start_ms": 3481,
+    "video_end_ms": 3487.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " the shift and the shift and you have the whole neural network and you can train this thing into",
+    "room_id": "139909",
+    "id": "4d97a729-7493-4cc9-8c7d-bf54d57ed903",
+    "page": null,
+    "video_start_ms": 3487.88,
+    "video_end_ms": 3494.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " end by minimizing basically the min-square-error for example between the predicted and the true",
+    "room_id": "139909",
+    "id": "5b79e84a-f908-4391-a98a-d0dcbfedf4c2",
+    "page": null,
+    "video_start_ms": 3494.2,
+    "video_end_ms": 3500.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " translation and this is basically a paper by Memes Advice at all from 2010 which uses a similar",
+    "room_id": "139909",
+    "id": "cb9ef173-446e-46c0-8c53-e5348a4310dc",
+    "page": null,
+    "video_start_ms": 3500.92,
+    "video_end_ms": 3510.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " ID with this product network it's not exactly the one shown in the previous slide it's a bit more",
+    "room_id": "139909",
+    "id": "1d93d841-1958-4af5-8154-11ed23441461",
+    "page": null,
+    "video_start_ms": 3510.44,
+    "video_end_ms": 3515.48
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " complicated it makes use of probabilistic model but basically this is the basis that is learned",
+    "room_id": "139909",
+    "id": "cbcbc741-c8e1-48bc-ac77-efe6cec8ed50",
+    "page": null,
+    "video_start_ms": 3515.48,
+    "video_end_ms": 3525.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " for the two modalities. So here under left and the right you have two different basis function",
+    "room_id": "139909",
+    "id": "c77cac4a-401c-4cdf-9d7f-e11485cd2f48",
+    "page": null,
+    "video_start_ms": 3526.76,
+    "video_end_ms": 3532.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " but what you observe first is that the average in the rather this is basically a 2D Fourier",
+    "room_id": "139909",
+    "id": "14170011-87eb-4e3e-8b67-d27af4d7fbd2",
+    "page": null,
+    "video_start_ms": 3532.92,
+    "video_end_ms": 3540.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " transform learned from the data which has been it has kind of recovered what we expected",
+    "room_id": "139909",
+    "id": "b9ea86b9-decd-492e-995c-e5a77af97c15",
+    "page": null,
+    "video_start_ms": 3540.76,
+    "video_end_ms": 3546.68
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " this to be to be learned by just learning to translate basically and what you observe for",
+    "room_id": "139909",
+    "id": "140c81ac-e7ed-42e4-a219-bcf7b554bab1",
+    "page": null,
+    "video_start_ms": 3546.68,
+    "video_end_ms": 3558.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " example is that this filter is the same as here just with a few pixels of translation this",
+    "room_id": "139909",
+    "id": "9e40884a-7126-40dd-8a6f-05144ccfea5b",
+    "page": null,
+    "video_start_ms": 3558.92,
+    "video_end_ms": 3566.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " one again is horizontal and this one is shifted so basically the idea is that you kind of apply",
+    "room_id": "139909",
+    "id": "ee6998fd-65f4-4a23-8ecc-3996e293c33d",
+    "page": null,
+    "video_start_ms": 3566.12,
+    "video_end_ms": 3572.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " all these filters to your data points and then after you get a representation of the shift",
+    "room_id": "139909",
+    "id": "ec91a63d-f81d-4e7c-9bf8-9989025ae020",
+    "page": null,
+    "video_start_ms": 3572.52,
+    "video_end_ms": 3581.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " or basically various directions and then you map it back to the input space and you basically arrive",
+    "room_id": "139909",
+    "id": "213bc6ff-c0b0-49f9-b402-b5935fbbe8c4",
+    "page": null,
+    "video_start_ms": 3581.88,
+    "video_end_ms": 3591.56
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " at a translated version of your digit. Now the interesting part is that now if you if you try to",
+    "room_id": "139909",
+    "id": "02bd9ebb-44c0-4f1f-a434-8636944623c5",
+    "page": null,
+    "video_start_ms": 3591.56,
+    "video_end_ms": 3603.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " model other transformation for example rotation you keep the same architecture but you retrain",
+    "room_id": "139909",
+    "id": "9df12884-5faf-4fa5-8cd6-c4dce0104f45",
+    "page": null,
+    "video_start_ms": 3603.88,
+    "video_end_ms": 3612.76
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " on this translation and you look at the filters that you have learned and you learn all the",
+    "room_id": "139909",
+    "id": "60463a80-3530-44b3-b080-b5e1bc20681f",
+    "page": null,
+    "video_start_ms": 3612.76,
+    "video_end_ms": 3616.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " types of basis functions so here we have these spiral-like filters and again you have the same",
+    "room_id": "139909",
+    "id": "ad903a78-c5a8-4d0b-8f3b-320c2c91dd1d",
+    "page": null,
+    "video_start_ms": 3616.92,
+    "video_end_ms": 3624.04
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " structure so images are very similar but in fact they are similar up to a smaller rotation",
+    "room_id": "139909",
+    "id": "7081fbb0-bd75-4b52-b89a-f53ec6dec3ec",
+    "page": null,
+    "video_start_ms": 3624.04,
+    "video_end_ms": 3630.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " so actually the most amusing way to look at them is to take these images and just like",
+    "room_id": "139909",
+    "id": "cb975f35-f41d-4971-b947-58dafc01e602",
+    "page": null,
+    "video_start_ms": 3630.44,
+    "video_end_ms": 3637.4
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " scroll from one to the other repeatedly and you see these things moving a little bit.",
+    "room_id": "139909",
+    "id": "b0da2cb2-6b61-4c01-87fc-f318c68d9c89",
+    "page": null,
+    "video_start_ms": 3640.28,
+    "video_end_ms": 3644.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Okay so that's basically the content for for today and with this we are done with the",
+    "room_id": "139909",
+    "id": "d931169a-83cc-4dc6-a38d-338dd1f4b5c3",
+    "page": null,
+    "video_start_ms": 3647.8,
+    "video_end_ms": 3652.92
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " part of the course on component analysis so let's just recap what we have seen today",
+    "room_id": "139909",
+    "id": "b5adddc4-4a66-4b92-9efa-2bfbdbe47f2f",
+    "page": null,
+    "video_start_ms": 3652.92,
+    "video_end_ms": 3661.88
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " similar to PCA, CCA and ICA, sparse coding and autoencoders, the representations from",
+    "room_id": "139909",
+    "id": "c85af64c-a67c-4d66-829c-0033d8d4ce59",
+    "page": null,
+    "video_start_ms": 3662.52,
+    "video_end_ms": 3670.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " unsurprised data so we've been looking at mainly at unsurprised learning today.",
+    "room_id": "139909",
+    "id": "22b5d723-6222-4d12-a573-2e1aef326b2a",
+    "page": null,
+    "video_start_ms": 3670.2,
+    "video_end_ms": 3676.12
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " Autoencoders can be trained quickly and they can be implemented as neural networks and therefore",
+    "room_id": "139909",
+    "id": "4ee7a0f1-46be-4cf1-bfab-08b4fc05d039",
+    "page": null,
+    "video_start_ms": 3676.12,
+    "video_end_ms": 3684.52
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " they can make use of all the neural network layers available for example convolution,",
+    "room_id": "139909",
+    "id": "0532cdc6-488f-42f1-97ff-bb345eee5217",
+    "page": null,
+    "video_start_ms": 3685.48,
+    "video_end_ms": 3690.36
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " pulling etc and autoencoders can serve different purposes for example they can produce compact",
+    "room_id": "139909",
+    "id": "2d46867f-c02d-493b-9e9a-a57257b44826",
+    "page": null,
+    "video_start_ms": 3690.36,
+    "video_end_ms": 3700.44
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " sparse representations they can learn invariant representation they can learn abstract",
+    "room_id": "139909",
+    "id": "0830493f-d820-40b8-a95d-5894c8c9eceb",
+    "page": null,
+    "video_start_ms": 3700.44,
+    "video_end_ms": 3707.8
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " representation we've seen for example the ladder network which is also based on some kind of",
+    "room_id": "139909",
+    "id": "5e8eced2-9fdb-4f16-8405-6b7e342b2e2d",
+    "page": null,
+    "video_start_ms": 3707.8,
+    "video_end_ms": 3714.2
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " autoencoder and finally the last example I was describing I was presenting they can learn a",
+    "room_id": "139909",
+    "id": "9048ea28-36e4-4201-8d45-9ab1c2e81b1c",
+    "page": null,
+    "video_start_ms": 3714.2,
+    "video_end_ms": 3722.6
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " transformation of the data rather than the data itself. Okay so that's it for today thank you",
+    "room_id": "139909",
+    "id": "109975fb-2dcc-45d9-844e-81f4d6184bc1",
+    "page": null,
+    "video_start_ms": 3722.6,
+    "video_end_ms": 3729.96
+  },
+  {
+    "created_at": "2023-07-05T21:54:02.913847+00:00",
+    "data": " for your attention and yeah see you next week.",
+    "room_id": "139909",
+    "id": "e8582e5e-c947-4079-94aa-2693078f69ac",
+    "page": null,
+    "video_start_ms": 3729.96,
+    "video_end_ms": 3739.96
+  }
+]

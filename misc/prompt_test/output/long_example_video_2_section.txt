@@ -1,0 +1,138 @@
+[14:17]
+In practice, it will be most of the time sufficient. But yes, there are actually some approach to sparse coding that try to go beyond L1 norm and try to use something non convex, which is closer to the zero norm.
+
+[14:32]
+And there is another problem.
+
+[14:42]
+And this one is actually more severe, is that if you scale up W and scale down SI accordingly, then this term does not change.
+
+[14:52]
+Let's say if you multiply W by 2 and you divide SI by 2.
+
+[14:59]
+This doesn't change, but this thing decreases by effect or 2. So you can just keep scaling up and scaling down these two terms.
+
+[15:07]
+And at the end, the sparse term becomes almost zero.
+
+[15:14]
+And essentially, you get a sparse theory term which is not effective.
+
+[15:22]
+You can always create an optimally reconstructing solution optimally sparse by choosing a dictionary with very large weights.
+
+[15:28]
+So we don't want that because we want to, we have some effective sparse city.
+
+[15:37]
+And for this, we will add a regularization terms on the weights of the dictionary, which can be, for example, simply eta times the Frobenius norm of the dictionary W.
+
+[15:57]
+So basically, what is the Frobenius norm square is the sum of all the square values of the matrix.
+
+[16:05]
+There are different formulations, a different way to incorporate this constraint.
+
+[16:13]
+Here it's a additive term, but sometimes you can also see in the literature this constraint enforce some actual constraint.
+
+[16:20]
+The norm of the weights have to be smaller than some parameter C.
+
+[16:30]
+So there are different formulations. But in any case, this serves to address the problem of making the sparse-determe effective.
+
+[16:40]
+Okay, so now to illustrate what sparse coding does, we will look at the toy example.
+
+[16:52]
+We have some data sets of N data points in R2.
+
+[16:58]
+And then we will perform source coding with sources in R3. And after optimization, most of the data points will be sparse in a source space.
+
+[17:10]
+And align with the coordinate system.
+
+[17:21]
+So basically, this is like a simulation. So here we have taken some input data. We have fixed dictionary to be, to be basically optimal.
+
+[17:30]
+And then we run basically this sum gradient descent over sources.
+
+[17:37]
+And this is what we find. So basically if we apply the L1 norm, then the sources naturally converge towards either the origin or not the origin, but as close as possible to the canonical coordinate system.
+
+[17:51]
+So we get this kind of cloud of data points.
+
+[18:00]
+And then if you project back on the dictionary, then basically this thing maps there. This thing maps there.
+
+[18:09]
+And this one maps there. And then basically we get some reconstruction of our input data, which is not optimal, but still quite acceptable.
+
+[18:14]
+So for example, most of these points will map to this region of the input space.
+
+[18:25]
+So probably the ones that are close to this line will map exactly there.
+
+[18:32]
+And only the few points that are far away will be left over there.
+
+[18:38]
+And then there's the question of the parameter lambda. So if you remember in this optimization problem, there is a factor lambda, which basically determines who strongly we apply this participinality.
+
+[18:55]
+And it's interesting to see the effect of the parameter lambda.
+
+[19:03]
+So if you use a small parameter lambda, then basically nothing happens.
+
+[19:10]
+So you just have perfect reconstruction and no sparsity at all. If you increase lambda a little bit, then you start to see that a few points start to agglomerate them in a region of sparsity.
+
+[19:28]
+So we're only one of the element is zero. One element is known zero. If you keep increasing lambda, then most of the points start to align with the canonical coordinate system in the source space and then project back onto this direction of the dictionary.
+
+[19:47]
+And if you just keep increasing lambda, for example, lambda equals six, then you try to have even more sparsity.
+
+[20:03]
+And in the very end, the the problem, the strongest sparsity is just to set everything to zero.
+
+[20:08]
+And then basically, then you have the most spars possible solution, which is basically solution, all the sources are zero.
+
+[20:15]
+But the problem is that it does not reconstruct well the data anymore.
+
+[20:20]
+And so in practice, you always want to have some intermediate value of lambda to get a nice trade off.
+
+[20:31]
+So here, probably, n equals zero.
+
+[20:37]
+Six might be good, or n equals zero. Two might be good. It very much depends on the exact applications.
+
+[20:43]
+So you want a strong compression. Or what are you want to keep the data, basically to do better preserved property of the data.
+
+[20:52]
+So that was for basic spars coding. And now there are many extensions of spars coding.
+
+[21:04]
+And one which is interesting is convolutional spars coding.
+
+[21:08]
+So we haven't looked at convolution so much yet, just a little bit machine learning one in the context of neural networks.
+
+[21:14]
+But here, the idea is that you can have some kind of structured feature map or structured source code that consists of basically source elements.
+
+[21:36]
+And then they are not simple scalars. They are actually images. And at these images, you have some points that are known zero.
+

@@ -1,0 +1,48 @@
+[0:00]
+Okay, so hello everyone. Today is the last lecture of the series of lecture on component analysis.
+
+[0:09]
+So we've seen CCA, ICA, and today we look at some more general, which is representation learning.
+
+[0:19]
+So to set up the ID, basically you have an observation space, which can be, for example, images, but this could also be sounds or any data you observe.
+
+[0:28]
+And what you would like to do is to encode this data into some latent space, which is typically more abstract, which could be, for example, vectors.
+
+[0:43]
+And then from this latent space, space we can go back to the observation space using some decoding.
+
+[0:50]
+And there are many reasons why we would like to do this representation learning.
+
+[0:57]
+And in some cases, the latent space might be, for example, lower dimensional or more easily, more easy to express.
+
+[1:05]
+And this could be used for compression or summarization.
+
+[1:11]
+In some cases, the goal of the latent space is to try to find a joint subspace between different modalities.
+
+[1:19]
+And we have seen that in the lecture on CCA, sometimes the purpose of the latent space is to extract factors that are basically a decent thing of the data, for example, in the case of images, and the composition in terms of edges or some independent components.
+
+[1:38]
+And we've shown some examples last week when discussing ICA.
+
+[1:46]
+And finally, something we'll also look at today is that we can build this latent space to try to extract more high level features that are more closely related to the task we would like to solve, which might be, for example, some image classification task or something else, which is a high level.
+
+[2:05]
+So far, we've already served a number of methods for representation learning.
+
+[2:13]
+And the simplest one, and if we have already seen in the very beginning of machine learning one, was a principle component analysis or PCA.
+
+[2:25]
+And basically, PCA tries to find a representation or a projection of the data where the variance is maximized.
+
+[2:34]
+And the idea is that the main and the first few principal components provide a good summarization of your data.
+

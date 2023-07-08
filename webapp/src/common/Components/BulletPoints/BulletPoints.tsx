@@ -9,6 +9,103 @@ import { useMutation, useQueryClient } from "react-query";
 import { BulletPointI } from "@/common/Interfaces/Interfaces";
 import { BulletPoint } from "./BulletPoint";
 
+export function convert_min_sec_to_seconds(min_sec: string) {
+  const [min, sec] = min_sec.split(":");
+  return parseInt(min) * 60 + parseInt(sec);
+}
+interface BulletpointSection {
+  title: string;
+  start: string;
+  end: string;
+  bullet_points: BulletPointI[];
+}
+
+interface VideoBulletPoints {
+  isLong: boolean;
+  sections: BulletpointSection[] | undefined;
+  bullet_points: BulletPointI[] | undefined;
+}
+
+function BulletPointList({
+  bulletPoints,
+  setPlayPosition,
+  setCurrentPage,
+  onOpenChat,
+}: {
+  bulletPoints: BulletPointI[];
+  setPlayPosition: ({ pos }: { pos: number }) => void;
+  setCurrentPage: (page: number) => void;
+  onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
+}) {
+  return (
+    <>
+      {bulletPoints &&
+        bulletPoints.map((bulletPoint: BulletPointI) => (
+          <BulletPoint
+            key={
+              bulletPoint.bullet_point +
+              bulletPoint.video_start_ms +
+              bulletPoint.page
+            }
+            bulletPointId={bulletPoint.id}
+            bulletPoint={bulletPoint}
+            setPlayPosition={setPlayPosition}
+            setCurrentPage={setCurrentPage}
+            onOpenChat={onOpenChat}
+          />
+        ))}
+    </>
+  );
+}
+
+function VideoBulletPoints({
+  bulletPoints,
+  setPlayPosition,
+  setCurrentPage,
+  onOpenChat,
+}: {
+  bulletPoints: VideoBulletPoints;
+  setPlayPosition: ({ pos }: { pos: number }) => void;
+  setCurrentPage: (page: number) => void;
+  onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
+}) {
+  if (!bulletPoints.isLong) {
+    return (
+      <BulletPointList
+        bulletPoints={bulletPoints.bullet_points!}
+        setPlayPosition={setPlayPosition}
+        setCurrentPage={setCurrentPage}
+        onOpenChat={onOpenChat}
+      />
+    );
+  }
+
+  return (
+    <div>
+      {bulletPoints.sections?.map((section, i) => (
+        <div key={i}>
+          <h2
+            style={{ cursor: "pointer" }}
+            onClick={() =>
+              setPlayPosition({
+                pos: convert_min_sec_to_seconds(section.start),
+              })
+            }
+          >
+            {section.title} ({section.start} - {section.end})
+          </h2>
+          <BulletPointList
+            bulletPoints={section.bullet_points}
+            setPlayPosition={setPlayPosition}
+            setCurrentPage={setCurrentPage}
+            onOpenChat={onOpenChat}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function BulletPoints({
   roomId,
   onOpenChat,
@@ -35,7 +132,7 @@ export function BulletPoints({
       if (!res) return;
 
       if (res.data) {
-        setBulletPoints(res.data.data);
+        queryClient.invalidateQueries(["bulletpoints", roomId]);
       }
     },
   });
@@ -50,16 +147,11 @@ export function BulletPoints({
         if (data?.error) {
           // Create new bullet points
           if (mutation.isLoading) return;
+          queryClient.setQueryData(["bulletpoints", roomId], []);
           mutation.mutate();
         }
       },
     }
-  );
-
-  const [bulletPoints, setBulletPoints] = React.useState<BulletPointI[] | null>(
-    bulletPointsData.data?.error === null
-      ? JSON.parse(bulletPointsData!.data!.data!.bulletpoints! as string)
-      : null
   );
 
   // If segments change, check if the last segment is on a new page
@@ -75,14 +167,18 @@ export function BulletPoints({
       const secondLastSegment = segments[segments.length - 2];
 
       if (lastSegment.page !== secondLastSegment.page) {
-        console.log("BulletPoints: page changed", lastSegment.page);
         mutation.mutate();
         prevSegmentLength.current = segments.length;
       }
     }
   }, [segments.length]);
 
+  const bulletPoints = bulletPointsData.data?.data?.bulletpoints
+    ? JSON.parse(bulletPointsData.data?.data?.bulletpoints as string)
+    : [];
+
   const loading = bulletPointsData.isLoading || mutation.isLoading;
+  const isVideo = bulletPoints && "isLong" in bulletPoints;
 
   return (
     <div>
@@ -95,21 +191,25 @@ export function BulletPoints({
           {loading ? "Updating" : "Update"}
         </LoadingButton>
       </div>
-      {bulletPoints &&
-        bulletPoints.map((bulletPoint: BulletPointI) => (
-          <BulletPoint
-            key={
-              bulletPoint.bullet_point +
-              bulletPoint.video_start_ms +
-              bulletPoint.page
-            }
-            bulletPointId={bulletPointsData.data?.data?.id!}
-            bulletPoint={bulletPoint}
-            onOpenChat={onOpenChat}
-            setPlayPosition={setPlayPosition}
-            setCurrentPage={setCurrentPage}
-          />
-        ))}
+      {bulletPoints && (
+        <>
+          {isVideo ? (
+            <VideoBulletPoints
+              bulletPoints={bulletPoints as unknown as VideoBulletPoints}
+              setPlayPosition={setPlayPosition}
+              setCurrentPage={setCurrentPage}
+              onOpenChat={onOpenChat}
+            />
+          ) : (
+            <BulletPointList
+              bulletPoints={bulletPoints as unknown as BulletPointI[]}
+              setPlayPosition={setPlayPosition}
+              setCurrentPage={setCurrentPage}
+              onOpenChat={onOpenChat}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }

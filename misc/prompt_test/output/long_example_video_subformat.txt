@@ -1,0 +1,957 @@
+[0:00]
+so hello everyone. Today is the last lecture of the series of lecture on component analysis.
+
+[0:09]
+So we've seen CCA, ICA, and today we look at some more general, which is representation learning.
+
+[0:19]
+So to set up the ID, basically you have an observation space, which can be, for example, images, but this could also be sounds or any data you observe.
+
+[0:28]
+And what you would like to do is to encode this data into some latent space, which is typically more abstract, which could be, for example, vectors.
+
+[0:43]
+And then from this latent space, space we can go back to the observation space using some decoding.
+
+[0:50]
+And there are many reasons why we would like to do this representation learning.
+
+[0:57]
+And in some cases, the latent space might be, for example, lower dimensional or more easily, more easy to express.
+
+[1:05]
+And this could be used for compression or summarization.
+
+[1:11]
+In some cases, the goal of the latent space is to try to find a joint subspace between different modalities.
+
+[1:19]
+And we have seen that in the lecture on CCA, sometimes the purpose of the latent space is to extract factors that are basically a decent thing of the data, for example, in the case of images, and the composition in terms of edges or some independent components.
+
+[1:38]
+And we've shown some examples last week when discussing ICA.
+
+[1:46]
+And finally, something we'll also look at today is that we can build this latent space to try to extract more high level features that are more closely related to the task we would like to solve, which might be, for example, some image classification task or something else, which is a high level.
+
+[2:05]
+So far, we've already served a number of methods for representation learning.
+
+[2:13]
+And the simplest one, and if we have already seen in the very beginning of machine learning one, was a principle component analysis or PCA.
+
+[2:25]
+And basically, PCA tries to find a representation or a projection of the data where the variance is maximized.
+
+[2:34]
+And the idea is that the main and the first few principal components provide a good summarization of your data.
+
+[2:42]
+We've also looked at canonical correlation analysis or CCA machine learning too, as well as ICA.
+
+[2:49]
+And today we will continue with a few more of this analysis, and we will introduce, we'll present in particular a sparse coding and auto encoders.
+
+[3:03]
+And then we will look at a few more ideas, for example, transfer learning, etc.
+
+[3:10]
+So what is sparse coding? So sparse coding aims to represent the data in a way that in the latent representation many elements are zero.
+
+[3:33]
+And the idea is so basically that's the definition of sparse, and contrary to dense, sparse basically is something which only contains a few elements, and so the rest is assumed to be zero.
+
+[3:48]
+And then the data can be reconstructed from this sparse code using a dictionary.
+
+[3:55]
+And here you can see a cartoon on the left. And basically you can think of your source vector, which is an abstract vector of some dimensions.
+
+[4:03]
+And each dimension is associated some filter or some basically basis, and this set of basis form a dictionary that's called W.
+
+[4:20]
+And then basically if you take the non-zero element of the source vectors, so here those that are highlighted in red, and you sum them up, then basically you arrive at some reconstructed data which basically corresponds to the image represented by this source vector S.
+
+[4:42]
+And sparse coding has several advantages compared to dense coding, and the first one is a low storage cost.
+
+[4:52]
+So a vector with many zeros can be represented completely.
+
+[5:00]
+For example, if you have a vector of this type where the big red one would be like 12, here 0, here 7, and then 0 0 again, you don't need to encode every individual entries of this vector.
+
+[5:15]
+You can use a collection of this index value pairs where basically you write the index and then the value.
+
+[5:24]
+So for example, here we have index 0, you have a value of 12.
+
+[5:29]
+Then you skip this one because 0, then you jump directly to index 2. So here index 2, you write 7, and then you skip index 3 and 4 because they are also 0.
+
+[5:35]
+And so here, instead of having like 5 entries, you only have 4 of them, and if you have higher dimensional vectors that have higher sparsity, it becomes clearly more efficient.
+
+[5:48]
+So that's one advantage of sparse coding.
+
+[5:55]
+And a second advantage is that it is actually more interpretable. So it's nice to be able to think of your data as a combination of few factors, and then you can think of basically just the data being like the reconstruction or the superposition of a few additional elements.
+
+[6:16]
+So the first model we will look at is a linear sparse coding.
+
+[6:27]
+And here we'll assume that we have a vector and basically a data vector x, which is some abstract D-dimensional space.
+
+[6:34]
+So if we think of an image with just the image matrix, then we flatten it and we make a vector out of it.
+
+[6:43]
+And so this image maybe it's like 32, 32, or if you flatten it, it's a vector of size of 1024.
+
+[6:50]
+And then we'll have our source code, which is again a vector in rH with H different than D.
+
+[7:01]
+And usually in PCA H was much smaller than D.
+
+[7:09]
+But in sparse coding it can be actually much smaller. It can be the same size or also larger.
+
+[7:18]
+In that case we talk about an over-complete representation.
+
+[7:24]
+And this doesn't really cause a problem because many of these elements will be zero. So if you think of trying to describe, for example, in terms of an image in terms of worlds, there might be many more worlds that would potentially describe an image than the number of pixels that formed the image.
+
+[7:48]
+So it's not a problem to have H larger than D. And in fact, we will typically prefer indicative sparse coding to have large, high dimensional source vectors.
+
+[7:57]
+Okay, then the dictionary W.
+
+[8:06]
+So this is basically a matrix of size d times H. Or it can sometimes be H times D.
+
+[8:16]
+It depends on how you write the formulas, I think in the programming exercise, it's of size H times D.
+
+[8:21]
+But basically it's the collection of all the basis in input space.
+
+[8:30]
+So basically each basis is a vector of dimension D. And if you just stack them, you get a matrix of size d times H.
+
+[8:38]
+And linear sparse coding reconstructs approximately the data from the source code.
+
+[8:47]
+Basically using this matrix multiplication. So you take S, which is a vector, RH, then you multiply it by this matrix.
+
+[8:56]
+And then you get some X hat where X hat is the reconstructed data.
+
+[9:03]
+And this is basically a matrix multiplication.
+
+[9:12]
+This is actually the dense formulation, but because many of these vectors elements are sparse in practice, it's inefficient.
+
+[9:18]
+Or you can basically have more efficient formulation by basically summing over the nonzero indices.
+
+[9:26]
+And here basically by this we mean the its column of the matrix W.
+
+[9:37]
+That we then multiply with a entry SI of the source vector.
+
+[9:47]
+And we just sum them up. So if we have like only like one percent of the source vectors that are, let's say if you have like a source vector of size 200.
+
+[9:54]
+And on the two of these elements are active.
+
+[10:01]
+Instead of running this big matrix multiplication, you just have to sum over two elements and apply basically sum over two vectors.
+
+[10:05]
+So that's basically the way the model is defined.
+
+[10:14]
+And now the big question will be how do we learn the dictionary with W as well as the sparse code S1 until Sn.
+
+[10:19]
+If we have some data sets X1 until Xn. So when no nether of them, we don't know the dictionary query, we like to learn it.
+
+[10:29]
+And the sparse codes we also need to learn them.
+
+[10:35]
+So we'll first start with the L0 formulation, which is like theoretically optimal, but which is not practically, which cannot be optimized practically.
+
+[10:51]
+Or at least not with simple methods. And we will have basically our data set which is composed of our collection of vectors in Rd.
+
+[10:58]
+Then we will have our associated sources, which is basically a collection of vectors in Rh.
+
+[11:06]
+And then we will finally have W, which is our dictionary that reconstruct the data from the sources.
+
+[11:14]
+And now we will try to implement the following objective, which is basically the mean square error between the data and the reconstruction.
+
+[11:33]
+Right. It's a reconstruction error. And in addition, we want to reconstruct the source vector sparse.
+
+[11:43]
+And one way to implement that is to apply the zero norm with norm in quotes, because it's not a norm actually, but it's just basically a generalization of the p-norm with p equal to zero.
+
+[12:00]
+And what this zero norm does is that it counts the number of non-zero elements in the vector.
+
+[12:07]
+So here, for example, if you have this vector, the zero norm would be simply 2.
+
+[12:14]
+And so if you minimize that, you have an objective which tries to reconstruct and at the same time, try to create source vectors that are as sparse as possible.
+
+[12:30]
+So if we could optimize this, that would be very good. But the problem is that the zero norm is a non-convex and not differentiable, which makes it hard to optimize.
+
+[12:38]
+So one idea is to apply what we call an L1 relaxation.
+
+[12:50]
+And the idea is to replace the zero norm by one norm.
+
+[13:02]
+And one norm is basically sometimes called the Manhattan distance between SE and the origin.
+
+[13:13]
+And here, basically, the only thing that changes from the previous optimization problem is that we have a one here.
+
+[13:19]
+And the nice thing about the L1 norm, the one norm is that it's complex.
+
+[13:27]
+So and also, it is the differentiable almost everywhere, except at the hinges of the norm, but most likely, we will never be exactly at that point.
+
+[13:35]
+So basically now we have a convex optimization problem.
+
+[13:48]
+We can, for example, solve it by gradient descent or by something more efficient.
+
+[13:53]
+But there is actually a problem with this.
+
+[14:00]
+Okay, first of all, the limitation is that we are not optimizing the exact L0 formulation of sparse coding.
+
+[14:10]
+So we will not get the maximally, like the optimally sparse solution, but something like a sparse solution.
+
+[14:17]
+In practice, it will be most of the time sufficient. But yes, there are actually some approach to sparse coding that try to go beyond L1 norm and try to use something non convex, which is closer to the zero norm.
+
+[14:32]
+And there is another problem.
+
+[14:42]
+And this one is actually more severe, is that if you scale up W and scale down SI accordingly, then this term does not change.
+
+[14:52]
+Let's say if you multiply W by 2 and you divide SI by 2.
+
+[14:59]
+This doesn't change, but this thing decreases by effect or 2. So you can just keep scaling up and scaling down these two terms.
+
+[15:07]
+And at the end, the sparse term becomes almost zero.
+
+[15:14]
+And essentially, you get a sparse theory term which is not effective.
+
+[15:22]
+You can always create an optimally reconstructing solution optimally sparse by choosing a dictionary with very large weights.
+
+[15:28]
+So we don't want that because we want to, we have some effective sparse city.
+
+[15:37]
+And for this, we will add a regularization terms on the weights of the dictionary, which can be, for example, simply eta times the Frobenius norm of the dictionary W.
+
+[15:57]
+So basically, what is the Frobenius norm square is the sum of all the square values of the matrix.
+
+[16:05]
+There are different formulations, a different way to incorporate this constraint.
+
+[16:13]
+Here it's a additive term, but sometimes you can also see in the literature this constraint enforce some actual constraint.
+
+[16:20]
+The norm of the weights have to be smaller than some parameter C.
+
+[16:30]
+So there are different formulations. But in any case, this serves to address the problem of making the sparse-determe effective.
+
+[16:40]
+Okay, so now to illustrate what sparse coding does, we will look at the toy example.
+
+[16:52]
+We have some data sets of N data points in R2.
+
+[16:58]
+And then we will perform source coding with sources in R3. And after optimization, most of the data points will be sparse in a source space.
+
+[17:10]
+And align with the coordinate system.
+
+[17:21]
+So basically, this is like a simulation. So here we have taken some input data. We have fixed dictionary to be, to be basically optimal.
+
+[17:30]
+And then we run basically this sum gradient descent over sources.
+
+[17:37]
+And this is what we find. So basically if we apply the L1 norm, then the sources naturally converge towards either the origin or not the origin, but as close as possible to the canonical coordinate system.
+
+[17:51]
+So we get this kind of cloud of data points.
+
+[18:00]
+And then if you project back on the dictionary, then basically this thing maps there. This thing maps there.
+
+[18:09]
+And this one maps there. And then basically we get some reconstruction of our input data, which is not optimal, but still quite acceptable.
+
+[18:14]
+So for example, most of these points will map to this region of the input space.
+
+[18:25]
+So probably the ones that are close to this line will map exactly there.
+
+[18:32]
+And only the few points that are far away will be left over there.
+
+[18:38]
+And then there's the question of the parameter lambda. So if you remember in this optimization problem, there is a factor lambda, which basically determines who strongly we apply this participinality.
+
+[18:55]
+And it's interesting to see the effect of the parameter lambda.
+
+[19:03]
+So if you use a small parameter lambda, then basically nothing happens.
+
+[19:10]
+So you just have perfect reconstruction and no sparsity at all. If you increase lambda a little bit, then you start to see that a few points start to agglomerate them in a region of sparsity.
+
+[19:28]
+So we're only one of the element is zero. One element is known zero. If you keep increasing lambda, then most of the points start to align with the canonical coordinate system in the source space and then project back onto this direction of the dictionary.
+
+[19:47]
+And if you just keep increasing lambda, for example, lambda equals six, then you try to have even more sparsity.
+
+[20:03]
+And in the very end, the the problem, the strongest sparsity is just to set everything to zero.
+
+[20:08]
+And then basically, then you have the most spars possible solution, which is basically solution, all the sources are zero.
+
+[20:15]
+But the problem is that it does not reconstruct well the data anymore.
+
+[20:20]
+And so in practice, you always want to have some intermediate value of lambda to get a nice trade off.
+
+[20:31]
+So here, probably, n equals zero.
+
+[20:37]
+Six might be good, or n equals zero. Two might be good. It very much depends on the exact applications.
+
+[20:43]
+So you want a strong compression. Or what are you want to keep the data, basically to do better preserved property of the data.
+
+[20:52]
+So that was for basic spars coding. And now there are many extensions of spars coding.
+
+[21:04]
+And one which is interesting is convolutional spars coding.
+
+[21:08]
+So we haven't looked at convolution so much yet, just a little bit machine learning one in the context of neural networks.
+
+[21:14]
+But here, the idea is that you can have some kind of structured feature map or structured source code that consists of basically source elements.
+
+[21:36]
+And then they are not simple scalars. They are actually images. And at these images, you have some points that are known zero.
+
+[21:43]
+And then the idea is that each of these images, then you can evolve them with a convolution filter.
+
+[21:50]
+And then you add them up for all these feature maps.
+
+[21:55]
+And then you get the coded image. And the nice thing about it, so one first nice thing is that you can actually have even more interesting representation of your source vector.
+
+[22:08]
+Or you can basically only encode the non-zero maps and the non-zero locations in the map.
+
+[22:20]
+So it's actually can be even higher compression. And another nice thing is that you don't need to build like one dictionary element for every location in the input space.
+
+[22:41]
+So if you look at the previous dictionary, which was there, then basically you have these filters that detect edges with everywhere in the input space.
+
+[22:46]
+With convolutional spars coding, you don't have to do that.
+
+[22:53]
+You just have to learn these filter once. And naturally it will be at the middle of the convolution filters.
+
+[23:00]
+And then the position of the dictionary element is not encoded by the exact index of your source vector, but by the position within a given index.
+
+[23:15]
+So to compare standard spars coding and convolutional spars coding, so this is what you see.
+
+[23:25]
+So this is basically when you build some decomposition as spars code of image patches.
+
+[23:31]
+And if you apply spars coding, you get this kind of decomposition in the dictionary, which is basically a bunch of oriented edges at a different location.
+
+[23:38]
+If you apply convolutional spars coding, then the edges you still have oriented edges, but you don't need to encode all the shifts.
+
+[23:51]
+So you can in fact use the capacity of your dictionary to encode some richer features.
+
+[24:02]
+And here you see, for example, you don't have only edges. You also have circles.
+
+[24:07]
+You have cross. You have some interesting texture filters. So much, much more variety.
+
+[24:21]
+Compared to standard spars coding. There is one more extension of spars coding, which is topological spars coding.
+
+[24:29]
+And here are the ideas that you can add to your spars coding objective constraints that source dimensions must correlate on some pretty fine two-degree.
+
+[24:37]
+So basically you add this constraint.
+
+[24:45]
+You force basically this source code, as I said, to see two dictionary elements to be correlated.
+
+[24:53]
+And you do the same for this one, for this one, for this one, and so on.
+
+[25:00]
+And so forth. And then basically you get your nice topological spars coding where you can have a nice overview of the dictionary elements, which direction they take and how similar the different dictionary elements are.
+
+[25:18]
+Now we come to the implementation of spars coding.
+
+[25:28]
+And so the first observation we can make is that there might be different cases.
+
+[25:39]
+So sometimes you might have large number of data points. And the whole source code, which is of size n times h, might not fit on in memory.
+
+[25:47]
+So if you have a very large image data set, you can pose a 1 million images.
+
+[25:53]
+This might not fit in memory. And there are other cases, which is when n is small.
+
+[26:01]
+And in that case you might fit all the data in memory in all the source codes.
+
+[26:08]
+So for the first case, there is something, the approach, natural approach is to have a batch algorithm where you basically initialize all your vector and source code.
+
+[26:20]
+And then you can just update the source elements and dictionary one after the other until convergence.
+
+[26:27]
+For the online version, you cannot do that. You first have to initialize, basically you can only keep track of the dictionary.
+
+[26:35]
+But at every step, you basically need to take a selection of source code, because you cannot do this for all of them at the same time.
+
+[26:52]
+Which means that at every time step, because the W has changed, you need to recalculate for a given ID to might have chosen randomly the source code SI.
+
+[27:06]
+So this can take some time. And then you can update W approximately from SI, basically something like stochastic written descent.
+
+[27:15]
+And here, I didn't mention whether we have to how we do these updates and inferences.
+
+[27:22]
+This could be done lively using gradient descent, but in fact there are many much more efficient implementations of sparse code image.
+
+[27:29]
+And there is a paper by Lee et al 2006 that explains different ways of computing these quantities efficiently.
+
+[27:47]
+Okay, so now we will look at related model, which is auto encoder. And if we remember one difficulty of sparse coding is that we always need to infer the source codes when learning dictionary.
+
+[28:10]
+And we can facilitate our sole address this problem with an encoding function that we would also train at the same time.
+
+[28:20]
+And so the simplest encoding function we can think of would be simply a linear projection that maps our data into the source code.
+
+[28:28]
+And then if we basically replace SI by the encoding function, we arrive at a similar objective sparse coding that we can see here.
+
+[28:50]
+And here now we do not minimize over W and SI. We minimize over W and V and SI does not appear.
+
+[28:59]
+So this objective function only depends on these two matrices and this can be learned via a stochastic gradient descent.
+
+[29:10]
+So there is a problem with this potential problem with this formulation is that we are not sure that encoding function actually arrive manages to produce these sparse vectors.
+
+[29:26]
+And because there is nothing the linear function that induces any sparsity.
+
+[29:36]
+And so one idea is to use an linear encoding function which is basically applying a rectifying function to the output of the linear projection.
+
+[29:45]
+Basically it's a value of an linearity which we apply element wise.
+
+[29:58]
+And the nice thing with this linear function is that it produces values that are exactly zero for every negative input.
+
+[30:06]
+So if you want to increase sparsity, basically we need to make sure that our projection V XI produces maps to something negative.
+
+[30:20]
+And this can be even more facilitated by also having bias here.
+
+[30:30]
+So V XI plus B. And then you get we can basically choose B to be negative and it will induce some sparsity.
+
+[30:41]
+So if now you inject this function into basically the objective, you have this, you have this.
+
+[30:51]
+So W max zero V XI plus lambda S I, normal one.
+
+[31:02]
+There haven't developed this quantity but you can just replace S I by the maximum. And this is very close to an auto encoder that people would use in practice.
+
+[31:13]
+And there is actually one small problem with this auto encoder is that if we apply, if this sparse tip nLT works too well, basically the S I will go to zero.
+
+[31:30]
+And what happens if S I zero basically it means that this thing is zero.
+
+[31:40]
+And there is no gradient information left.
+
+[31:46]
+And this is a problem called dead units sometimes. Where basically at some point the sparsity has had its effects and then there is no way to recuperate the units because it has been driven to zero.
+
+[32:02]
+And it has no gradient anymore. And to avoid creating dead units, we can add some entropy term which basically forces each unit to activate at least a few times.
+
+[32:09]
+I didn't write the formula here but in the programming homework this entropy term or something similar is included.
+
+[32:24]
+So this is how the auto encoder looks like. So first we have your original data.
+
+[32:32]
+Then you pass it through this encoder function which is like multiplication by symmetric SV plus our compose with some RELU in linearity which gives you your vector S.
+
+[32:37]
+And then you map it into some decoder function w.
+
+[32:51]
+And then you get your reconstruction X hat. And it looks very much like neural network because you have basically one linear layer, one RELU layer and then one linear layer.
+
+[33:06]
+You have outputs with an input. And then basically you can define some objective and basically back propagates at least a reconstruction error.
+
+[33:11]
+You can for example learn the parameter v by back propagating through that network.
+
+[33:17]
+So taking this neural network view, you can then generalize the auto encoder.
+
+[33:27]
+You can create deep auto encoders.
+
+[33:37]
+And this was successfully applied in 2006 on some complex data sets.
+
+[33:47]
+And here the motivation is that a simple linear encoder function might not have to be sufficient to produce a meaningful source code.
+
+[33:53]
+Because sometimes you have like the data is complex and to extract meaningful dictionary elements that might have a bit of invariance for example you need to apply more transformation.
+
+[34:07]
+And so which means that now you can think of the encoder as a function g, which can be any function g, which is like one layer of multiple layers or something else.
+
+[34:22]
+And you have some decoder, which is some function f. And then this objective is consists of minimizing X minus composition of f and g plus some sparsity term that will apply to your intermediate layer basically plus some regularization which will basically force the decoder to basically not produce like you.
+
+[34:47]
+Yeah, to not produce large values if this was code is very small.
+
+[34:59]
+So yeah, here again this deep auto encoder can be trained using back propagation.
+
+[35:08]
+So you start at least for the reconstruction term you start here.
+
+[35:13]
+Then you back propagate the error reconstruction error through the network.
+
+[35:21]
+And then you can update the parameters of the decoder and encoder. For the sparsity term which is defined here, then in fact you would start here, define some additional error term here and then back propagate through this branch and you might actually update some parameters of the encoder.
+
+[35:40]
+And for the regularization, typically this will be some function on of this.
+
+[35:45]
+And you can again, as a, it's a simple regularization term which only involves the parameters or if it's more complex, you can again lose some back propagation.
+
+[35:53]
+But in practice, there are some efficient frameworks, for example, by torches or then torflow that allow you to not have to implement the back propagation yourself.
+
+[36:11]
+It uses automatic differentiation which basically requires you only to specify the objective or the forward pass.
+
+[36:19]
+Basically you need to write this and then you can basically call backward and it kind of pushes to create derivatives back into the network and collect the gradients wherever you need them.
+
+[36:32]
+So far we have mostly looked at autoencoder for the purpose of producing some spars or low dimensional representation which you might use for example for a storage solution.
+
+[36:58]
+But in practice, in fact it's also something that one has, that's in the paper on autoencoders was studied.
+
+[37:14]
+We would like to learn abstract representation. And what are these abstract representations? It's a presentation that might have built some level of invariance or extract some features that are useful for some prediction task of interest.
+
+[37:26]
+So for example in the case of face data, you might want to predict the age or male female.
+
+[37:36]
+And in that case, the representation should ideally only keep the factors in the data that are relevant for the task.
+
+[37:52]
+And room removed those that are irrelevant. So for example, you might want the factor as Z which is basically representation to be invariant to some more translation or rotation of the image because you know that's applying such transformation, should not change a prediction.
+
+[38:15]
+And for this, basically we not necessarily want to perfectly reconstruct any more.
+
+[38:33]
+We might want to, in fact, lose a bit of reconstruction accuracy for the purpose of building these different invariances.
+
+[38:42]
+So some examples that can trade a bit of reconstruction error in favor of something like in favor of building some invariance.
+
+[38:54]
+You have the bottleneck autoencoder.
+
+[39:01]
+So basically it's an autoencoder that has a middle layer which is as very low dimensionality.
+
+[39:08]
+And it will basically capture the essential element of the data and discard the rest.
+
+[39:17]
+And this is basically a generalization of the PCA ID.
+
+[39:23]
+In fact, there is a special connection between the autoencoder and PCA. It's that if you have a linear autoencoder, so basically there is no linearity in the middle layer.
+
+[39:31]
+With a bottleneck layer, H is more or equal to 2.
+
+[39:38]
+Then basically it will learn a solution that spans the PCA space.
+
+[39:43]
+And this was shown already a long time ago. Then there is another approach which is denosing autoencoder, where basically you will learn to reconstruct images that have been artificially corrupted by noise, for example, alitif, caution noise.
+
+[40:00]
+And it will show an example just after.
+
+[40:06]
+And by doing so, the representation will become less sensitive to noise components in the data.
+
+[40:15]
+So because it has to reconstruct, basically it has to remove noise from the image.
+
+[40:22]
+The representation will tend to learn direction in input space that are orthogonal to this noise.
+
+[40:30]
+And so as a result, you also simplify and filter some component of the data while expressing some others.
+
+[40:38]
+That might be more task relevance.
+
+[40:47]
+And the last approach, one more approach is the contractive autoencoder. And here the idea is to take your encoder function, G, and say, OK, I want my representation to be invariant to small variation in the data.
+
+[41:01]
+At least where my data is. And you can basically define this take your outputs, apply the gradient, you can get some Jacobian matrix.
+
+[41:12]
+And add it to the objective so that it penalizes a strong variation of the encoding function.
+
+[41:22]
+And this can also be done now with modern automatic differentiation software.
+
+[41:32]
+So I was mentioning the denosing autoencoder.
+
+[41:43]
+So this is basically how it works. There are different ways of syncing about it.
+
+[41:48]
+But a simpler one is to sync it off a simple autoencoder where you hard code a first layer of noise into your network.
+
+[41:54]
+So if you have the original data, then you have this green layer which can be cannot train with just adds noise.
+
+[42:02]
+So basically makes the task more complicated.
+
+[42:11]
+And then you have encoder and decoder that basically try to reconstruct your data.
+
+[42:16]
+And because you've added noise, you cannot reconstruct perfectly.
+
+[42:22]
+But ideally, you've kept some of the main information about the task.
+
+[42:34]
+Okay, so there is actually the limitation of this lossy reconstruction model that we've presented above.
+
+[42:51]
+Whether it's the bottleneck layer denosing autoencoder or conflicted autoencoders.
+
+[42:58]
+It is that also you are incorporating these constraints which basically try to build abstraction in addition to the reconstruction error.
+
+[43:07]
+It's still essentially learning a representation that optimizes the reconstruction error under these constraints.
+
+[43:15]
+So you still have basically this reconstruction term which will kind of force the network to preserve everything in the bottleneck.
+
+[43:30]
+So basically you have like a model that's try to solve to construct contradictory objectives, one which is to build some kind of robustness or invariance and at the same time trying to reconstruct the data.
+
+[43:46]
+And now we look at models that overcome this possible conflict and which really are designed to learn high level features and discard low level features.
+
+[44:04]
+And the first idea is to take an autoencoder and add some shortcut connections.
+
+[44:15]
+And what is the purpose of a shortcut connection? It basically to let some of the information flows directly from low level to the low level and just basically so that's not all the information has to pass through our vector Z.
+
+[44:36]
+And if we design things properly then Z would only preserve more abstract components of the image whereas the shortcut connection would rather focus on everything which is low level.
+
+[44:51]
+So the idea is that Z would kind of represent the abstract structure of the image.
+
+[44:56]
+For example like concept like whether you have like the different concepts that are composing this image and short connection would rather do something like fine alignments or fine rotation of the image to and then you kind of merge the two to reconstruct the data accurately.
+
+[45:19]
+And there are many models that have been proposed that implement this idea.
+
+[45:30]
+Maybe the very popular one is a unit that has been used for the task of segmentation.
+
+[45:37]
+But we also have this sort of connection. And one like two models that really explicitly try to build more abstract to presentation or at least this one in particular the ladder network has this structure and then also plug some supervised objective to basically get a better classification model.
+
+[46:01]
+And the deep model in both the machine which is some probabilistic model which also includes a short connection not explicitly like in any networks but via a special design of the probability function.
+
+[46:25]
+So this is the ladder network. So it's paper written in 2015 where basically the task is semi-supervised learning.
+
+[46:38]
+So basically it's a setting we have a lot of supervised data and very little supervised data.
+
+[46:43]
+And the idea in this paper was to have this auto encoder which is here shown by this end shape with some shortcut connection.
+
+[46:54]
+And then basically having and basically with this shortcut connection you will allow this top layer presentation to be more abstract.
+
+[47:15]
+And then the idea is that you have next to it some supervised models so it's turned out a feedforward network, a similar to the one that you've seen in machine learning one.
+
+[47:25]
+And in addition to the prediction cost you add this cost function at this level that can tie the representation to the one that have been built by the auto encoder.
+
+[47:38]
+And if you train the whole thing jointly then basically you get this abstractions that are built from a large amount of data and you try to synchronize them with abstractions that are required for the classifier.
+
+[47:51]
+And with this approach it's actually a very good model for super-supervised learning.
+
+[48:00]
+It produced state-of-the-art results on the task with strong manifold structure and particular amnesty where with very few labels you get very high accuracy.
+
+[48:13]
+So now we move a little bit away from the idea for auto encoders and discuss other approach for representation learning.
+
+[48:27]
+Always with the goal to try to build representations that are useful for some prediction task.
+
+[48:36]
+And one such approach which is very popular and very often used in practice it's a transfer learning.
+
+[48:51]
+And here instead of constructing the data we make use of an auxiliary task scheme.
+
+[48:59]
+And this auxiliary task would be something that you're not interested in but that for which we might have some labels for example you might have some data set of phases with some information that identifies these phases and might for example train a network that does that.
+
+[49:22]
+And if you think that the task would actually be the features that have been learned in some intermediate layer are useful for your real task which might be for example age prediction then you can take this part of the network and take away the rest of the blue parts and then connect add the two more layers here the green layers then say okay this is my new neural network composing five layers and I fine tune the whole thing on my task of interest.
+
+[49:52]
+And for transfer learning to work it is important that's the auxiliary task is related to the target task which means that it has to share some common features and also that it is more general.
+
+[50:08]
+So for example the task is more difficult or has more classes.
+
+[50:15]
+And transfer learning for example in the context of images so typically you will take you will start with the data set which is very large with a lot of labels in the context of image classification you have for example the image net data sets for specifically this ILS of your C bench mark which has millions of images and 1000 classes and with this we can build pretty general features and then you can transfer it on some more specific tasks which might contain let's say only two or three classes but that you might be interested in for your application.
+
+[50:59]
+Now we move to another approach which is basically between autoencoder and the transfer learning it's self-supervised learning and the idea is to generate if you don't have a noxular task like in the transfer learning scenario you can still generate an artificial task for learning the representation and the task is really complex enough so that's holding it produces useful features.
+
+[51:37]
+So one example of a auction task for image classification might be to say okay I will try to play a game I take an image I take a little square of the image out and then my prediction task is to impain the image.
+
+[52:00]
+So it's not exactly the same as reconstruct as an autoencoder because you really like take one part out and you just require to reconstruct the missing parts of the image and if the missing part of the image is large then somehow you expect that the network has to learn some, has to build some understanding of the image to be able to know what should be filled at the given missing parts of the image.
+
+[52:31]
+Another popular autoencoder task which is to learn to colorize an image.
+
+[52:40]
+So here we play another game which is that you take your RGB image like color images you make it artificially gray scale and then you train a neural network to predict the color image from the gray scale image.
+
+[52:54]
+So this is something that human can do pretty well.
+
+[53:03]
+So if you see for example this image you might say okay I recognize this fish and in fact I know that this fish is yellow and they are the head and the blue in the middle.
+
+[53:16]
+And for the network to be able to do the proper colorization it has to recognize the fish in the first place.
+
+[53:24]
+Same for the classes. There are other autoencoder tasks you can for example learn to predict whether two images are related or not.
+
+[53:40]
+Or you can try to solve some deep clustering tasks where you learn to map images into dense and well separated clusters.
+
+[53:49]
+And for all of these self supervised tasks no labels are needed.
+
+[53:57]
+So the only thing you need is creativity in setting up these self supervised tasks. And self supervised learning is a hot topic currently in machine learning.
+
+[54:06]
+Okay so now we look at the last topic for today which is how to represent transformation.
+
+[54:15]
+So here the idea is that we would like our network to predict not the input image itself but the transformation between two images or two data points.
+
+[54:33]
+And basically the question is can we represent the way to images are they form rather than the content of the image itself.
+
+[54:41]
+And in other words can we learn representation of transformation for example of translation which is invariant to the actual image content.
+
+[54:56]
+So we might for example want to learn a translation model on some handwritten digits.
+
+[55:04]
+And then without having ever seen some auto type of data for example real images we would like our translation model to work on these images as well.
+
+[55:11]
+And this is an example for and so basically we can do that with with techniques similar to auto encoders.
+
+[55:21]
+And this is illustration of the idea in the context of translation.
+
+[55:27]
+So translation are typically detected using a convolution. So you take your two images x and y then you convolve them and at some and basically you will see a peak here in basically your convolution.
+
+[55:46]
+That corresponds to the shift of the two images. So if x and y are two translated images basically the convolution will produce a maximum word to two function overlap.
+
+[56:05]
+And the same operation can be computed as a product. So you know from the four-year chart theorem that you can rewrite a convolution as mapping to four-year space of the two modalities of the two data points taking the products and then taking the inverse four-year transform and then you get basically your the convolution.
+
+[56:28]
+And now the idea is that we will learn f from the data and we will hard-code this product structure into our auto encoder.
+
+[56:38]
+So this is basically a toy case from translation scenario but then the idea will be that we might not know exactly what is the transform that produce a certain type of deformation which might be not translation will still use the same structure and then we will get different basis.
+
+[57:04]
+It will start with translation just to illustrate the concept.
+
+[57:10]
+So the auto encoder now consists of two parts and an encoder which produced the shift.
+
+[57:18]
+So basically this is what we've shown here but except that here we don't apply the four-year transform directly but just some encoding function that you have to learn and then you apply a dot product and then basically we get some shift representation.
+
+[57:32]
+So it's not exactly like a number of pixels but it's like a vector which encodes the shift and then the idea is to know how a second part which is a decoder which take your encoder inputs then apply the shift and multiply again and then have a decoding function that produces the translated image.
+
+[58:01]
+So now you can compose the two so basically you connect these two things, the shift and the shift and you have the whole neural network and you can train this thing into end by minimizing basically the min-square-error for example between the predicted and the true translation and this is basically a paper by Memes Advice at all from 2010 which uses a similar ID with this product network it's not exactly the one shown in the previous slide it's a bit more complicated it makes use of probabilistic model but basically this is the basis that is learned for the two modalities.
+
+[58:46]
+So here under left and the right you have two different basis function but what you observe first is that the average in the rather this is basically a 2D Fourier transform learned from the data which has been it has kind of recovered what we expected this to be to be learned by just learning to translate basically and what you observe for example is that this filter is the same as here just with a few pixels of translation this one again is horizontal and this one is shifted so basically the idea is that you kind of apply all these filters to your data points and then after you get a representation of the shift or basically various directions and then you map it back to the input space and you basically arrive at a translated version of your digit.
+
+[59:51]
+Now the interesting part is that now if you if you try to model other transformation for example rotation you keep the same architecture but you retrain on this translation and you look at the filters that you have learned and you learn all the types of basis functions so here we have these spiral-like filters and again you have the same structure so images are very similar but in fact they are similar up to a smaller rotation so actually the most amusing way to look at them is to take these images and just like scroll from one to the other repeatedly and you see these things moving a little bit.
+
+[60:40]
+Okay so that's basically the content for for today and with this we are done with the part of the course on component analysis so let's just recap what we have seen today similar to PCA, CCA and ICA, sparse coding and autoencoders, the representations from unsurprised data so we've been looking at mainly at unsurprised learning today.
+
+[61:10]
+Autoencoders can be trained quickly and they can be implemented as neural networks and therefore they can make use of all the neural network layers available for example convolution, pulling etc and autoencoders can serve different purposes for example they can produce compact sparse representations they can learn invariant representation they can learn abstract representation we've seen for example the ladder network which is also based on some kind of autoencoder and finally the last example I was describing I was presenting they can learn a transformation of the data rather than the data itself.
+
+[62:02]
+Okay so that's it for today thank you for your attention and yeah see you next week.
+
