@@ -6,14 +6,15 @@ import { LoadingButton } from "@mui/lab";
 import React, { useContext, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import { BulletPoint, BulletPointI } from "./BulletPoint";
+import { BulletPointI } from "@/common/Interfaces/Interfaces";
+import { BulletPoint } from "./BulletPoint";
 
 export function BulletPoints({
   roomId,
   onOpenChat,
 }: {
   roomId: string;
-  onOpenChat: (a: string) => void;
+  onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
 }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const queryClient = useQueryClient();
@@ -102,7 +103,9 @@ export function BulletPoints({
               bulletPoint.video_start_ms +
               bulletPoint.page
             }
+            bulletPointId={bulletPointsData.data?.data?.id!}
             bulletPoint={bulletPoint}
+            onOpenChat={onOpenChat}
             setPlayPosition={setPlayPosition}
             setCurrentPage={setCurrentPage}
           />

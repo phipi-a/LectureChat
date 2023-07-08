@@ -1,6 +1,7 @@
 "use client";
 
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
+import { BulletPointI } from "@/common/Interfaces/Interfaces";
 import {
   FormatListBulletedOutlined,
   SubtitlesOutlined,
@@ -8,9 +9,9 @@ import {
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
 import { Resizable } from "re-resizable";
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { BulletPoints } from "../../BulletPoints/BulletPoints";
-import { Chat } from "../../Chat/Chat";
+import ChatSuspense from "../../Chat";
 import "./style.css";
 
 export function MainContainer({
@@ -26,13 +27,18 @@ export function MainContainer({
 }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const [currentTab, setCurrentTab] = React.useState("1");
-  const [chatInitBulletpoint, setChatInitBulletpoint] = React.useState<
-    string | null
-  >(null);
-
+  const [chatBulletpoint, setChatBulletpoint] =
+    React.useState<BulletPointI | null>(null);
+  const [chatBulletPointId, setChatBulletPointId] = React.useState<number>(0);
+  const refContainer = useRef<HTMLDivElement>(null);
+  const refLeft = useRef<Resizable>(null);
+  const refRight = useRef<Resizable>(null);
+  const [width2, setWidth2] = React.useState<number>(200);
+  const minWidth3 = 200;
   return (
     <Box
       overflow={"auto"}
+      ref={refContainer}
       sx={{
         display: "flex",
         flexWrap: "nowrap",
@@ -47,12 +53,20 @@ export function MainContainer({
           width: width,
           height: "100%",
         }}
-        maxWidth={"90%"}
+        maxWidth={
+          refContainer.current && refRight.current
+            ? refContainer.current.offsetWidth -
+              (refRight.current.state.width as number) -
+              minWidth3
+            : "50%"
+        }
+        ref={refLeft}
         minWidth={"20%"}
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          borderRight: "3px solid #1565c0",
         }}
         enable={{
           top: false,
@@ -68,12 +82,14 @@ export function MainContainer({
           setWidth(width + d.width);
         }}
       >
-        <Box flex={1} pl={1} mt={6}>
+        <Box flex={1} p={1} mt={6}>
           {children}
         </Box>
       </Resizable>
+
       <TabContext value={currentTab}>
         <Box
+          p={1}
           overflow={"auto"}
           flex={1}
           sx={{
@@ -82,14 +98,6 @@ export function MainContainer({
             height: "100%",
           }}
         >
-          <Box
-            height={"100%"}
-            sx={{
-              width: "3px",
-              backgroundColor: "#1565c0",
-              zIndex: 1,
-            }}
-          ></Box>
           <Box
             overflow={"auto"}
             height={"100%"}
@@ -113,8 +121,9 @@ export function MainContainer({
               <TabPanel value="1">
                 <BulletPoints
                   roomId={roomId}
-                  onOpenChat={(a) => {
-                    setChatInitBulletpoint(a);
+                  onOpenChat={(a, bulletpointId) => {
+                    setChatBulletpoint(a);
+                    setChatBulletPointId(bulletpointId);
                   }}
                 />
               </TabPanel>
@@ -131,7 +140,9 @@ export function MainContainer({
                         }}
                         onClick={() => {
                           if (segment.video_start_ms !== null) {
-                            setPlayPosition({ pos: segment.video_start_ms! });
+                            setPlayPosition({
+                              pos: segment.video_start_ms!,
+                            });
                           } else if (segment.page !== null) {
                             setCurrentPage(segment.page!);
                           }
@@ -147,8 +158,51 @@ export function MainContainer({
             </Box>
           </Box>
         </Box>
-        <Chat init_bulletpoint={chatInitBulletpoint} roomId={roomId} />
       </TabContext>
+      <Resizable
+        ref={refRight}
+        defaultSize={{
+          width: width2,
+          height: "100%",
+        }}
+        maxWidth={
+          refContainer.current && refLeft.current
+            ? refContainer.current.offsetWidth -
+              (refLeft.current.state.width as number) -
+              minWidth3
+            : "50%"
+        }
+        onResizeStop={(e, direction, ref, d) => {
+          setWidth2(width2 - d.width);
+        }}
+        minWidth={290}
+        style={{
+          display: chatBulletpoint ? "flex" : "none",
+          flexDirection: "column",
+          justifyContent: "center",
+          borderLeft: "3px solid #1565c0",
+          overflow: "hidden",
+        }}
+        enable={{
+          top: false,
+          right: true,
+          bottom: false,
+          left: true,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false,
+        }}
+      >
+        <ChatSuspense
+          onClose={() => {
+            setChatBulletpoint(null);
+          }}
+          bulletpoint={chatBulletpoint}
+          roomId={roomId}
+          bulletPointsId={chatBulletPointId}
+        />
+      </Resizable>
     </Box>
   );
 }

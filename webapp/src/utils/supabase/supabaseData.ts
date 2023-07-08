@@ -70,6 +70,21 @@ export function useGetData<T>(
   );
 }
 
+export function useGetDataN<TReturn, TFinal>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<TFinal>,
+  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
+  useQueryOptions?: UseQueryOptions<any, any, any, any>
+): UseQueryResult<TReturn, PostgrestError> {
+  return useQuery<TReturn, PostgrestError>(
+    queryName,
+    async () => {
+      return progrssor(await awaitData(query));
+    },
+    useQueryOptions
+  );
+}
+
 export function useUpsertData<
   Relation extends GenericTable | GenericView,
   Row extends Relation extends { Insert: unknown } ? Relation["Insert"] : never
