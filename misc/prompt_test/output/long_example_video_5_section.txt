@@ -1,0 +1,72 @@
+[28:10]
+And we can facilitate our sole address this problem with an encoding function that we would also train at the same time.
+
+[28:20]
+And so the simplest encoding function we can think of would be simply a linear projection that maps our data into the source code.
+
+[28:28]
+And then if we basically replace SI by the encoding function, we arrive at a similar objective sparse coding that we can see here.
+
+[28:50]
+And here now we do not minimize over W and SI. We minimize over W and V and SI does not appear.
+
+[28:59]
+So this objective function only depends on these two matrices and this can be learned via a stochastic gradient descent.
+
+[29:10]
+So there is a problem with this potential problem with this formulation is that we are not sure that encoding function actually arrive manages to produce these sparse vectors.
+
+[29:26]
+And because there is nothing the linear function that induces any sparsity.
+
+[29:36]
+And so one idea is to use an linear encoding function which is basically applying a rectifying function to the output of the linear projection.
+
+[29:45]
+Basically it's a value of an linearity which we apply element wise.
+
+[29:58]
+And the nice thing with this linear function is that it produces values that are exactly zero for every negative input.
+
+[30:06]
+So if you want to increase sparsity, basically we need to make sure that our projection V XI produces maps to something negative.
+
+[30:20]
+And this can be even more facilitated by also having bias here.
+
+[30:30]
+So V XI plus B. And then you get we can basically choose B to be negative and it will induce some sparsity.
+
+[30:41]
+So if now you inject this function into basically the objective, you have this, you have this.
+
+[30:51]
+So W max zero V XI plus lambda S I, normal one.
+
+[31:02]
+There haven't developed this quantity but you can just replace S I by the maximum. And this is very close to an auto encoder that people would use in practice.
+
+[31:13]
+And there is actually one small problem with this auto encoder is that if we apply, if this sparse tip nLT works too well, basically the S I will go to zero.
+
+[31:30]
+And what happens if S I zero basically it means that this thing is zero.
+
+[31:40]
+And there is no gradient information left.
+
+[31:46]
+And this is a problem called dead units sometimes. Where basically at some point the sparsity has had its effects and then there is no way to recuperate the units because it has been driven to zero.
+
+[32:02]
+And it has no gradient anymore. And to avoid creating dead units, we can add some entropy term which basically forces each unit to activate at least a few times.
+
+[32:09]
+I didn't write the formula here but in the programming homework this entropy term or something similar is included.
+
+[32:24]
+So this is how the auto encoder looks like. So first we have your original data.
+
+[32:32]
+Then you pass it through this encoder function which is like multiplication by symmetric SV plus our compose with some RELU in linearity which gives you your vector S.
+

@@ -37,7 +37,7 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
 
   const uploadAudio = useMutation({
     mutationFn: (audioBlob: Blob) => {
-      const url = userData?.openai_key + "/asr?&output=json&language=en&";
+      const url = userData?.whisper_url + "/asr?&output=json&language=en&";
 
       const formData = new FormData();
       formData.append("audio_file", audioBlob);

@@ -1,0 +1,135 @@
+[0:00]
+Okay, pop quiz. What am I drawing? I'm going to make three predictions here. Firstly, you think of your house, you'd be right.
+
+[0:10]
+Secondly, that just came really easily to your effortless, and thirdly, you're thinking that I'm not much of an artist, and you'd be right on all counts there.
+
+[0:23]
+But how can we look at this set of geometric shapes and think, oh, house, if you live in a house, I bet it looks nothing like this.
+
+[0:29]
+Well, that ability to perform object identification that comes so easily to us does not come so easily to a computer, but that is where we can apply something called convolutional neural networks to the problem.
+
+[0:42]
+Now, a convolutional neural network or a CNN is a area of deep learning, but specializes in pattern recognition.
+
+[1:02]
+My name is Martin Keen, and I work in the IBM Garage at IBM. Now, let's take a look at how CNN works at a high level.
+
+[1:11]
+Well, let's break it down. CNN, convolutional neural network, well, let's start with the artificial neural network part.
+
+[1:20]
+This is a standard network that consists of multiple layers that are interconnected, and each layer receives some input, transforms that input to something else, and passes it as output to the next layer.
+
+[1:34]
+That's how neural networks work.
+
+[1:40]
+And CNN is a particular part of the neural network, or a section of layers, let's say it's these three layers here.
+
+[1:47]
+And within these layers, we have something called filters, and it's the filters that perform the pattern recognition that CNN is so good at.
+
+[1:55]
+So, let's apply this to our house example.
+
+[2:04]
+Now, if this house were an actual image, it would be a series of pixels, just like any image.
+
+[2:11]
+And if we zoom in on a particular part of this house, let's say we zoom in around here, then we would get, well, the window.
+
+[2:21]
+And what we're saying here is that a window consists of some perfectly straight lines, almost perfectly straight lines.
+
+[2:30]
+But you know, a window doesn't need to look like that.
+
+[2:37]
+A window could equally look like this, and we would still say it was a window.
+
+[2:41]
+The cool thing about CNN is that using filters, CNN could also say that these two objects represent the same thing.
+
+[2:47]
+The way they do that, then, is through the application of these filters.
+
+[2:53]
+So, let's take a look at how that works. Now, a filter is basically just a three by three block.
+
+[2:58]
+And within that block, we can specify a pattern to look for.
+
+[3:06]
+So, we could say, let's look for a pattern like this, a right angle in our image.
+
+[3:16]
+So, what we do is we take this filter, and it's a three by three block here. We will analyze the equivalent three by three block up here as well.
+
+[3:22]
+So, we'll look at, first of all, these first group of three by three pixels, and we will see how close are they to the filter shape.
+
+[3:29]
+And we'll give that a numeric score.
+
+[3:36]
+Then, we will move across one column to the right, and look at the next three by three block of pixels, and score how close they are to the filter shape.
+
+[3:47]
+And we will continue to slide over or convolt over all of these pixel layers until we have mapped every three by three block.
+
+[3:55]
+Now, that's just for one filter, but what that will give us is an array of numbers that say how closely an image matches our filter.
+
+[4:03]
+But we can add more filters.
+
+[4:10]
+So, we could add another three by three filter here, and perhaps this one looks for a shape like this.
+
+[4:16]
+And we could add a third filter here, and perhaps this looks for a different kind of right angle shape.
+
+[4:23]
+If we take the numeric arrays from all of these filters and combine them together in a process called pooling, then we have a much better understanding of what is contained within this series of pixels.
+
+[4:38]
+Now, that's just the first layer of the CNN. And as we go deeper into the neural network, the filters become more abstract or they can do more.
+
+[4:45]
+So, the second layer of filters perhaps can perform tasks like basic object recognition.
+
+[4:53]
+So, we could have filters here that might be able to recognize the presence of a window or the presence of a door or the presence of a roof.
+
+[5:01]
+And as we go deeper into the CNN to the next layer, well, maybe these filters can perform even more abstract tasks like being able to determine whether we're looking at a house or we're looking at an apartment or whether we're looking at a skyscraper.
+
+[5:23]
+So, you can see the application of these filters increases as we go through the network and can perform more and more tasks.
+
+[5:32]
+And that's a very high level basic overview of what CNN is.
+
+[5:38]
+It has a ton of business applications. Think of OCR, for example, for understanding handwritten documents.
+
+[5:45]
+Think of visual recognition and facial detection and visual search.
+
+[5:52]
+Think of medical imagery and looking at that and determining what is being shown in an imaging scan.
+
+[5:58]
+And even think of the fact that we can apply a CNN to perform object identification for badly drawn houses.
+
+[6:05]
+If you have any questions, please drop us a line below.
+
+[6:12]
+And if you want to see more videos like this in the future, please like and subscribe.
+
+[6:17]
+Thanks for watching.
+

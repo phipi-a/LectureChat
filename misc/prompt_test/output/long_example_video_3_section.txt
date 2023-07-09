@@ -1,0 +1,75 @@
+[21:14]
+But here, the idea is that you can have some kind of structured feature map or structured source code that consists of basically source elements.
+
+[21:36]
+And then they are not simple scalars. They are actually images. And at these images, you have some points that are known zero.
+
+[21:43]
+And then the idea is that each of these images, then you can evolve them with a convolution filter.
+
+[21:50]
+And then you add them up for all these feature maps.
+
+[21:55]
+And then you get the coded image. And the nice thing about it, so one first nice thing is that you can actually have even more interesting representation of your source vector.
+
+[22:08]
+Or you can basically only encode the non-zero maps and the non-zero locations in the map.
+
+[22:20]
+So it's actually can be even higher compression. And another nice thing is that you don't need to build like one dictionary element for every location in the input space.
+
+[22:41]
+So if you look at the previous dictionary, which was there, then basically you have these filters that detect edges with everywhere in the input space.
+
+[22:46]
+With convolutional spars coding, you don't have to do that.
+
+[22:53]
+You just have to learn these filter once. And naturally it will be at the middle of the convolution filters.
+
+[23:00]
+And then the position of the dictionary element is not encoded by the exact index of your source vector, but by the position within a given index.
+
+[23:15]
+So to compare standard spars coding and convolutional spars coding, so this is what you see.
+
+[23:25]
+So this is basically when you build some decomposition as spars code of image patches.
+
+[23:31]
+And if you apply spars coding, you get this kind of decomposition in the dictionary, which is basically a bunch of oriented edges at a different location.
+
+[23:38]
+If you apply convolutional spars coding, then the edges you still have oriented edges, but you don't need to encode all the shifts.
+
+[23:51]
+So you can in fact use the capacity of your dictionary to encode some richer features.
+
+[24:02]
+And here you see, for example, you don't have only edges. You also have circles.
+
+[24:07]
+You have cross. You have some interesting texture filters. So much, much more variety.
+
+[24:21]
+Compared to standard spars coding. There is one more extension of spars coding, which is topological spars coding.
+
+[24:29]
+And here are the ideas that you can add to your spars coding objective constraints that source dimensions must correlate on some pretty fine two-degree.
+
+[24:37]
+So basically you add this constraint.
+
+[24:45]
+You force basically this source code, as I said, to see two dictionary elements to be correlated.
+
+[24:53]
+And you do the same for this one, for this one, for this one, and so on.
+
+[25:00]
+And so forth. And then basically you get your nice topological spars coding where you can have a nice overview of the dictionary elements, which direction they take and how similar the different dictionary elements are.
+
+[25:18]
+Now we come to the implementation of spars coding.
+

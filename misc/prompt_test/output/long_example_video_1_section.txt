@@ -1,0 +1,231 @@
+[2:05]
+So far, we've already served a number of methods for representation learning.
+
+[2:13]
+And the simplest one, and if we have already seen in the very beginning of machine learning one, was a principle component analysis or PCA.
+
+[2:25]
+And basically, PCA tries to find a representation or a projection of the data where the variance is maximized.
+
+[2:34]
+And the idea is that the main and the first few principal components provide a good summarization of your data.
+
+[2:42]
+We've also looked at canonical correlation analysis or CCA machine learning too, as well as ICA.
+
+[2:49]
+And today we will continue with a few more of this analysis, and we will introduce, we'll present in particular a sparse coding and auto encoders.
+
+[3:03]
+And then we will look at a few more ideas, for example, transfer learning, etc.
+
+[3:10]
+So what is sparse coding? So sparse coding aims to represent the data in a way that in the latent representation many elements are zero.
+
+[3:33]
+And the idea is so basically that's the definition of sparse, and contrary to dense, sparse basically is something which only contains a few elements, and so the rest is assumed to be zero.
+
+[3:48]
+And then the data can be reconstructed from this sparse code using a dictionary.
+
+[3:55]
+And here you can see a cartoon on the left. And basically you can think of your source vector, which is an abstract vector of some dimensions.
+
+[4:03]
+And each dimension is associated some filter or some basically basis, and this set of basis form a dictionary that's called W.
+
+[4:20]
+And then basically if you take the non-zero element of the source vectors, so here those that are highlighted in red, and you sum them up, then basically you arrive at some reconstructed data which basically corresponds to the image represented by this source vector S.
+
+[4:42]
+And sparse coding has several advantages compared to dense coding, and the first one is a low storage cost.
+
+[4:52]
+So a vector with many zeros can be represented completely.
+
+[5:00]
+For example, if you have a vector of this type where the big red one would be like 12, here 0, here 7, and then 0 0 again, you don't need to encode every individual entries of this vector.
+
+[5:15]
+You can use a collection of this index value pairs where basically you write the index and then the value.
+
+[5:24]
+So for example, here we have index 0, you have a value of 12.
+
+[5:29]
+Then you skip this one because 0, then you jump directly to index 2. So here index 2, you write 7, and then you skip index 3 and 4 because they are also 0.
+
+[5:35]
+And so here, instead of having like 5 entries, you only have 4 of them, and if you have higher dimensional vectors that have higher sparsity, it becomes clearly more efficient.
+
+[5:48]
+So that's one advantage of sparse coding.
+
+[5:55]
+And a second advantage is that it is actually more interpretable. So it's nice to be able to think of your data as a combination of few factors, and then you can think of basically just the data being like the reconstruction or the superposition of a few additional elements.
+
+[6:16]
+So the first model we will look at is a linear sparse coding.
+
+[6:27]
+And here we'll assume that we have a vector and basically a data vector x, which is some abstract D-dimensional space.
+
+[6:34]
+So if we think of an image with just the image matrix, then we flatten it and we make a vector out of it.
+
+[6:43]
+And so this image maybe it's like 32, 32, or if you flatten it, it's a vector of size of 1024.
+
+[6:50]
+And then we'll have our source code, which is again a vector in rH with H different than D.
+
+[7:01]
+And usually in PCA H was much smaller than D.
+
+[7:09]
+But in sparse coding it can be actually much smaller. It can be the same size or also larger.
+
+[7:18]
+In that case we talk about an over-complete representation.
+
+[7:24]
+And this doesn't really cause a problem because many of these elements will be zero. So if you think of trying to describe, for example, in terms of an image in terms of worlds, there might be many more worlds that would potentially describe an image than the number of pixels that formed the image.
+
+[7:48]
+So it's not a problem to have H larger than D. And in fact, we will typically prefer indicative sparse coding to have large, high dimensional source vectors.
+
+[7:57]
+Okay, then the dictionary W.
+
+[8:06]
+So this is basically a matrix of size d times H. Or it can sometimes be H times D.
+
+[8:16]
+It depends on how you write the formulas, I think in the programming exercise, it's of size H times D.
+
+[8:21]
+But basically it's the collection of all the basis in input space.
+
+[8:30]
+So basically each basis is a vector of dimension D. And if you just stack them, you get a matrix of size d times H.
+
+[8:38]
+And linear sparse coding reconstructs approximately the data from the source code.
+
+[8:47]
+Basically using this matrix multiplication. So you take S, which is a vector, RH, then you multiply it by this matrix.
+
+[8:56]
+And then you get some X hat where X hat is the reconstructed data.
+
+[9:03]
+And this is basically a matrix multiplication.
+
+[9:12]
+This is actually the dense formulation, but because many of these vectors elements are sparse in practice, it's inefficient.
+
+[9:18]
+Or you can basically have more efficient formulation by basically summing over the nonzero indices.
+
+[9:26]
+And here basically by this we mean the its column of the matrix W.
+
+[9:37]
+That we then multiply with a entry SI of the source vector.
+
+[9:47]
+And we just sum them up. So if we have like only like one percent of the source vectors that are, let's say if you have like a source vector of size 200.
+
+[9:54]
+And on the two of these elements are active.
+
+[10:01]
+Instead of running this big matrix multiplication, you just have to sum over two elements and apply basically sum over two vectors.
+
+[10:05]
+So that's basically the way the model is defined.
+
+[10:14]
+And now the big question will be how do we learn the dictionary with W as well as the sparse code S1 until Sn.
+
+[10:19]
+If we have some data sets X1 until Xn. So when no nether of them, we don't know the dictionary query, we like to learn it.
+
+[10:29]
+And the sparse codes we also need to learn them.
+
+[10:35]
+So we'll first start with the L0 formulation, which is like theoretically optimal, but which is not practically, which cannot be optimized practically.
+
+[10:51]
+Or at least not with simple methods. And we will have basically our data set which is composed of our collection of vectors in Rd.
+
+[10:58]
+Then we will have our associated sources, which is basically a collection of vectors in Rh.
+
+[11:06]
+And then we will finally have W, which is our dictionary that reconstruct the data from the sources.
+
+[11:14]
+And now we will try to implement the following objective, which is basically the mean square error between the data and the reconstruction.
+
+[11:33]
+Right. It's a reconstruction error. And in addition, we want to reconstruct the source vector sparse.
+
+[11:43]
+And one way to implement that is to apply the zero norm with norm in quotes, because it's not a norm actually, but it's just basically a generalization of the p-norm with p equal to zero.
+
+[12:00]
+And what this zero norm does is that it counts the number of non-zero elements in the vector.
+
+[12:07]
+So here, for example, if you have this vector, the zero norm would be simply 2.
+
+[12:14]
+And so if you minimize that, you have an objective which tries to reconstruct and at the same time, try to create source vectors that are as sparse as possible.
+
+[12:30]
+So if we could optimize this, that would be very good. But the problem is that the zero norm is a non-convex and not differentiable, which makes it hard to optimize.
+
+[12:38]
+So one idea is to apply what we call an L1 relaxation.
+
+[12:50]
+And the idea is to replace the zero norm by one norm.
+
+[13:02]
+And one norm is basically sometimes called the Manhattan distance between SE and the origin.
+
+[13:13]
+And here, basically, the only thing that changes from the previous optimization problem is that we have a one here.
+
+[13:19]
+And the nice thing about the L1 norm, the one norm is that it's complex.
+
+[13:27]
+So and also, it is the differentiable almost everywhere, except at the hinges of the norm, but most likely, we will never be exactly at that point.
+
+[13:35]
+So basically now we have a convex optimization problem.
+
+[13:48]
+We can, for example, solve it by gradient descent or by something more efficient.
+
+[13:53]
+But there is actually a problem with this.
+
+[14:00]
+Okay, first of all, the limitation is that we are not optimizing the exact L0 formulation of sparse coding.
+
+[14:10]
+So we will not get the maximally, like the optimally sparse solution, but something like a sparse solution.
+
+[14:17]
+In practice, it will be most of the time sufficient. But yes, there are actually some approach to sparse coding that try to go beyond L1 norm and try to use something non convex, which is closer to the zero norm.
+
+[14:32]
+And there is another problem.
+
+[14:42]
+And this one is actually more severe, is that if you scale up W and scale down SI accordingly, then this term does not change.
+
