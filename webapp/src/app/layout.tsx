@@ -78,7 +78,6 @@ export default function RootLayout({
                       sx={{
                         my: 2,
                         m: 0,
-                        p: 2,
                         maxWidth: "undefined",
                         height: "100%",
                         width: "100%",

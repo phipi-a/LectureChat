@@ -53,8 +53,21 @@ export function OwnToolbar() {
           setOpenSettings(true);
         }}
       >
-        <Box flexWrap={"nowrap"} flexDirection={"row"} display={"flex"}>
-          <Typography marginX={2}>{session?.user?.email}</Typography>
+        <Box
+          flexWrap={"nowrap"}
+          flexDirection={"row"}
+          display={"flex"}
+          justifyContent={"center"}
+        >
+          <Typography
+            marginX={2}
+            display={{
+              xs: "none",
+              sm: "block",
+            }}
+          >
+            {session?.user?.email}
+          </Typography>
           <Settings />
         </Box>
       </Button>

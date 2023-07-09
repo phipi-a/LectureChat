@@ -64,6 +64,13 @@ export default function Home() {
             xs: 1,
             md: 2,
           }}
+          spacing={{
+            xs: 2,
+            md: 3,
+          }}
+          style={{
+            margin: "0",
+          }}
         >
           {userData?.openai_key === "" && (
             <PaperBox title={"No OpenAI API Key"} warning>

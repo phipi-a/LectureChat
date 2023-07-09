@@ -21,7 +21,14 @@ export function PersonalizeBox() {
             router.push("/personalize");
           }}
         >
-          Personalize
+          <Typography
+            display={{
+              xs: "none",
+              sm: "block",
+            }}
+          >
+            Personalize
+          </Typography>
           <AutoAwesomeOutlined />
         </Button>
       }

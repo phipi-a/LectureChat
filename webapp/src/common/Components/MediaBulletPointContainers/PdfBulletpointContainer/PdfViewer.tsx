@@ -18,6 +18,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 export function PdfViewer({ file, width }: { file: any; width: number }) {
   const { currentPage, setCurrentPage } = React.useContext(RoomContext);
   const [numPages, setNumPages] = React.useState(0);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const pageRef = React.useRef(currentPage);
   useEffect(() => {
@@ -49,7 +50,7 @@ export function PdfViewer({ file, width }: { file: any; width: number }) {
   }, [handleKeyPress]);
 
   return (
-    <Box display={"flex"} flexDirection={"column"}>
+    <Box display={"flex"} flexDirection={"column"} overflow={"auto"}>
       <TextField
         type="number"
         InputLabelProps={{
@@ -82,6 +83,8 @@ export function PdfViewer({ file, width }: { file: any; width: number }) {
           justifyContent: "center",
           overflow: "hidden",
         }}
+        ref={containerRef}
+        border={1}
         id="PdfDiv"
       >
         <Document
@@ -94,7 +97,11 @@ export function PdfViewer({ file, width }: { file: any; width: number }) {
           <Page
             pageNumber={currentPage}
             renderAnnotationLayer={false}
-            width={width}
+            width={
+              containerRef.current
+                ? Math.min(containerRef.current.clientWidth, width)
+                : width
+            }
             onLoadError={console.error}
             canvasBackground="grey"
           />

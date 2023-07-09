@@ -11,6 +11,7 @@ import {
 } from "@/utils/supabase/supabaseData";
 import { MicOff, MicOutlined } from "@mui/icons-material";
 import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import React, { useContext, useEffect } from "react";
 import { useMutation } from "react-query";
 import { TranscriptionEditBox } from "../TranscriptionEditBox/TranscriptionEditBox";
@@ -55,6 +56,11 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
           page: currentPage,
         });
       }
+    },
+    onError: (error) => {
+      enqueueSnackbar("Error transcribing audio: pls check yout whisper url", {
+        variant: "error",
+      });
     },
   });
   const insertData = useInsertSelectData(supabase.from("data"), {

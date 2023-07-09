@@ -3,7 +3,7 @@
 import PaperBox from "@/common/Components/PaperBox";
 import RoomsListFallback from "@/common/Components/RoomsListFallback";
 import { AddOutlined } from "@mui/icons-material";
-import { Button, Dialog } from "@mui/material";
+import { Button, Dialog, Typography } from "@mui/material";
 import React, { Suspense } from "react";
 import { CreateNewRoomDialog } from "./CreateNewRoomDialog";
 import { HostedRoomsList } from "./HostedRoomsList";
@@ -24,7 +24,14 @@ export function HostedRoomsBox() {
             setOpenCreateRoom(true);
           }}
         >
-          Create Room
+          <Typography
+            display={{
+              xs: "none",
+              sm: "block",
+            }}
+          >
+            Create Room
+          </Typography>
           <AddOutlined />
         </Button>
       }

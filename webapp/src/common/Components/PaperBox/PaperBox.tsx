@@ -4,9 +4,9 @@ import { Box, Divider, Paper, Typography } from "@mui/material";
 
 export function PaperBox({ children, title, button, warning = false }: any) {
   return (
-    <Box overflow={"auto"} width={"100%"} p={2}>
+    <Box overflow={"auto"} width={"100%"}>
       <Paper>
-        <Box height={"100%"} flexDirection={"column"} display={"flex"} m={1}>
+        <Box height={"100%"} flexDirection={"column"} display={"flex"}>
           <Box display={"flex"} alignItems={"center"}>
             <Typography
               variant={"h6"}

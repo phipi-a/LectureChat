@@ -2,7 +2,7 @@
 
 import PaperBox from "@/common/Components/PaperBox";
 import { MeetingRoomOutlined } from "@mui/icons-material";
-import { Button, Dialog } from "@mui/material";
+import { Button, Dialog, Typography } from "@mui/material";
 import React, { Suspense } from "react";
 import { RoomsListFallback } from "../../../Components/RoomsListFallback/RoomsListFallback";
 import { JoinRoomDialog } from "./JoinRoomDialog";
@@ -24,7 +24,14 @@ export function JoinRoomsBox() {
             setOpenJoinRoom(true);
           }}
         >
-          Join Room
+          <Typography
+            display={{
+              xs: "none",
+              sm: "block",
+            }}
+          >
+            Join Room
+          </Typography>
           <MeetingRoomOutlined />
         </Button>
       }
