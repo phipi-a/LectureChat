@@ -11,6 +11,7 @@ import {
 } from "@/utils/supabase/supabaseData";
 import { MicOff, MicOutlined } from "@mui/icons-material";
 import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import React, { useContext, useEffect } from "react";
 import { useMutation } from "react-query";
 import { TranscriptionEditBox } from "../TranscriptionEditBox/TranscriptionEditBox";
@@ -37,7 +38,7 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
 
   const uploadAudio = useMutation({
     mutationFn: (audioBlob: Blob) => {
-      const url = userData?.openai_key + "/asr?&output=json&language=en&";
+      const url = userData?.whisper_url + "/asr?&output=json&language=en&";
 
       const formData = new FormData();
       formData.append("audio_file", audioBlob);
@@ -55,6 +56,11 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
           page: currentPage,
         });
       }
+    },
+    onError: (error) => {
+      enqueueSnackbar("Error transcribing audio: pls check yout whisper url", {
+        variant: "error",
+      });
     },
   });
   const insertData = useInsertSelectData(supabase.from("data"), {

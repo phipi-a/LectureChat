@@ -104,7 +104,7 @@ export function CreateNewRoomDialog({}) {
         uploadVideoTranscript.mutate(segments);
       },
       onError: (error) => {
-        enqueueSnackbar("Error transcript Video: " + error, {
+        enqueueSnackbar("Error transcript Video: pls check your whisper url!", {
           variant: "error",
         });
         deleteRoom.mutate({ field: "id", value: roomId.current });
