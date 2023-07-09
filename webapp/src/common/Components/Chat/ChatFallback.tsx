@@ -11,23 +11,28 @@ import {
 import { Suspense } from "react";
 import { Chat } from "./Chat";
 
-export function ChatFallback() {
+export function ChatFallback({
+  displayCloseButton = true,
+}: {
+  displayCloseButton?: boolean;
+}) {
   return (
-    <Box display={"flex"} flexDirection={"column"} height={"100%"} p={3}>
-      <Box display={"flex"} alignItems={"center"} justifyContent={"flex-end"}>
+    <Box display={"flex"} flexDirection={"column"} height={"100%"}>
+      <Box
+        display={displayCloseButton ? "flex" : "none"}
+        alignItems={"center"}
+        justifyContent={"flex-end"}
+      >
         <IconButton disabled>
           <CloseOutlined />
         </IconButton>
       </Box>
       <Box overflow={"auto"} height={"100%"} flex={1} display={"flex"}>
         <Box
-          maxHeight={"600px"}
           flex={1}
           height={"100%"}
           display={"flex"}
-          border={"1px solid"}
           borderColor={"primary.main"}
-          borderRadius={"10px"}
           flexDirection={"column"}
           overflow={"auto"}
         >
@@ -79,6 +84,7 @@ export function ChatFallback() {
 export function ChatSuspense({
   onClose,
   bulletpoint,
+  displayCloseButton = true,
   bulletPointsId,
   roomId,
 }: {
@@ -86,13 +92,15 @@ export function ChatSuspense({
   bulletpoint: BulletPointI | null;
   bulletPointsId: number;
   roomId: string;
+  displayCloseButton?: boolean;
 }) {
   return (
-    <Suspense fallback={<ChatFallback />}>
+    <Suspense fallback={<ChatFallback displayCloseButton />}>
       <Chat
         onClose={onClose}
         bulletpoint={bulletpoint}
         bulletPointsId={bulletPointsId}
+        displayCloseButton={displayCloseButton}
         roomId={roomId}
       />
     </Suspense>

@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import React from "react";
 import { useQuery } from "react-query";
 import { supabase } from "../../../Modules/SupabaseClient";
-import MainContainerSuspense from "../MainMediaBulletPointContainer";
+import GeneralMainContainerSuspense from "../GeneralMediaBulletPointContainer";
 import { PdfViewer } from "./PdfViewer";
 
 export function PdfBulletpointContainerSuspense({
@@ -24,12 +24,16 @@ export function PdfBulletpointContainerSuspense({
 
   const [width, setWidth] = React.useState(500);
   return (
-    <MainContainerSuspense width={width} setWidth={setWidth} roomId={roomId}>
-      <Box flex={1} height="100%">
+    <GeneralMainContainerSuspense
+      width={width}
+      setWidth={setWidth}
+      roomId={roomId}
+    >
+      <Box flex={1} height="100%" overflow={"auto"}>
         {pdfDownload.data && (
           <PdfViewer file={pdfDownload.data} width={width} />
         )}
       </Box>
-    </MainContainerSuspense>
+    </GeneralMainContainerSuspense>
   );
 }

@@ -6,7 +6,7 @@ import { Box, Typography } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import ReactPlayer from "react-player";
 import DropFileBox from "../../DropFileBox";
-import MainContainerSuspense from "../MainMediaBulletPointContainer";
+import GeneralMainContainerSuspense from "../GeneralMediaBulletPointContainer";
 import "./v.css";
 
 export function VideoBulletPointContainerSuspense({
@@ -30,7 +30,11 @@ export function VideoBulletPointContainerSuspense({
     }
   }, [playPosition, player]);
   return (
-    <MainContainerSuspense width={width} setWidth={setWidth} roomId={roomId}>
+    <GeneralMainContainerSuspense
+      width={width}
+      setWidth={setWidth}
+      roomId={roomId}
+    >
       {ReactPlayer.canPlay(videoUrl!) || videoUrlFilePath !== "" ? (
         <div className="player-wrapper">
           <ReactPlayer
@@ -98,6 +102,6 @@ export function VideoBulletPointContainerSuspense({
           />
         </Box>
       )}
-    </MainContainerSuspense>
+    </GeneralMainContainerSuspense>
   );
 }

@@ -157,6 +157,7 @@ export default function Home() {
             inputRef={emailRef}
             label="Email Address"
             name="email"
+            type="email"
             error={emailHelperText !== ""}
             helperText={emailHelperText}
             autoFocus
