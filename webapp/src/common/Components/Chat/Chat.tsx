@@ -153,7 +153,7 @@ export function Chat({
           </Link>
         );
       }
-      return <span>{split}</span>;
+      return { split };
     });
   }
 
@@ -179,7 +179,7 @@ export function Chat({
           </Link>
         );
       }
-      return <span>{replacePageLinks(split)}</span>;
+      return replacePageLinks(split);
     });
   }
 
