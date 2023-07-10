@@ -81,3 +81,9 @@ export function timeConverter(timestamp: string) {
   var time = date + " " + month + " " + year + " " + hour + ":" + min;
   return time;
 }
+
+export function time2sec(timestamp: string) {
+  return (
+    parseInt(timestamp.split(":")[0]) * 60 + parseInt(timestamp.split(":")[1])
+  );
+}

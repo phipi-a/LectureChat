@@ -1,16 +1,15 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
-import { UnauthorizedError, BadRequestError } from "../_shared/errors.ts";
+import { BadRequestError, UnauthorizedError } from "../_shared/errors.ts";
+import { analyse_pdf } from "./_src/analyse_pdf.ts";
+import { analyse_video } from "./_src/analyse_video.ts";
 import {
-  Bulletpoint,
   BulletpointWithID,
   Data,
   VideoBulletPoints,
 } from "./_src/interfaces.ts";
 import { OpenAI } from "./_src/utils.ts";
-import { analyse_video } from "./_src/analyse_video.ts";
-import { analyse_pdf } from "./_src/analyse_pdf.ts";
 
 serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.

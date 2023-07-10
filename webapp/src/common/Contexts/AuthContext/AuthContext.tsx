@@ -8,10 +8,14 @@ export const AuthContext = React.createContext<{
   userId: string | null;
   event: String | null;
   userData: Database["public"]["Tables"]["user"]["Insert"] | null;
+  setUserData: (
+    newUserData: Database["public"]["Tables"]["user"]["Insert"]
+  ) => void;
 }>({
   session: null,
   loggedIn: false,
   userId: null,
   event: null,
   userData: null,
+  setUserData: () => {},
 });

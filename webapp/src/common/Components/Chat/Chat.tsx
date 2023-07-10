@@ -1,6 +1,8 @@
+import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { BulletPointI, ChatI, MessageI } from "@/common/Interfaces/Interfaces";
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import { supabase } from "@/common/Modules/SupabaseClient";
+import { time2sec } from "@/utils/helper";
 import { useGetDataN } from "@/utils/supabase/supabaseData";
 import { CloseOutlined, Send } from "@mui/icons-material";
 import {
@@ -11,7 +13,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import Link from "next/link";
+import React, { useContext, useEffect } from "react";
 import { useMutation } from "react-query";
 import { TypingIndicator } from "../TypingIndicator/TypingIndicator";
 
@@ -28,6 +31,7 @@ export function Chat({
   roomId: string;
   displayCloseButton?: boolean;
 }) {
+  const { setPlayPosition, setCurrentPage } = useContext(RoomContext);
   const [currentMessage, setCurrentMessage] = React.useState("");
   const [messages, setMessages] = React.useState<ChatI>({
     id: undefined,
@@ -67,8 +71,9 @@ export function Chat({
     },
     {
       onSuccess: (data) => {
-        console.log("Chat: onSuccess", data);
+        console.log("Chat: onSuccess", data, bulletPointsId, bulletpoint?.id);
       },
+      enabled: bulletPointsId !== undefined && bulletpoint?.id !== undefined,
     }
   );
   useEffect(() => {
@@ -128,6 +133,55 @@ export function Chat({
 
     mutation.mutate(newMessage);
   }
+  function replacePageLinks(message: string) {
+    const reg = RegExp(/(\[[0-9]])/g);
+    const splits = message.split(reg);
+    return splits.map((split, index) => {
+      if (split.match(reg)) {
+        return (
+          <Link
+            href="#"
+            style={{
+              color: "inherit",
+            }}
+            key={split + index}
+            onClick={(e) => {
+              setCurrentPage(parseInt(split.slice(1, split.length - 1)));
+            }}
+          >
+            {split.slice(1, split.length - 1)}
+          </Link>
+        );
+      }
+      return <span>{split}</span>;
+    });
+  }
+
+  function replaceTimestamps(message: string) {
+    const reg = RegExp(/(\[[0-9][0-9]:[0-9][0-9]])/g);
+    const splits = message.split(reg);
+    return splits.map((split, index) => {
+      if (split.match(reg)) {
+        return (
+          <Link
+            href="#"
+            style={{
+              color: "inherit",
+            }}
+            key={split + index}
+            onClick={(e) => {
+              setPlayPosition({
+                pos: time2sec(split.slice(1, split.length - 1)),
+              });
+            }}
+          >
+            {split.slice(1, split.length - 1)}
+          </Link>
+        );
+      }
+      return <span>{replacePageLinks(split)}</span>;
+    });
+  }
 
   return (
     <Box display={"flex"} flexDirection={"column"} height={"100%"}>
@@ -161,6 +215,7 @@ export function Chat({
                       message.role === "assistant" ? "flex-start" : "flex-end",
                     mb: 1,
                   }}
+                  onClick={() => {}}
                 >
                   <Paper
                     variant="outlined"
@@ -182,7 +237,7 @@ export function Chat({
                           message.role === "assistant" ? "left" : "right"
                         }
                       >
-                        {message.content}
+                        {replaceTimestamps(message.content)}
                       </Typography>
                     )}
                   </Paper>

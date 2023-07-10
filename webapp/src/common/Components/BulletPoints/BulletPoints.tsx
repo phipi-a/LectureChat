@@ -28,11 +28,13 @@ interface VideoBulletPoints {
 
 function BulletPointList({
   bulletPoints,
+  bulletPointsId,
   setPlayPosition,
   setCurrentPage,
   onOpenChat,
 }: {
   bulletPoints: BulletPointI[];
+  bulletPointsId: number;
   setPlayPosition: ({ pos }: { pos: number }) => void;
   setCurrentPage: (page: number) => void;
   onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
@@ -43,11 +45,9 @@ function BulletPointList({
         bulletPoints.map((bulletPoint: BulletPointI) => (
           <BulletPoint
             key={
-              bulletPoint.bullet_point +
-              bulletPoint.video_start_ms +
-              bulletPoint.page
+              bulletPoint.bullet_point + bulletPoint.start + bulletPoint.page
             }
-            bulletPointId={bulletPoint.id}
+            bulletPointId={bulletPointsId}
             bulletPoint={bulletPoint}
             setPlayPosition={setPlayPosition}
             setCurrentPage={setCurrentPage}
@@ -60,11 +60,14 @@ function BulletPointList({
 
 function VideoBulletPoints({
   bulletPoints,
+  bulletPointsId,
+
   setPlayPosition,
   setCurrentPage,
   onOpenChat,
 }: {
   bulletPoints: VideoBulletPoints;
+  bulletPointsId: number;
   setPlayPosition: ({ pos }: { pos: number }) => void;
   setCurrentPage: (page: number) => void;
   onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
@@ -72,6 +75,7 @@ function VideoBulletPoints({
   if (!bulletPoints.isLong) {
     return (
       <BulletPointList
+        bulletPointsId={bulletPointsId}
         bulletPoints={bulletPoints.bullet_points!}
         setPlayPosition={setPlayPosition}
         setCurrentPage={setCurrentPage}
@@ -99,6 +103,7 @@ function VideoBulletPoints({
             setPlayPosition={setPlayPosition}
             setCurrentPage={setCurrentPage}
             onOpenChat={onOpenChat}
+            bulletPointsId={bulletPointsId}
           />
         </div>
       ))}
@@ -119,8 +124,6 @@ export function BulletPoints({
 
   const mutation = useMutation({
     mutationFn: async () => {
-      console.log("Creating new bullet points");
-
       return supabase.functions.invoke("bulletpoints", {
         body: {
           roomId,
@@ -140,7 +143,12 @@ export function BulletPoints({
   // Read bulletpoints from db
   const bulletPointsData = useGetData(
     ["bulletpoints", roomId],
-    supabase.from("bulletpoints").select("*").eq("room_id", roomId).single(),
+    supabase
+      .from("bulletpoints")
+      .select("*")
+      .eq("room_id", roomId)
+      .eq("user_id", userData?.id)
+      .single(),
     {
       onSuccess: (data) => {
         // If no bullet points are found
@@ -148,6 +156,7 @@ export function BulletPoints({
           // Create new bullet points
           if (mutation.isLoading) return;
           queryClient.setQueryData(["bulletpoints", roomId], []);
+          console.log("Creating new bullet points mut");
           mutation.mutate();
         }
       },
@@ -168,6 +177,7 @@ export function BulletPoints({
 
       if (lastSegment.page !== secondLastSegment.page) {
         mutation.mutate();
+        console.log("New page detected");
         prevSegmentLength.current = segments.length;
       }
     }
@@ -176,6 +186,7 @@ export function BulletPoints({
   const bulletPoints = bulletPointsData.data?.data?.bulletpoints
     ? JSON.parse(bulletPointsData.data?.data?.bulletpoints as string)
     : [];
+  console.log(bulletPoints);
 
   const loading = bulletPointsData.isLoading || mutation.isLoading;
   const isVideo = bulletPoints && "isLong" in bulletPoints;
@@ -185,7 +196,10 @@ export function BulletPoints({
       <div style={{ display: "flex", alignItems: "end" }}>
         <LoadingButton
           variant="outlined"
-          onClick={() => mutation.mutate()}
+          onClick={() => {
+            mutation.mutate();
+            console.log("Creating new bullet pointsclick");
+          }}
           disabled={loading}
         >
           {loading ? "Updating" : "Update"}
@@ -199,6 +213,7 @@ export function BulletPoints({
               setPlayPosition={setPlayPosition}
               setCurrentPage={setCurrentPage}
               onOpenChat={onOpenChat}
+              bulletPointsId={bulletPointsData.data?.data?.id!}
             />
           ) : (
             <BulletPointList
@@ -206,6 +221,7 @@ export function BulletPoints({
               setPlayPosition={setPlayPosition}
               setCurrentPage={setCurrentPage}
               onOpenChat={onOpenChat}
+              bulletPointsId={bulletPointsData.data?.data?.id!}
             />
           )}
         </>

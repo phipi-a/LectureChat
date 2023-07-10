@@ -1,4 +1,5 @@
 import { BulletPointI } from "@/common/Interfaces/Interfaces";
+import { time2sec } from "@/utils/helper";
 import { SendOutlined } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 
@@ -21,8 +22,13 @@ export function BulletPoint({
         <h3
           style={{ cursor: "pointer" }}
           onClick={() => {
-            if (bulletPoint.video_start_ms !== undefined) {
-              setPlayPosition({ pos: bulletPoint.video_start_ms });
+            console.log(bulletPoint);
+            if (bulletPoint.start !== undefined) {
+              // mm:ss to ms
+              bulletPoint.start.split(":")[0];
+              setPlayPosition({
+                pos: time2sec(bulletPoint.start),
+              });
             } else if (bulletPoint.page !== undefined) {
               setCurrentPage(parseInt(bulletPoint.page));
             }

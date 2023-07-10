@@ -3,8 +3,7 @@ export interface BulletPointI {
   longer_explanation: string;
   page: string | undefined;
   id: number;
-  video_start_ms: number | undefined;
-  video_end_ms: number | undefined;
+  start: string | undefined;
 }
 export interface ChatI {
   id: number | undefined;

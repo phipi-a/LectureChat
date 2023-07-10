@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 
 import CenteredLoading from "@/common/Components/CenteredLoading";
 import { useGetData } from "@/utils/supabase/supabaseData";
-import { Session } from "@supabase/supabase-js";
+import { PostgrestSingleResponse, Session } from "@supabase/supabase-js";
+import { useQueryClient } from "react-query";
 import { supabase } from "../../Modules/SupabaseClient";
 import { AuthContext } from "./AuthContext";
 
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
       suspense: true,
     }
   );
+  const queryClient = useQueryClient();
   useEffect(() => {
     supabase.auth
       .getSession()
@@ -54,6 +56,11 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
           event: event,
           loggedIn: session !== null,
           userId: session?.user.id || null,
+          setUserData: (newUserData) => {
+            queryClient.setQueryData(["userData", session?.user?.id], {
+              data: newUserData,
+            } as PostgrestSingleResponse<any>);
+          },
           userData: data,
         }}
       >
