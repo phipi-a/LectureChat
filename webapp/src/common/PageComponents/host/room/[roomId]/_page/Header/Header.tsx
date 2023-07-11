@@ -1,7 +1,12 @@
 "use client";
 
-import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
-import { Box, IconButton, Typography } from "@mui/material";
+import EditRoomDialog from "@/common/Components/EditRoomDialog";
+import {
+  EditOutlined,
+  VisibilityOffOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material";
+import { Box, Dialog, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 
 export function HostRoomHeader({
@@ -14,12 +19,15 @@ export function HostRoomHeader({
   password: string;
 }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showEditRoomDialog, setShowEditRoomDialog] = useState(false);
   return (
     <Box
       display={"flex"}
       flexDirection={"row"}
       alignItems={"center"}
       mb={4}
+      mx={2}
+      mt={1}
       flexWrap={"wrap"}
     >
       <Typography
@@ -99,6 +107,29 @@ export function HostRoomHeader({
             }}
           />
         </IconButton>
+        <IconButton
+          onClick={() => {
+            setShowEditRoomDialog(true);
+          }}
+        >
+          <EditOutlined />
+        </IconButton>
+
+        <Dialog
+          open={showEditRoomDialog}
+          onClose={() => {
+            setShowEditRoomDialog(false);
+          }}
+        >
+          <EditRoomDialog
+            room_id={roomId}
+            room_title={title}
+            room_password={password}
+            onClose={() => {
+              setShowEditRoomDialog(false);
+            }}
+          />
+        </Dialog>
       </Box>
     </Box>
   );

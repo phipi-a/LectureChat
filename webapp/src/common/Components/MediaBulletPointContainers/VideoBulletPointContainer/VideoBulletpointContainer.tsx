@@ -3,6 +3,7 @@
 import Link from "@/common/Components/Link";
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { Box, Typography } from "@mui/material";
+import { useSearchParams } from "next/navigation";
 import React, { useContext, useEffect } from "react";
 import ReactPlayer from "react-player";
 import DropFileBox from "../../DropFileBox";
@@ -16,6 +17,16 @@ export function VideoBulletPointContainerSuspense({
   videoUrl: string | null;
   roomId: string;
 }) {
+  const searchParams = useSearchParams();
+  const def_videoUrl = videoUrl;
+  const searchVideoUrl = searchParams.get("videoUrl");
+  if (
+    (videoUrl === null || !ReactPlayer.canPlay(videoUrl)) &&
+    searchVideoUrl !== null
+  ) {
+    videoUrl = searchParams.get("videoUrl");
+  }
+  const [videoURL, setVideoURL] = React.useState<string | null>(videoUrl);
   const { playPosition } = useContext(RoomContext);
   const [duration, setDuration] = React.useState<number>(0);
   const [playing, setPlaying] = React.useState<boolean>(false);
@@ -35,10 +46,16 @@ export function VideoBulletPointContainerSuspense({
       setWidth={setWidth}
       roomId={roomId}
     >
-      {ReactPlayer.canPlay(videoUrl!) || videoUrlFilePath !== "" ? (
+      {ReactPlayer.canPlay(videoURL!) || videoUrlFilePath !== "" ? (
         <div className="player-wrapper">
           <ReactPlayer
-            onError={(e) => {}}
+            onError={(e) => {
+              if (e.type === "error") {
+                if (videoURL?.startsWith("blob:")) {
+                  setVideoURL(def_videoUrl);
+                }
+              }
+            }}
             onReady={() => {}}
             style={{
               justifyContent: "center",
@@ -58,7 +75,7 @@ export function VideoBulletPointContainerSuspense({
               setPlaying(false);
             }}
             className="react-player"
-            url={videoUrlFilePath !== "" ? videoUrlFilePath : videoUrl!}
+            url={videoUrlFilePath !== "" ? videoUrlFilePath : videoURL!}
             width="100%"
             height="100%"
           />
@@ -70,14 +87,14 @@ export function VideoBulletPointContainerSuspense({
           alignItems={"center"}
           flexDirection={"column"}
         >
-          {videoUrl?.trim() !== "" ? (
+          {videoURL?.trim() !== "" ? (
             <>
               <Typography variant={"h6"}>Video not found</Typography>
               <Typography variant={"body1"}>
                 The following link was provided:
               </Typography>
 
-              <Link href={videoUrl!}>
+              <Link href={videoURL!}>
                 <Typography
                   variant={"body1"}
                   textOverflow={"ellipsis"}
@@ -85,21 +102,23 @@ export function VideoBulletPointContainerSuspense({
                   overflow={"hidden"}
                   whiteSpace={"nowrap"}
                 >
-                  {videoUrl}
+                  {videoURL}
                 </Typography>
               </Link>
             </>
           ) : (
             <></>
           )}
-          <DropFileBox
-            onFileChanged={function (file: any): void {
-              const temporaryURL = URL.createObjectURL(file);
+          <Box m={3}>
+            <DropFileBox
+              onFileChanged={function (file: any): void {
+                const temporaryURL = URL.createObjectURL(file);
 
-              setVideoUrlFilePath(temporaryURL);
-            }}
-            dataType={"video"}
-          />
+                setVideoUrlFilePath(temporaryURL);
+              }}
+              dataType={"video"}
+            />
+          </Box>
         </Box>
       )}
     </GeneralMainContainerSuspense>

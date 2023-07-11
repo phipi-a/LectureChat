@@ -13,3 +13,11 @@ export interface MessageI {
   role: "user" | "assistant";
   content: string;
 }
+export interface BulletPointsJsonI {
+  bullet_points: BulletPointI[];
+  isLong: boolean;
+}
+export interface BulletPointsI {
+  content: BulletPointsJsonI;
+  id: number | undefined;
+}

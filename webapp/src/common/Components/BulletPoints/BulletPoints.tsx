@@ -1,18 +1,20 @@
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
-import { useGetData } from "@/utils/supabase/supabaseData";
-import { LoadingButton } from "@mui/lab";
-import React, { useContext, useEffect } from "react";
+import { LoadingButton, Skeleton } from "@mui/lab";
+import React, { Suspense, useContext, useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import { BulletPointI } from "@/common/Interfaces/Interfaces";
+import {
+  BulletPointI,
+  BulletPointsI,
+  BulletPointsJsonI,
+} from "@/common/Interfaces/Interfaces";
+import { Database } from "@/common/Interfaces/supabaseTypes";
+import { time2sec } from "@/utils/helper";
+import { useGetDataN } from "@/utils/supabase/supabaseData";
 import { BulletPoint } from "./BulletPoint";
 
-export function convert_min_sec_to_seconds(min_sec: string) {
-  const [min, sec] = min_sec.split(":");
-  return parseInt(min) * 60 + parseInt(sec);
-}
 interface BulletpointSection {
   title: string;
   start: string;
@@ -92,7 +94,7 @@ function VideoBulletPoints({
             style={{ cursor: "pointer" }}
             onClick={() =>
               setPlayPosition({
-                pos: convert_min_sec_to_seconds(section.start),
+                pos: time2sec(section.start),
               })
             }
           >
@@ -111,6 +113,20 @@ function VideoBulletPoints({
   );
 }
 
+function BulletPointListFallback() {
+  return (
+    <>
+      <Skeleton height={50} width={"80%"} />
+      <Skeleton width={"100%"} />
+      <Skeleton width={"30%"} />
+      <Skeleton height={50} width={"85%"} />
+      <Skeleton width={"95%"} />
+      <Skeleton width={"100%"} />
+      <Skeleton width={"40%"} />
+    </>
+  );
+}
+
 export function BulletPoints({
   roomId,
   onOpenChat,
@@ -121,6 +137,48 @@ export function BulletPoints({
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const queryClient = useQueryClient();
   const { userData } = useContext(AuthContext);
+
+  const [bulletPointsData, setBulletPointsData] = useGetDataN<
+    BulletPointsI,
+    Database["public"]["Tables"]["bulletpoints"]["Row"]
+  >(
+    ["bulletpoints", roomId],
+    supabase
+      .from("bulletpoints")
+      .select("*")
+      .eq("room_id", roomId)
+      .eq("user_id", userData?.id)
+      .single(),
+    (data) => {
+      if (data.data === null) {
+        return {
+          content: {
+            bullet_points: [],
+            isLong: false,
+          },
+          id: undefined,
+        };
+      }
+      const bpjson = JSON.parse(
+        data.data.bulletpoints as string
+      ) as unknown as BulletPointsJsonI;
+      const bps = {
+        content: bpjson,
+        id: data.data.id,
+      } as BulletPointsI;
+      return bps;
+    },
+
+    queryClient,
+    {
+      onSuccess: (data) => {
+        // If no bullet points are found
+        if (data?.error) {
+          //mutation.mutate();
+        }
+      },
+    }
+  );
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -135,33 +193,12 @@ export function BulletPoints({
       if (!res) return;
 
       if (res.data) {
-        queryClient.invalidateQueries(["bulletpoints", roomId]);
+        setBulletPointsData(res.data);
       }
     },
   });
 
   // Read bulletpoints from db
-  const bulletPointsData = useGetData(
-    ["bulletpoints", roomId],
-    supabase
-      .from("bulletpoints")
-      .select("*")
-      .eq("room_id", roomId)
-      .eq("user_id", userData?.id)
-      .single(),
-    {
-      onSuccess: (data) => {
-        // If no bullet points are found
-        if (data?.error) {
-          // Create new bullet points
-          if (mutation.isLoading) return;
-          queryClient.setQueryData(["bulletpoints", roomId], []);
-          console.log("Creating new bullet points mut");
-          mutation.mutate();
-        }
-      },
-    }
-  );
 
   // If segments change, check if the last segment is on a new page
   const prevSegmentLength = React.useRef(segments.length || 0);
@@ -177,16 +214,14 @@ export function BulletPoints({
 
       if (lastSegment.page !== secondLastSegment.page) {
         mutation.mutate();
-        console.log("New page detected");
+
         prevSegmentLength.current = segments.length;
       }
     }
   }, [segments.length]);
 
-  const bulletPoints = bulletPointsData.data?.data?.bulletpoints
-    ? JSON.parse(bulletPointsData.data?.data?.bulletpoints as string)
-    : [];
-  console.log(bulletPoints);
+  const bulletPoints = bulletPointsData.data?.content.bullet_points;
+  const bulletPointsId = bulletPointsData.data?.id;
 
   const loading = bulletPointsData.isLoading || mutation.isLoading;
   const isVideo = bulletPoints && "isLong" in bulletPoints;
@@ -198,11 +233,11 @@ export function BulletPoints({
           variant="outlined"
           onClick={() => {
             mutation.mutate();
-            console.log("Creating new bullet pointsclick");
           }}
-          disabled={loading}
+          loading={loading}
+          loadingIndicator="Updating..."
         >
-          {loading ? "Updating" : "Update"}
+          Update
         </LoadingButton>
       </div>
       {bulletPoints && (
@@ -213,7 +248,7 @@ export function BulletPoints({
               setPlayPosition={setPlayPosition}
               setCurrentPage={setCurrentPage}
               onOpenChat={onOpenChat}
-              bulletPointsId={bulletPointsData.data?.data?.id!}
+              bulletPointsId={bulletPointsId!}
             />
           ) : (
             <BulletPointList
@@ -221,11 +256,25 @@ export function BulletPoints({
               setPlayPosition={setPlayPosition}
               setCurrentPage={setCurrentPage}
               onOpenChat={onOpenChat}
-              bulletPointsId={bulletPointsData.data?.data?.id!}
+              bulletPointsId={bulletPointsId!}
             />
           )}
         </>
       )}
     </div>
+  );
+}
+
+export function BulletPointsSuspense({
+  roomId,
+  onOpenChat,
+}: {
+  roomId: string;
+  onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
+}) {
+  return (
+    <Suspense fallback={<BulletPointListFallback />}>
+      <BulletPoints roomId={roomId} onOpenChat={onOpenChat} />
+    </Suspense>
   );
 }

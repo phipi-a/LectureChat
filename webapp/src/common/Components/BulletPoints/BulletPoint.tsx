@@ -22,7 +22,6 @@ export function BulletPoint({
         <h3
           style={{ cursor: "pointer" }}
           onClick={() => {
-            console.log(bulletPoint);
             if (bulletPoint.start !== undefined) {
               // mm:ss to ms
               bulletPoint.start.split(":")[0];

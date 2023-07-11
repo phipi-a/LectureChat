@@ -72,7 +72,12 @@ serve(async (req) => {
     }
 
     // Save the bullet points in the database
-    const { error: updateError, count } = await supabaseClient
+    let id = undefined;
+    const {
+      data,
+      error: updateError,
+      count,
+    } = await supabaseClient
       .from("bulletpoints")
       .update(
         {
@@ -82,24 +87,30 @@ serve(async (req) => {
         },
         { count: "exact" }
       )
-      .eq("room_id", roomId);
+      .eq("room_id", roomId)
+      .select("id");
 
     if (updateError) throw updateError;
 
     if (count === 0) {
       // Insert the bullet points in the database
-      const { error: insertError } = await supabaseClient
+      const { data, error: insertError } = await supabaseClient
         .from("bulletpoints")
         .insert({
           bulletpoints: JSON.stringify(bulletPoints),
           user_id: user.id,
           room_id: roomId,
-        });
+        })
+        .select("id")
+        .single();
 
       if (insertError) throw insertError;
+      id = data?.id;
+    } else {
+      id = data?.[0].id;
     }
 
-    return new Response(JSON.stringify({ data: bulletPoints, roomId }), {
+    return new Response(JSON.stringify({ content: bulletPoints, id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });

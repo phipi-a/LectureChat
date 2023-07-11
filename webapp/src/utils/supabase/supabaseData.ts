@@ -10,6 +10,7 @@ import {
 } from "@supabase/supabase-js/dist/module/lib/types";
 import { enqueueSnackbar } from "notistack";
 import {
+  QueryClient,
   QueryKey,
   UseInfiniteQueryResult,
   UseMutationOptions,
@@ -56,7 +57,7 @@ export function useInfiniteGetData<T>(
   });
 }
 
-export function useGetData<T>(
+export function useGetData1<T>(
   queryName: QueryKey,
   query: PostgrestBuilder<T>,
   useQueryOptions?: UseQueryOptions<any, any, any, any>
@@ -70,7 +71,77 @@ export function useGetData<T>(
   );
 }
 
-export function useGetDataN<TReturn, TFinal>(
+export function useGetData2<T>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<T>,
+  queryClient: QueryClient,
+  useQueryOptions?: UseQueryOptions<any, any, any, any>
+): [
+  UseQueryResult<PostgrestSingleResponse<T>, PostgrestError>,
+  (new_data: T) => void
+] {
+  return [
+    useQuery<PostgrestSingleResponse<T>, PostgrestError>(
+      queryName,
+      () => {
+        return awaitData(query);
+      },
+      useQueryOptions
+    ),
+    function setData(new_data: T) {
+      queryClient.setQueryData(queryName, new_data);
+    },
+  ];
+}
+
+export function useGetData<T>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<T>,
+  useQueryOptions?: UseQueryOptions<any, any, any, any>
+): UseQueryResult<PostgrestSingleResponse<T>, PostgrestError>;
+export function useGetData<T>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<T>,
+  queryClient: QueryClient,
+  useQueryOptions?: UseQueryOptions<any, any, any, any>
+): [
+  UseQueryResult<PostgrestSingleResponse<T>, PostgrestError>,
+  (new_data: T) => void
+];
+export function useGetData<T>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<T>,
+  aopt?: any,
+  bopt?: any
+): any {
+  if (aopt instanceof QueryClient || bopt instanceof QueryClient) {
+    return useGetData2(queryName, query, aopt, bopt);
+  } else {
+    return useGetData1(queryName, query, aopt);
+  }
+}
+
+function useGetDataN2<TReturn, TFinal>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<TFinal>,
+  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
+  queryClient: QueryClient,
+  useQueryOptions?: UseQueryOptions<any, any, any, any>
+): [UseQueryResult<TReturn, PostgrestError>, (new_data: TReturn) => void] {
+  return [
+    useQuery<TReturn, PostgrestError>(
+      queryName,
+      async () => {
+        return progrssor(await awaitData(query));
+      },
+      useQueryOptions
+    ),
+    function setData(new_data: TReturn) {
+      queryClient.setQueryData(queryName, new_data);
+    },
+  ];
+}
+function useGetDataN1<TReturn, TFinal>(
   queryName: QueryKey,
   query: PostgrestBuilder<TFinal>,
   progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
@@ -83,6 +154,63 @@ export function useGetDataN<TReturn, TFinal>(
     },
     useQueryOptions
   );
+}
+
+export function useGetDataN<TReturn, TFinal>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<TFinal>,
+
+  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
+  useQueryOptions?: UseQueryOptions<any, any, any, any>
+): UseQueryResult<TReturn, PostgrestError>;
+export function useGetDataN<TReturn, TFinal>(
+  queryName: QueryKey,
+  query: PostgrestBuilder<TFinal>,
+  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
+  queryClient: QueryClient,
+  useQueryOptions?: UseQueryOptions<any, any, any, any>
+): [UseQueryResult<TReturn, PostgrestError>, (new_data: TReturn) => void];
+export function useGetDataN<TReturn, TFinal>(
+  queryName: QueryKey,
+
+  query: PostgrestBuilder<TFinal>,
+  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
+  aopt?: any,
+  bopt?: any
+): any {
+  if (aopt instanceof QueryClient || bopt instanceof QueryClient) {
+    return useGetDataN2(queryName, query, progrssor, aopt, bopt);
+  } else {
+    return useGetDataN1(queryName, query, progrssor, aopt);
+  }
+}
+export function useUpdateData<
+  Relation extends GenericTable | GenericView,
+  Row extends Relation extends { Update: unknown } ? Relation["Update"] : never,
+  ColumnName extends string & keyof Row
+>(
+  query: PostgrestQueryBuilder<any, Relation>,
+  useMutationOptions?: UseMutationOptions<
+    PostgrestSingleResponse<null>,
+    PostgrestError,
+    { field: ColumnName; value: any; data: Row }
+  >
+): UseMutationResult<
+  PostgrestSingleResponse<null>,
+  PostgrestError,
+  { field: ColumnName; value: any; data: Row }
+> {
+  useMutationOptions = addDefaultErrorHandling(
+    useMutationOptions,
+    enqueueSnackbar
+  );
+  return useMutation<
+    PostgrestSingleResponse<null>,
+    PostgrestError,
+    { field: ColumnName; value: any; data: Row }
+  >(({ field, value, data }) => {
+    return awaitData(query.update(data).eq(field, value));
+  }, useMutationOptions);
 }
 
 export function useUpsertData<

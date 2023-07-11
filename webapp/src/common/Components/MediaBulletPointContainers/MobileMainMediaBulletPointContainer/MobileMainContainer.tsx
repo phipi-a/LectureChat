@@ -11,7 +11,7 @@ import {
 import { TabContext, TabList } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
 import React, { useContext, useEffect } from "react";
-import { BulletPoints } from "../../BulletPoints/BulletPoints";
+import { BulletPointsSuspense } from "../../BulletPoints/BulletPoints";
 import ChatSuspense from "../../Chat";
 import "./style.css";
 
@@ -76,8 +76,12 @@ export function MobileMainContainer({
             flex={1}
             flexDirection={"column"}
           >
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box
+              sx={{ borderBottom: 1, borderColor: "divider" }}
+              overflow={"auto"}
+            >
               <TabList
+                variant="scrollable"
                 onChange={(e, value) => {
                   setCurrentTab(value);
                 }}
@@ -97,7 +101,7 @@ export function MobileMainContainer({
                 {children}
               </Box>
               <Box mt={1} display={currentTab === "2" ? "block" : "none"}>
-                <BulletPoints
+                <BulletPointsSuspense
                   roomId={roomId}
                   onOpenChat={(a, bulletpointId) => {
                     setChatBulletpoint({ ...a });

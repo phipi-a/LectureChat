@@ -36,7 +36,7 @@ The goal is that students can later look at the bullet points and learn from the
 Return a json array and include a summary of the part and
 bullet points and longer summary per bullet point only for the current part and the time in the video where they occur in JSON format. 
 
-Example Start:
+Format Start
 {
    "summary": "Long summary of the current part",
    "bullet_points": [
@@ -48,9 +48,9 @@ Example Start:
         ...
     ]
 }
-Example End
+Format End
 
-You only can respond with valid json format.`.trim();
+You only can respond with this json format.`.trim();
 
 export const subsectionPrompt = `
 You are expert in analyzing lecture videos.

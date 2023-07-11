@@ -6,6 +6,7 @@ import {
   useInsertData,
   useInsertSelectData,
 } from "@/utils/supabase/supabaseData";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
@@ -14,6 +15,8 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
@@ -31,9 +34,12 @@ export function CreateNewRoomDialog({}) {
   const [nameHelperText, setNameHelperText] = useState("");
   const [passwordHelperText, setPasswordHelperText] = useState("");
   const [title, setTitle] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(
+    Math.random().toString(36).slice(-8)
+  );
+  const [showPassword, setShowPassword] = useState(false);
   const [id, setId] = useState(Math.random().toString().substring(2, 8));
-  const [isVideoRoom, setIsVideoRoom] = useState(false);
+  const [isVideoRoom, setIsVideoRoom] = useState(true);
   const [idHelperText, setIdHelperText] = useState("");
   const [pdfFile, setPdfFile] = useState<any>(null);
   const [videoFile, setVideoFile] = useState<any>(null);
@@ -121,7 +127,11 @@ export function CreateNewRoomDialog({}) {
         return;
       } else {
         queryClient.invalidateQueries(["host_rooms"]);
-        router.push(`/host/room/${roomId.current}`);
+        router.push(
+          `/host/room/${roomId.current}?videoUrl=${URL.createObjectURL(
+            videoFile
+          )}`
+        );
       }
     },
     onError: (error) => {
@@ -190,6 +200,12 @@ export function CreateNewRoomDialog({}) {
     }
     roomId.current = id;
     if (isVideoRoom) {
+      if (!videoFile) {
+        enqueueSnackbar("Please upload a video file!", {
+          variant: "error",
+        });
+        return;
+      }
       createVideoRoom.mutate({
         video_url: videoUrl,
         title: title,
@@ -274,12 +290,24 @@ export function CreateNewRoomDialog({}) {
               variant="standard"
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
                 setPasswordHelperText("");
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
               error={passwordHelperText !== ""}
               helperText={passwordHelperText}

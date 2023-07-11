@@ -1,3 +1,4 @@
+import { useMediaQuery, useTheme } from "@mui/material";
 import { SetStateAction } from "react";
 import MainContainerSuspense from "../MainMediaBulletPointContainer";
 import MobileMainContainerSuspense from "../MobileMainMediaBulletPointContainer";
@@ -13,7 +14,9 @@ export default function GeneralMainContainerSuspense({
   setWidth: React.Dispatch<SetStateAction<number>>;
   roomId: string;
 }): React.ReactElement {
-  if (window.matchMedia("(pointer: coarse)").matches) {
+  const theme = useTheme();
+  const xs = useMediaQuery(theme.breakpoints.down("md"));
+  if (window.matchMedia("(pointer: coarse)").matches || xs) {
     return (
       <MobileMainContainerSuspense
         width={width}

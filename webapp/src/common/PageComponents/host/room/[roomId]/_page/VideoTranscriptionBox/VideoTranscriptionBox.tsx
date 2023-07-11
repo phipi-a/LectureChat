@@ -52,7 +52,7 @@ export function VideoTranscriptionBox({ roomId }: { roomId: string }) {
     <Box
       display={"flex"}
       justifyContent={"end"}
-      mx={5}
+      mx={2}
       flexDirection={"row"}
       alignItems={transcriptBoxOpen ? "flex-start" : "center"}
     >
@@ -63,7 +63,7 @@ export function VideoTranscriptionBox({ roomId }: { roomId: string }) {
           borderRadius: "5px",
           overflow: "hidden",
           display: "flex",
-          p: 2,
+          p: 1,
         }}
         flex={1}
         onClick={
