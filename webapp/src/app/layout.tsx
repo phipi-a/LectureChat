@@ -14,7 +14,12 @@ import {
 import { SnackbarProvider } from "notistack";
 import React, { useContext } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+const ReactQueryDevtoolsProduction = React.lazy(() =>
+  import("react-query/devtools/development").then((d) => ({
+    // ---------------------------^^^^^^^^^
+    default: d.ReactQueryDevtools,
+  }))
+);
 
 function InnerLoadingLayout({ children }: { children: any }) {
   const { isPending } = useContext(LoadingContext);
@@ -67,7 +72,7 @@ export default function RootLayout({
           <CssBaseline />
           <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
             <QueryClientProvider client={queryClient}>
-              <ReactQueryDevtools initialIsOpen={false} />
+              <ReactQueryDevtoolsProduction initialIsOpen={false} />
               <LoadingProvider>
                 <AuthProvider>
                   <AppBar position="sticky">

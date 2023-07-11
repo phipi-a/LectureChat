@@ -90,11 +90,7 @@ export function useGetData2<T, TInsert>(
     ),
     function setData(new_data: TInsert) {
       queryClient.setQueryData(queryName, {
-        error: null,
         data: new_data,
-        count: null,
-        status: 200,
-        statusText: "",
       } as PostgrestSingleResponse<TInsert>);
     },
   ];
