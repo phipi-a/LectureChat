@@ -6,6 +6,7 @@ import {
   useInsertData,
   useInsertSelectData,
 } from "@/utils/supabase/supabaseData";
+import { useUserData } from "@/utils/supabase/supabaseQuery";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -45,10 +46,11 @@ export function CreateNewRoomDialog({}) {
   const [videoFile, setVideoFile] = useState<any>(null);
   const [videoUrl, setVideoUrl] = useState("");
   const transcriptionRef = useRef<Segment[]>([]);
-  const { userId, userData } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
   const roomId = useRef("");
   const router = useOwnRouter();
   const queryClient = useQueryClient();
+  const [userData] = useUserData(userId, queryClient);
 
   const deleteRoom = useDeleteData(supabase.from("room"));
 
@@ -79,7 +81,8 @@ export function CreateNewRoomDialog({}) {
 
   const transcriptVideo = useMutation(
     (audioBlob: Blob) => {
-      const url = userData?.whisper_url! + "/asr?&output=json&language=en&";
+      const url =
+        userData?.data?.data?.whisper_url! + "/asr?&output=json&language=en&";
 
       const formData = new FormData();
       formData.append("audio_file", audioBlob);

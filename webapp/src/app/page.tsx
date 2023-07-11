@@ -8,17 +8,25 @@ import HostedRoomsBox from "@/common/PageComponents/_page/HostetRoomsBox";
 import JoinRoomsBox from "@/common/PageComponents/_page/JoinRoomsBox";
 import PersonalizeBox from "@/common/PageComponents/_page/PersonalizeBox";
 import { startPageText } from "@/common/Texts/startpage";
+import { useUserData } from "@/utils/supabase/supabaseQuery";
 import { Masonry } from "@mui/lab";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useContext } from "react";
+import { useQueryClient } from "react-query";
 
 export default function Home() {
   const router = useOwnRouter();
-  const { loggedIn, event, userData } = useContext(AuthContext);
+  const { loggedIn, event, userId } = useContext(AuthContext);
+
+  const queryClient = useQueryClient();
+
+  const [userData] = useUserData(userId, queryClient);
+
+  //console.log(useTest);
+
   if (event === "PASSWORD_RECOVERY") {
     return router.replace("/update-password");
   }
-
   if (loggedIn) {
     return (
       <Container>
@@ -72,7 +80,7 @@ export default function Home() {
             margin: "0",
           }}
         >
-          {userData?.openai_key === "" && (
+          {userData.data?.data?.openai_key === "" && (
             <PaperBox title={"No OpenAI API Key"} warning>
               <Typography variant="body1" color={"text.secondary"} m={2}>
                 You have not set an OpenAI API key yet. You can do this in the
@@ -81,7 +89,7 @@ export default function Home() {
               </Typography>
             </PaperBox>
           )}
-          {userData?.whisper_url === "" && (
+          {userData.data?.data?.whisper_url === "" && (
             <PaperBox title={"No Whisper URL"} warning>
               <Typography variant="body1" color={"text.secondary"} m={2}>
                 You have not set a Whisper URL yet. You can do this in the

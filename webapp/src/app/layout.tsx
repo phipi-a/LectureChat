@@ -14,6 +14,7 @@ import {
 import { SnackbarProvider } from "notistack";
 import React, { useContext } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 const ReactQueryDevtoolsProduction = React.lazy(() =>
   import("react-query/devtools/development").then((d) => ({
     // ---------------------------^^^^^^^^^
@@ -72,7 +73,7 @@ export default function RootLayout({
           <CssBaseline />
           <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
             <QueryClientProvider client={queryClient}>
-              <ReactQueryDevtoolsProduction initialIsOpen={false} />
+              <ReactQueryDevtools initialIsOpen={false} />
               <LoadingProvider>
                 <AuthProvider>
                   <AppBar position="sticky">

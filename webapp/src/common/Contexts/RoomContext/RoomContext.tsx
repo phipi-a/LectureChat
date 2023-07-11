@@ -1,3 +1,4 @@
+"use client";
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import React from "react";
 

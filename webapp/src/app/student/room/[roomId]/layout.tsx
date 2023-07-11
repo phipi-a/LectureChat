@@ -1,3 +1,4 @@
+"use client";
 import CheckAuth from "@/common/Components/CheckAuth";
 import { RoomProvider } from "@/common/Contexts/RoomContext/RoomProvider";
 
