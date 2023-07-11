@@ -12,7 +12,7 @@ import {
 } from "@/common/Interfaces/Interfaces";
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import { time2sec } from "@/utils/helper";
-import { useGetDataN } from "@/utils/supabase/supabaseData";
+import { useGetDataN2 } from "@/utils/supabase/supabaseData";
 import { BulletPoint } from "./BulletPoint";
 
 interface BulletpointSection {
@@ -138,7 +138,7 @@ export function BulletPoints({
   const queryClient = useQueryClient();
   const { userData } = useContext(AuthContext);
 
-  const [bulletPointsData, setBulletPointsData] = useGetDataN<
+  const [bulletPointsData, setBulletPointsData] = useGetDataN2<
     BulletPointsI,
     Database["public"]["Tables"]["bulletpoints"]["Row"]
   >(

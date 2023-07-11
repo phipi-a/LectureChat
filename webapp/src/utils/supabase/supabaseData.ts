@@ -57,7 +57,7 @@ export function useInfiniteGetData<T>(
   });
 }
 
-export function useGetData1<T>(
+export function useGetData<T>(
   queryName: QueryKey,
   query: PostgrestBuilder<T>,
   useQueryOptions?: UseQueryOptions<any, any, any, any>
@@ -94,34 +94,7 @@ export function useGetData2<T>(
   ];
 }
 
-export function useGetData<T>(
-  queryName: QueryKey,
-  query: PostgrestBuilder<T>,
-  useQueryOptions?: UseQueryOptions<any, any, any, any>
-): UseQueryResult<PostgrestSingleResponse<T>, PostgrestError>;
-export function useGetData<T>(
-  queryName: QueryKey,
-  query: PostgrestBuilder<T>,
-  queryClient: QueryClient,
-  useQueryOptions?: UseQueryOptions<any, any, any, any>
-): [
-  UseQueryResult<PostgrestSingleResponse<T>, PostgrestError>,
-  (new_data: T) => void
-];
-export function useGetData<T>(
-  queryName: QueryKey,
-  query: PostgrestBuilder<T>,
-  aopt?: any,
-  bopt?: any
-): any {
-  if (aopt instanceof QueryClient || bopt instanceof QueryClient) {
-    return useGetData2(queryName, query, aopt, bopt);
-  } else {
-    return useGetData1(queryName, query, aopt);
-  }
-}
-
-function useGetDataN2<TReturn, TFinal>(
+export function useGetDataN2<TReturn, TFinal>(
   queryName: QueryKey,
   query: PostgrestBuilder<TFinal>,
   progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
@@ -141,7 +114,7 @@ function useGetDataN2<TReturn, TFinal>(
     },
   ];
 }
-function useGetDataN1<TReturn, TFinal>(
+export function useGetDataN<TReturn, TFinal>(
   queryName: QueryKey,
   query: PostgrestBuilder<TFinal>,
   progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
@@ -156,34 +129,6 @@ function useGetDataN1<TReturn, TFinal>(
   );
 }
 
-export function useGetDataN<TReturn, TFinal>(
-  queryName: QueryKey,
-  query: PostgrestBuilder<TFinal>,
-
-  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
-  useQueryOptions?: UseQueryOptions<any, any, any, any>
-): UseQueryResult<TReturn, PostgrestError>;
-export function useGetDataN<TReturn, TFinal>(
-  queryName: QueryKey,
-  query: PostgrestBuilder<TFinal>,
-  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
-  queryClient: QueryClient,
-  useQueryOptions?: UseQueryOptions<any, any, any, any>
-): [UseQueryResult<TReturn, PostgrestError>, (new_data: TReturn) => void];
-export function useGetDataN<TReturn, TFinal>(
-  queryName: QueryKey,
-
-  query: PostgrestBuilder<TFinal>,
-  progrssor: (data: PostgrestSingleResponse<TFinal>) => TReturn,
-  aopt?: any,
-  bopt?: any
-): any {
-  if (aopt instanceof QueryClient || bopt instanceof QueryClient) {
-    return useGetDataN2(queryName, query, progrssor, aopt, bopt);
-  } else {
-    return useGetDataN1(queryName, query, progrssor, aopt);
-  }
-}
 export function useUpdateData<
   Relation extends GenericTable | GenericView,
   Row extends Relation extends { Update: unknown } ? Relation["Update"] : never,

@@ -3,7 +3,7 @@ import { BulletPointI, ChatI, MessageI } from "@/common/Interfaces/Interfaces";
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { time2sec } from "@/utils/helper";
-import { useGetDataN } from "@/utils/supabase/supabaseData";
+import { useGetDataN2 } from "@/utils/supabase/supabaseData";
 import { CloseOutlined, Send } from "@mui/icons-material";
 import {
   Box,
@@ -35,7 +35,7 @@ export function Chat({
   const [currentMessage, setCurrentMessage] = React.useState("");
   const queryClient = useQueryClient();
 
-  const [messagesData, setMessageData] = useGetDataN<
+  const [messagesData, setMessageData] = useGetDataN2<
     ChatI,
     Database["public"]["Tables"]["chat"]["Row"]
   >(
