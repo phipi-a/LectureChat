@@ -71,14 +71,14 @@ export function useGetData<T>(
   );
 }
 
-export function useGetData2<T>(
+export function useGetData2<T, TInsert>(
   queryName: QueryKey,
   query: PostgrestBuilder<T>,
   queryClient: QueryClient,
   useQueryOptions?: UseQueryOptions<any, any, any, any>
 ): [
   UseQueryResult<PostgrestSingleResponse<T>, PostgrestError>,
-  (new_data: T) => void
+  (new_data: TInsert) => void
 ] {
   return [
     useQuery<PostgrestSingleResponse<T>, PostgrestError>(
@@ -88,8 +88,8 @@ export function useGetData2<T>(
       },
       useQueryOptions
     ),
-    function setData(new_data: T) {
-      queryClient.setQueryData(queryName, new_data);
+    function setData(new_data: TInsert) {
+      queryClient.setQueryData(queryName, { error: null, data: new_data });
     },
   ];
 }
