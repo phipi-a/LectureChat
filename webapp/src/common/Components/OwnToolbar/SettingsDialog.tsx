@@ -53,7 +53,9 @@ export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
       closeDialog();
       setUserData({
         id: userId!,
-        whisper_url: whisperUrl!,
+        whisper_url: whisperUrl?.endsWith("/")
+          ? whisperUrl.slice(0, -1)
+          : whisperUrl,
         openai_key: openAiApiKey!,
         created_at: userData?.data?.data?.created_at,
       });
