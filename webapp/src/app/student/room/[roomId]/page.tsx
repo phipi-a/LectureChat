@@ -100,38 +100,20 @@ export default function Room({ params }: { params: { roomId: string } }) {
   }, [room.room_id, setSegments]);
 
   return (
-    <>
-      {room?.room_is_video_room ? (
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          overflow={"auto"}
-          flex={1}
-        >
-          <Typography variant={"h4"}>
-            {room.room_title} ({room.room_id})
-          </Typography>
-          <Box display={"flex"} flex={1} overflow={"auto"}>
-            <VideoBulletPointContainerSuspense
-              videoUrl={room!.room_video_url}
-              roomId={params.roomId}
-            />
-          </Box>
-        </Box>
-      ) : (
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          flex={1}
-          overflow={"auto"}
-        >
-          <Typography variant={"h4"}>
-            {room?.room_title} ({room?.room_id})
-          </Typography>
-
+    <Box display={"flex"} flexDirection={"column"} overflow={"auto"} flex={1}>
+      <Typography variant={"h4"} mb={4} mx={2} mt={1}>
+        {room.room_title} ({room.room_id})
+      </Typography>
+      <Box display={"flex"} flex={1} overflow={"auto"}>
+        {room?.room_is_video_room ? (
+          <VideoBulletPointContainerSuspense
+            videoUrl={room!.room_video_url}
+            roomId={params.roomId}
+          />
+        ) : (
           <PdfBulletpointContainerSuspense roomId={params.roomId} />
-        </Box>
-      )}
-    </>
+        )}
+      </Box>
+    </Box>
   );
 }

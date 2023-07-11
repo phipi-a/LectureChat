@@ -10,7 +10,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
 import { Resizable } from "re-resizable";
 import React, { useContext, useRef } from "react";
-import { BulletPoints } from "../../BulletPoints/BulletPoints";
+import { BulletPointsSuspense } from "../../BulletPoints/BulletPoints";
 import ChatSuspense from "../../Chat";
 import "./style.css";
 
@@ -47,6 +47,7 @@ export function MainContainer({
         flexDirection: "row",
         alignItems: "center",
       }}
+      m={1}
     >
       <Resizable
         defaultSize={{
@@ -119,7 +120,7 @@ export function MainContainer({
 
             <Box flex={1} alignItems={"center"} overflow={"auto"}>
               <TabPanel value="1">
-                <BulletPoints
+                <BulletPointsSuspense
                   roomId={roomId}
                   onOpenChat={(a, bulletpointId) => {
                     setChatBulletpoint(a);

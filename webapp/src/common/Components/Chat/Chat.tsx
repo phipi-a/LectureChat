@@ -1,7 +1,9 @@
+import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { BulletPointI, ChatI, MessageI } from "@/common/Interfaces/Interfaces";
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import { supabase } from "@/common/Modules/SupabaseClient";
-import { useGetDataN } from "@/utils/supabase/supabaseData";
+import { time2sec } from "@/utils/helper";
+import { useGetDataN2 } from "@/utils/supabase/supabaseData";
 import { CloseOutlined, Send } from "@mui/icons-material";
 import {
   Box,
@@ -11,8 +13,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useMutation } from "react-query";
+import Link from "next/link";
+import React, { useContext, useEffect } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { TypingIndicator } from "../TypingIndicator/TypingIndicator";
 
 export function Chat({
@@ -28,13 +31,11 @@ export function Chat({
   roomId: string;
   displayCloseButton?: boolean;
 }) {
+  const { setPlayPosition, setCurrentPage } = useContext(RoomContext);
   const [currentMessage, setCurrentMessage] = React.useState("");
-  const [messages, setMessages] = React.useState<ChatI>({
-    id: undefined,
-    messages: [],
-  });
+  const queryClient = useQueryClient();
 
-  const messagesData = useGetDataN<
+  const [messagesData, setMessageData] = useGetDataN2<
     ChatI,
     Database["public"]["Tables"]["chat"]["Row"]
   >(
@@ -57,7 +58,7 @@ export function Chat({
           ],
         };
       }
-      console.log("data", data);
+
       const messages: MessageI[] = data.data!.content as unknown as MessageI[];
 
       return {
@@ -65,40 +66,39 @@ export function Chat({
         messages: messages,
       };
     },
+    queryClient,
     {
-      onSuccess: (data) => {
-        console.log("Chat: onSuccess", data);
-      },
+      onSuccess: (data) => {},
+      enabled: bulletPointsId !== undefined && bulletpoint?.id !== undefined,
     }
   );
-  useEffect(() => {
-    if (messagesData.data === null) return;
-    setMessages(messagesData.data!);
-  }, [messagesData.data]);
 
   const mutation = useMutation({
     mutationFn: async (newMessage: MessageI) => {
-      console.log("Creating new bullet points");
-      messages.messages.push(newMessage);
-      setMessages({ ...messages });
+      messagesData.data!.messages.push(newMessage);
+      setMessageData({
+        id: messagesData.data!.id,
+        messages: messagesData.data!.messages,
+      });
       setCurrentMessage("");
-      console.log("messages", messages);
 
       return supabase.functions.invoke("chat", {
         body: {
-          id: messages.id,
+          id: messagesData.data!.id,
           room_id: roomId,
-          messages: messages.messages,
+          messages: messagesData.data!.messages,
           bulletpoint_id: bulletPointsId,
           single_bulletpoint_id: bulletpoint?.id,
         },
       });
     },
     onSuccess: (res) => {
-      console.log("Chat: onSuccess", res);
       if (res.data === null) return;
-      messages.messages.push(res.data);
-      setMessages({ ...messages });
+      messagesData.data!.messages.push(res.data);
+      setMessageData({
+        id: messagesData.data!.id,
+        messages: messagesData.data!.messages,
+      });
     },
   });
   const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -110,11 +110,10 @@ export function Chat({
     });
   }
   useEffect(() => {
-    console.log("scrollRef", scrollRef);
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [messagesData.data?.messages]);
 
   if (bulletpoint === null) {
     return <></>;
@@ -127,6 +126,55 @@ export function Chat({
     };
 
     mutation.mutate(newMessage);
+  }
+  function replacePageLinks(message: string) {
+    const reg = RegExp(/(\[[0-9][0-9]?[0-9]?])/g);
+    const splits = message.split(reg);
+    return splits.map((split, index) => {
+      if (split.match(reg)) {
+        return (
+          <Link
+            href="#"
+            style={{
+              color: "inherit",
+            }}
+            key={split + index}
+            onClick={(e) => {
+              setCurrentPage(parseInt(split.slice(1, split.length - 1)));
+            }}
+          >
+            {split.slice(1, split.length - 1)}
+          </Link>
+        );
+      }
+      return <span key={split + index}>{split}</span>;
+    });
+  }
+
+  function replaceTimestamps(message: string) {
+    const reg = RegExp(/(\[[0-9]?[0-9]:[0-9]?[0-9]])/g);
+    const splits = message.split(reg);
+    return splits.map((split, index) => {
+      if (split.match(reg)) {
+        return (
+          <Link
+            href="#"
+            style={{
+              color: "inherit",
+            }}
+            key={split + index}
+            onClick={(e) => {
+              setPlayPosition({
+                pos: time2sec(split.slice(1, split.length - 1)),
+              });
+            }}
+          >
+            {split.slice(1, split.length - 1)}
+          </Link>
+        );
+      }
+      return <span key={split + index}>{replacePageLinks(split)}</span>;
+    });
   }
 
   return (
@@ -152,42 +200,47 @@ export function Chat({
         >
           <Box flex={1} m={1} overflow={"auto"}>
             <List>
-              {messages.messages.concat(loadingArray).map((message, index) => (
-                <Box
-                  key={message.content + index + bulletpoint.id}
-                  sx={{
-                    display: "flex",
-                    justifyContent:
-                      message.role === "assistant" ? "flex-start" : "flex-end",
-                    mb: 1,
-                  }}
-                >
-                  <Paper
-                    variant="outlined"
-                    ref={scrollRef}
+              {messagesData
+                .data!.messages.concat(loadingArray)
+                .map((message, index) => (
+                  <Box
+                    key={message.content + index + bulletpoint.id}
                     sx={{
-                      p: 1.3,
-                      borderRadius:
+                      display: "flex",
+                      justifyContent:
                         message.role === "assistant"
-                          ? "20px 20px 20px 5px"
-                          : "20px 20px 5px 20px",
+                          ? "flex-start"
+                          : "flex-end",
+                      mb: 1,
                     }}
+                    onClick={() => {}}
                   >
-                    {message.content === "Loading..." ? (
-                      <TypingIndicator />
-                    ) : (
-                      <Typography
-                        variant="body2"
-                        textAlign={
-                          message.role === "assistant" ? "left" : "right"
-                        }
-                      >
-                        {message.content}
-                      </Typography>
-                    )}
-                  </Paper>
-                </Box>
-              ))}
+                    <Paper
+                      variant="outlined"
+                      ref={scrollRef}
+                      sx={{
+                        p: 1.3,
+                        borderRadius:
+                          message.role === "assistant"
+                            ? "20px 20px 20px 5px"
+                            : "20px 20px 5px 20px",
+                      }}
+                    >
+                      {message.content === "Loading..." ? (
+                        <TypingIndicator />
+                      ) : (
+                        <Typography
+                          variant="body2"
+                          textAlign={
+                            message.role === "assistant" ? "left" : "right"
+                          }
+                        >
+                          {replaceTimestamps(message.content)}
+                        </Typography>
+                      )}
+                    </Paper>
+                  </Box>
+                ))}
             </List>
           </Box>
           <TextField
@@ -202,7 +255,6 @@ export function Chat({
               p: 1,
             }}
             onKeyDown={(ev) => {
-              console.log(`Pressed keyCode ${ev.key}`);
               if (ev.key === "Enter") {
                 handleSendMessage();
                 ev.preventDefault();

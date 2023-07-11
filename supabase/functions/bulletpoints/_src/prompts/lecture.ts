@@ -13,7 +13,7 @@ Previous Bullet Points:
 {
     "bullet_point": "Bullet Point 1",
     "longer_explanation": "Longer explanation of bullet point 1.",
-    "start": "00:00"
+    "page": "1"
 },
 ...
 ]
@@ -36,7 +36,7 @@ Previous Bullet Points:
 {
     "bullet_point": "Bullet Point 1",
     "longer_explanation": "Longer explanation of bullet point 1.",
-    "start": "00:00"
+    "page": "1"
 },
 ...
 ]

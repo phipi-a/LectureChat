@@ -1,10 +1,10 @@
 // Follow this setup guide to integrate the Deno language server with your editor:
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+
 const model_name = "gpt-3.5-turbo-0613";
 class UnauthorizedError extends Error {
   constructor(message: string) {
@@ -54,10 +54,13 @@ async function getOpenAIKey(user_id: string, supabaseClient: any) {
     .single();
   return rawData.openai_key;
 }
-const general_prompt = `
+const pdf_prompt = `
+You are a chatbot for a video and receive the bullet points of a PDF. Answer each question in detail and try to reference the Lecture if possible.
+ If you reference the lecture, please use the page number in brackets, e.g. [1] for page 1. If you don't know the answer, just say "I don't know".
+`;
+const video_prompt = `
 You are a chatbot for a video and receive the bullet points of the video. Answer each question in detail and try to reference the video if possible.
- Try to answer the question in maximum one sentence and with a timestemp of the video when you reference it in this format "{min}:{sec}".
- . If you don't know the answer, just say "I don't know".
+  If you reference the video, please use the time in brackets, e.g. [1:23] for 1 minute and 23 seconds. If you don't know the answer, just say "I don't know".
 `;
 
 async function getSystemPrompt(room_id: string, supabaseClient: any) {
@@ -66,8 +69,11 @@ async function getSystemPrompt(room_id: string, supabaseClient: any) {
     .select("bulletpoints")
     .eq("room_id", room_id)
     .single();
-  const system_prompt = general_prompt + rawData.bulletpoints;
-  return system_prompt;
+  if (rawData.bulletpoints.page !== undefined) {
+    return pdf_prompt + rawData.bulletpoints;
+  } else {
+    return video_prompt + rawData.bulletpoints;
+  }
 }
 serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.

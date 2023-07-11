@@ -4,7 +4,7 @@ import { VideoTranscriptionBox } from "./VideoTranscriptionBox";
 
 export function VideoTranscriptionBoxFallback() {
   return (
-    <Box display={"flex"} justifyContent={"end"} mx={5} flexDirection={"row"}>
+    <Box display={"flex"} justifyContent={"end"} mx={2} flexDirection={"row"}>
       <Box
         sx={{
           border: "3px solid",
@@ -12,7 +12,7 @@ export function VideoTranscriptionBoxFallback() {
           borderRadius: "5px",
           overflow: "hidden",
           display: "flex",
-          p: 2,
+          p: 1,
         }}
         flex={1}
       >

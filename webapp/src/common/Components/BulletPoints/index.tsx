@@ -1,3 +1,3 @@
-import { BulletPoints } from "./BulletPoints";
+import { BulletPointsSuspense } from "./BulletPoints";
 
-export default BulletPoints;
+export default BulletPointsSuspense;

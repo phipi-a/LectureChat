@@ -23,7 +23,7 @@ import { useContext, useState } from "react";
 import { useQueryClient } from "react-query";
 
 export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
-  const { session, userId, userData } = useContext(AuthContext);
+  const { session, userId, userData, setUserData } = useContext(AuthContext);
   const [showOpenAiApiKey, setShowOpenAiApiKey] = useState(false);
 
   const queryClient = useQueryClient();
@@ -46,7 +46,12 @@ export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
         variant: "success",
       });
       closeDialog();
-      queryClient.invalidateQueries(["userData", userId!]);
+      setUserData({
+        id: userId!,
+        whisper_url: whisperUrl!,
+        openai_key: openAiApiKey!,
+        created_at: userData?.created_at,
+      });
     },
   });
   const deleteAccount = useTriggerFunction(supabase.rpc("deleteUser"), {
@@ -99,12 +104,14 @@ export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
             setWhisperUrl(e.target.value);
           }}
           fullWidth
+          disabled={upsertUserSettings.isLoading}
         />
         <TextField
           margin="dense"
           id="name"
           label="OpenAi API Key"
           value={openAiApiKey}
+          disabled={upsertUserSettings.isLoading}
           onChange={(e) => {
             setOpenAiApiKey(e.target.value);
           }}

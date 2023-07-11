@@ -1,16 +1,15 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
-import { UnauthorizedError, BadRequestError } from "../_shared/errors.ts";
+import { BadRequestError, UnauthorizedError } from "../_shared/errors.ts";
+import { analyse_pdf } from "./_src/analyse_pdf.ts";
+import { analyse_video } from "./_src/analyse_video.ts";
 import {
-  Bulletpoint,
   BulletpointWithID,
   Data,
   VideoBulletPoints,
 } from "./_src/interfaces.ts";
 import { OpenAI } from "./_src/utils.ts";
-import { analyse_video } from "./_src/analyse_video.ts";
-import { analyse_pdf } from "./_src/analyse_pdf.ts";
 
 serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.
@@ -73,7 +72,12 @@ serve(async (req) => {
     }
 
     // Save the bullet points in the database
-    const { error: updateError, count } = await supabaseClient
+    let id = undefined;
+    const {
+      data,
+      error: updateError,
+      count,
+    } = await supabaseClient
       .from("bulletpoints")
       .update(
         {
@@ -83,24 +87,30 @@ serve(async (req) => {
         },
         { count: "exact" }
       )
-      .eq("room_id", roomId);
+      .eq("room_id", roomId)
+      .select("id");
 
     if (updateError) throw updateError;
 
     if (count === 0) {
       // Insert the bullet points in the database
-      const { error: insertError } = await supabaseClient
+      const { data, error: insertError } = await supabaseClient
         .from("bulletpoints")
         .insert({
           bulletpoints: JSON.stringify(bulletPoints),
           user_id: user.id,
           room_id: roomId,
-        });
+        })
+        .select("id")
+        .single();
 
       if (insertError) throw insertError;
+      id = data?.id;
+    } else {
+      id = data?.[0].id;
     }
 
-    return new Response(JSON.stringify({ data: bulletPoints, roomId }), {
+    return new Response(JSON.stringify({ content: bulletPoints, id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });

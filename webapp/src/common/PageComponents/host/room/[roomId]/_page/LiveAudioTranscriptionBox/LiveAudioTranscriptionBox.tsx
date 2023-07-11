@@ -93,15 +93,11 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
     setSegments([]);
   }
 
-  if (getInitData.isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Box
       display={"flex"}
       justifyContent={"end"}
-      mx={5}
+      mx={2}
       flexDirection={"row"}
       alignItems={transcriptBoxOpen ? "flex-start" : "center"}
     >
@@ -159,7 +155,7 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
           borderRadius: "5px",
           overflow: "hidden",
           display: "flex",
-          p: 2,
+          p: 1,
         }}
         flex={1}
         onClick={
@@ -170,6 +166,7 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
           <TranscriptionEditBox
             editable={true}
             rawData={segments}
+            enableDeleteAll={true}
             updateDataItem={updateDataItem}
             deleteDataItem={deleteDataItem}
             deleteAllData={deleteAllData}

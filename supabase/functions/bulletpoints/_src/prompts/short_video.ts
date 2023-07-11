@@ -25,7 +25,8 @@ Create a bullet point for each interesting information together with a longer te
 The goal is that students can later look at the bullet points and learn from them, therefore they have to be accurate and you should not invent facts are concept.
 
 Return a json array of bullet points with the bullet points and long summary and the time in the video where they occur in JSON format.
-For example:
+
+Format Start
 
 [
 {
@@ -36,5 +37,7 @@ For example:
 ...
 ]
 
-You only can respond with json format.
+Format End
+
+You only can respond with this json format.
 `.trim();

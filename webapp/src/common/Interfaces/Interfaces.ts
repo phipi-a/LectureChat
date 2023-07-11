@@ -3,8 +3,7 @@ export interface BulletPointI {
   longer_explanation: string;
   page: string | undefined;
   id: number;
-  video_start_ms: number | undefined;
-  video_end_ms: number | undefined;
+  start: string | undefined;
 }
 export interface ChatI {
   id: number | undefined;
@@ -13,4 +12,12 @@ export interface ChatI {
 export interface MessageI {
   role: "user" | "assistant";
   content: string;
+}
+export interface BulletPointsJsonI {
+  bullet_points: BulletPointI[];
+  isLong: boolean;
+}
+export interface BulletPointsI {
+  content: BulletPointsJsonI;
+  id: number | undefined;
 }

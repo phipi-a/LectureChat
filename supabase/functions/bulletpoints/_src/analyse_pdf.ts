@@ -1,6 +1,6 @@
 import { Bulletpoint, Data } from "./interfaces.ts";
-import * as utils from "./utils.ts";
 import lecturePrompt from "./prompts/lecture.ts";
+import * as utils from "./utils.ts";
 
 function cleanLectureText(videoContent: Data[]) {
   let fullLecture = "";
@@ -61,5 +61,5 @@ export async function analyse_pdf(
     id: `${idx}`,
   }));
 
-  return bulletPointsWithId;
+  return { bullet_points: bulletPointsWithId };
 }
