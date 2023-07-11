@@ -128,7 +128,7 @@ export function Chat({
     mutation.mutate(newMessage);
   }
   function replacePageLinks(message: string) {
-    const reg = RegExp(/(\[[0-9]])/g);
+    const reg = RegExp(/(\[[0-9][0-9]?[0-9]?])/g);
     const splits = message.split(reg);
     return splits.map((split, index) => {
       if (split.match(reg)) {
@@ -152,7 +152,7 @@ export function Chat({
   }
 
   function replaceTimestamps(message: string) {
-    const reg = RegExp(/(\[[0-9][0-9]:[0-9][0-9]])/g);
+    const reg = RegExp(/(\[[0-9]?[0-9]:[0-9]?[0-9]])/g);
     const splits = message.split(reg);
     return splits.map((split, index) => {
       if (split.match(reg)) {
