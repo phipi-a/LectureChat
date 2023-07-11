@@ -15,6 +15,12 @@ import { SnackbarProvider } from "notistack";
 import React, { useContext } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+const ReactQueryDevtoolsProduction = React.lazy(() =>
+  import("react-query/devtools/development").then((d) => ({
+    // ---------------------------^^^^^^^^^
+    default: d.ReactQueryDevtools,
+  }))
+);
 
 function InnerLoadingLayout({ children }: { children: any }) {
   const { isPending } = useContext(LoadingContext);

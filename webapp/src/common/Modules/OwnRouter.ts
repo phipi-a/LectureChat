@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { LoadingContext } from "../Contexts/LoadingContext/LoadingContext";

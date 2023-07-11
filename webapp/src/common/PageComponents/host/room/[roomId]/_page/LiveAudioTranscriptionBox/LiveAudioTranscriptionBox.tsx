@@ -9,17 +9,19 @@ import {
   useInsertSelectData,
   useUpsertData,
 } from "@/utils/supabase/supabaseData";
+import { useUserData } from "@/utils/supabase/supabaseQuery";
 import { MicOff, MicOutlined } from "@mui/icons-material";
 import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import React, { useContext, useEffect } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { TranscriptionEditBox } from "../TranscriptionEditBox/TranscriptionEditBox";
 import { AudioRecorder } from "./AudioRecorder";
 
 export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
-  const { userData } = useContext(AuthContext);
-  const { currentPage } = useContext(RoomContext);
+  const { userId } = useContext(AuthContext);
+  const queryClient = useQueryClient();
+  const [userData] = useUserData(userId, queryClient);
   const [recordingState, setRecordingState] = React.useState<
     "recording" | "stoped"
   >("stoped");
@@ -27,7 +29,7 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
     React.useState<boolean>(false);
 
   const [transcriptBoxOpen, setTranscriptBoxOpen] = React.useState(false);
-  const { segments, setSegments } = useContext(RoomContext);
+  const { segments, setSegments, currentPage } = useContext(RoomContext);
   const getInitData = useGetData(
     ["host", "room", roomId, "initData"],
     supabase.from("data").select("*").eq("room_id", roomId)
@@ -38,7 +40,8 @@ export function LiveAudioTranscriptionBox({ roomId }: { roomId: string }) {
 
   const uploadAudio = useMutation({
     mutationFn: (audioBlob: Blob) => {
-      const url = userData?.whisper_url + "/asr?&output=json&language=en&";
+      const url =
+        userData?.data?.data?.whisper_url + "/asr?&output=json&language=en&";
 
       const formData = new FormData();
       formData.append("audio_file", audioBlob);

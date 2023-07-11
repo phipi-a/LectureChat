@@ -1,9 +1,11 @@
+"use client";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import {
   useTriggerFunction,
   useUpsertData,
 } from "@/utils/supabase/supabaseData";
+import { useUserData } from "@/utils/supabase/supabaseQuery";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -23,15 +25,18 @@ import { useContext, useState } from "react";
 import { useQueryClient } from "react-query";
 
 export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
-  const { session, userId, userData, setUserData } = useContext(AuthContext);
+  const { session, userId } = useContext(AuthContext);
   const [showOpenAiApiKey, setShowOpenAiApiKey] = useState(false);
 
   const queryClient = useQueryClient();
+
+  const [userData, setUserData] = useUserData(userId, queryClient);
+
   const [whisperUrl, setWhisperUrl] = useState<string | null | undefined>(
-    userData?.whisper_url
+    userData?.data?.data?.whisper_url
   );
   const [openAiApiKey, setOpenAiApiKey] = useState<string | null | undefined>(
-    userData?.openai_key
+    userData?.data?.data?.openai_key
   );
   const [email, setEmail] = useState<string>("");
   const upsertUserSettings = useUpsertData(supabase.from("user"), {
@@ -48,9 +53,11 @@ export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
       closeDialog();
       setUserData({
         id: userId!,
-        whisper_url: whisperUrl!,
+        whisper_url: whisperUrl?.endsWith("/")
+          ? whisperUrl.slice(0, -1)
+          : whisperUrl,
         openai_key: openAiApiKey!,
-        created_at: userData?.created_at,
+        created_at: userData?.data?.data?.created_at,
       });
     },
   });

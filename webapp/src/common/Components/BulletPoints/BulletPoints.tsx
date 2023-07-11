@@ -13,6 +13,7 @@ import {
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import { time2sec } from "@/utils/helper";
 import { useGetDataN2 } from "@/utils/supabase/supabaseData";
+import { useUserData } from "@/utils/supabase/supabaseQuery";
 import { BulletPoint } from "./BulletPoint";
 
 interface BulletpointSection {
@@ -135,8 +136,9 @@ export function BulletPoints({
   onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
 }) {
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
+  const { userId } = useContext(AuthContext);
   const queryClient = useQueryClient();
-  const { userData } = useContext(AuthContext);
+  const [userData, setUserData] = useUserData(userId, queryClient);
 
   const [bulletPointsData, setBulletPointsData] = useGetDataN2<
     BulletPointsI,
@@ -147,7 +149,7 @@ export function BulletPoints({
       .from("bulletpoints")
       .select("*")
       .eq("room_id", roomId)
-      .eq("user_id", userData?.id)
+      .eq("user_id", userId)
       .single(),
     (data) => {
       if (data.data === null) {
@@ -185,7 +187,7 @@ export function BulletPoints({
       return supabase.functions.invoke("bulletpoints", {
         body: {
           roomId,
-          openaiKey: userData?.openai_key,
+          openaiKey: userData?.data?.data?.openai_key,
         },
       });
     },

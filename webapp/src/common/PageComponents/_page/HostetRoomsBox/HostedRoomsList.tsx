@@ -36,7 +36,6 @@ export function HostedRoomsList() {
     supabase.from("room").select("*").order("created_at", { ascending: false })
   );
   const router = useOwnRouter();
-
   return (
     <Container
       maxWidth="md"
