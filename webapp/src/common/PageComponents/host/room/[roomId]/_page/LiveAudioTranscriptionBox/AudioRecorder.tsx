@@ -16,6 +16,10 @@ export function AudioRecorder({
   const animationFrameId = React.useRef<number | null>(null);
   const steamRef = React.useRef<MediaStream | null>(null);
   const [recording, setRecording] = React.useState(false);
+  const [currentValue, setCurrentValue] = React.useState(0);
+  const maxValueRef = React.useRef(200);
+  const [silence_border, setSilence_border] = React.useState(150);
+  const silence_border_ref = React.useRef(silence_border);
 
   useEffect(() => {
     if (recording) {
@@ -33,7 +37,10 @@ export function AudioRecorder({
             max = dataArray[i];
           }
         }
-        if (max < 150) {
+        maxValueRef.current = Math.max(maxValueRef.current, max);
+        setCurrentValue(max);
+        console.log(silence_border_ref.current, max);
+        if (max < silence_border_ref.current) {
           if (currentAudioState === "audio") {
             currentAudioStateTime = Date.now();
             currentAudioState = "silence";
@@ -149,5 +156,49 @@ export function AudioRecorder({
   useEffect(() => {
     stopAudioRecording();
   }, [recordingMuteState]);
-  return <></>;
+  return (
+    <>
+      <div
+        style={{
+          width: "20px",
+          height: "70px",
+          background: "rgba(0,0,0,0.5)",
+          position: "relative",
+          borderRadius: "5px",
+        }}
+        onClick={(e) => {
+          //get position relative to div
+          const rect = e.currentTarget.getBoundingClientRect();
+          const y = e.clientY - rect.top;
+          const height = rect.height;
+          const value = (y / height) * maxValueRef.current;
+          setSilence_border(value);
+          silence_border_ref.current = value;
+        }}
+      >
+        <div
+          style={{
+            top: 0,
+            position: "absolute",
+            left: 0,
+            borderRadius: "2px",
+
+            width: "20px",
+
+            height: `${(currentValue * 70) / maxValueRef.current}px`,
+            background: "red",
+          }}
+        />
+        <div
+          style={{
+            width: "20px",
+            height: `2px`,
+            top: `${(silence_border * 70) / maxValueRef.current}px`,
+            position: "absolute",
+            background: "green",
+          }}
+        />
+      </div>
+    </>
+  );
 }

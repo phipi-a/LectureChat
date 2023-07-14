@@ -19,9 +19,15 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const openaiKey = body.openaiKey;
-    const roomId = body.roomId!;
+    let openaiKey = body.openaiKey;
 
+    const roomId = body.roomId!;
+    const lastBulletpoints = body.lastBulletpoints;
+    if (roomId === "000000") {
+      console.log("Using test key");
+      openaiKey = Deno.env.get("OPENAI_TEST_KEY")!;
+    }
+    console.log("openaiKey", openaiKey);
     const openai = new OpenAI(openaiKey);
     const supabaseClient = createClient(
       // Supabase API URL - env var exported by default.
@@ -32,22 +38,27 @@ serve(async (req) => {
       // This way your row-level-security (RLS) policies are applied.
       {
         global: {
-          headers: { Authorization: req.headers.get("Authorization")! },
+          headers:
+            roomId !== "000000"
+              ? { Authorization: req.headers.get("Authorization")! }
+              : {},
         },
       }
     );
+    let user = undefined;
+    if (roomId !== "000000") {
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
 
-    const {
-      data: { user },
-    } = await supabaseClient.auth.getUser();
-
-    if (!user) throw new UnauthorizedError("Unauthorized user");
-
+      if (!user) throw new UnauthorizedError("Unauthorized user");
+    }
     // Get the text from the data table
     const { data: rawData, error: dataError } = await supabaseClient
       .from("data")
       .select("*")
       .eq("room_id", roomId);
+    console.log("rawData", rawData);
 
     if (dataError) throw dataError;
 
@@ -66,48 +77,53 @@ serve(async (req) => {
           sorted,
           openai,
           supabaseClient,
-          roomId
+          roomId,
+          lastBulletpoints
         );
       }
     }
 
     // Save the bullet points in the database
-    let id = undefined;
-    const {
-      data,
-      error: updateError,
-      count,
-    } = await supabaseClient
-      .from("bulletpoints")
-      .update(
-        {
-          bulletpoints: JSON.stringify(bulletPoints),
-          user_id: user.id,
-          room_id: roomId,
-        },
-        { count: "exact" }
-      )
-      .eq("room_id", roomId)
-      .select("id");
-
-    if (updateError) throw updateError;
-
-    if (count === 0) {
-      // Insert the bullet points in the database
-      const { data, error: insertError } = await supabaseClient
+    let id: any = undefined;
+    if (roomId !== "000000") {
+      const {
+        data,
+        error: updateError,
+        count,
+      } = await supabaseClient
         .from("bulletpoints")
-        .insert({
-          bulletpoints: JSON.stringify(bulletPoints),
-          user_id: user.id,
-          room_id: roomId,
-        })
-        .select("id")
-        .single();
+        .update(
+          {
+            bulletpoints: JSON.stringify(bulletPoints),
+            user_id: user.id,
+            room_id: roomId,
+          },
+          { count: "exact" }
+        )
+        .eq("room_id", roomId)
+        .select("id");
 
-      if (insertError) throw insertError;
-      id = data?.id;
+      if (updateError) throw updateError;
+
+      if (count === 0) {
+        // Insert the bullet points in the database
+        const { data, error: insertError } = await supabaseClient
+          .from("bulletpoints")
+          .insert({
+            bulletpoints: JSON.stringify(bulletPoints),
+            user_id: user.id,
+            room_id: roomId,
+          })
+          .select("id")
+          .single();
+
+        if (insertError) throw insertError;
+        id = data?.id;
+      } else {
+        id = data?.[0].id;
+      }
     } else {
-      id = data?.[0].id;
+      id = 0;
     }
 
     return new Response(JSON.stringify({ content: bulletPoints, id }), {

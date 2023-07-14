@@ -18,12 +18,13 @@ class BodyError extends Error {
     this.name = "BodyError";
   }
 }
-console.log("Hello from Functions!");
 async function chat(
   messages: { role: "user" | "assistant"; content: string }[],
   system_prompt: string,
   openaiApiKey: string
 ) {
+  console.log(system_prompt);
+  console.log(messages);
   const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
     body: JSON.stringify({
       model: model_name,
@@ -63,16 +64,23 @@ You are a chatbot for a video and receive the bullet points of the video. Answer
   If you reference the video, please use the time in brackets, e.g. [1:23] for 1 minute and 23 seconds. If you don't know the answer, just say "I don't know".
 `;
 
-async function getSystemPrompt(room_id: string, supabaseClient: any) {
-  const { data: rawData, error: dataError } = await supabaseClient
-    .from("bulletpoints")
-    .select("bulletpoints")
-    .eq("room_id", room_id)
-    .single();
-  if (rawData.bulletpoints.page !== undefined) {
-    return pdf_prompt + rawData.bulletpoints;
+async function getSystemPrompt(
+  room_id: string,
+  supabaseClient: any,
+  bullet_points?: any
+) {
+  if (bullet_points === undefined) {
+    const { data: rawData, error: dataError } = await supabaseClient
+      .from("bulletpoints")
+      .select("bulletpoints")
+      .eq("room_id", room_id)
+      .single();
+    bullet_points = rawData.bulletpoints;
+  }
+  if (bullet_points?.page !== undefined) {
+    return pdf_prompt + bullet_points;
   } else {
-    return video_prompt + rawData.bulletpoints;
+    return video_prompt + bullet_points;
   }
 }
 serve(async (req) => {
@@ -84,6 +92,7 @@ serve(async (req) => {
     // TODO: Save openai key in supabase
     const body = await req.json();
     const id = body.id;
+    const bullet_points = JSON.stringify(body.bullet_points);
     const messages = body.messages;
     const room_id = body.room_id;
     const bulletpoint_id = body.bulletpoint_id;
@@ -105,30 +114,44 @@ serve(async (req) => {
       // This way your row-level-security (RLS) policies are applied.
       {
         global: {
-          headers: { Authorization: req.headers.get("Authorization")! },
+          headers:
+            room_id !== "000000"
+              ? { Authorization: req.headers.get("Authorization")! }
+              : {},
         },
       }
     );
+    let user = undefined;
+    let openaiKey;
+    if (room_id !== "000000") {
+      console.log("Using user key", room_id);
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
 
-    const {
-      data: { user },
-    } = await supabaseClient.auth.getUser();
-    if (!user) throw new UnauthorizedError("Unauthorized user");
-    const user_id = user?.id;
-
-    const openaiKey = await getOpenAIKey(user_id, supabaseClient);
-
-    const system_prompt = await getSystemPrompt(room_id, supabaseClient);
+      if (!user) throw new UnauthorizedError("Unauthorized user");
+      openaiKey = await getOpenAIKey(user.id, supabaseClient);
+    } else {
+      console.log("Using test key");
+      openaiKey = Deno.env.get("OPENAI_TEST_KEY")!;
+    }
+    const system_prompt = await getSystemPrompt(
+      room_id,
+      supabaseClient,
+      bullet_points
+    );
 
     const res = await chat(messages, system_prompt, openaiKey);
 
-    const uploadResponse = await supabaseClient.from("chat").upsert({
-      id: id,
-      bulletpoint_id: bulletpoint_id,
-      single_bulletpoint_id: single_bulletpoint_id,
-      content: messages.concat(res),
-    });
-    console.log(uploadResponse);
+    if (room_id !== "000000") {
+      const uploadResponse = await supabaseClient.from("chat").upsert({
+        id: id,
+        bulletpoint_id: bulletpoint_id,
+        single_bulletpoint_id: single_bulletpoint_id,
+        content: messages.concat(res),
+      });
+      console.log(uploadResponse);
+    }
 
     // Save the bullet points in the database
 

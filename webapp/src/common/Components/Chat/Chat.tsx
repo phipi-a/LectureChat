@@ -31,7 +31,8 @@ export function Chat({
   roomId: string;
   displayCloseButton?: boolean;
 }) {
-  const { setPlayPosition, setCurrentPage } = useContext(RoomContext);
+  const { setPlayPosition, setCurrentPage, bullet_points } =
+    useContext(RoomContext);
   const [currentMessage, setCurrentMessage] = React.useState("");
   const queryClient = useQueryClient();
 
@@ -73,6 +74,7 @@ export function Chat({
     }
   );
 
+  console.log(messagesData);
   const mutation = useMutation({
     mutationFn: async (newMessage: MessageI) => {
       messagesData.data!.messages.push(newMessage);
@@ -89,6 +91,10 @@ export function Chat({
           messages: messagesData.data!.messages,
           bulletpoint_id: bulletPointsId,
           single_bulletpoint_id: bulletpoint?.id,
+          bullet_points:
+            roomId === "000000"
+              ? JSON.stringify(bullet_points?.content.bullet_points)
+              : undefined,
         },
       });
     },

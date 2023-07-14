@@ -135,10 +135,33 @@ export function BulletPoints({
   roomId: string;
   onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
 }) {
-  const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
+  const { segments, setCurrentPage, setPlayPosition, setBulletPoints } =
+    useContext(RoomContext);
   const { userId } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const [userData, setUserData] = useUserData(userId, queryClient);
+  const isTestRoom = roomId === "000000";
+  const mutation = useMutation({
+    mutationFn: async () => {
+      return supabase.functions.invoke("bulletpoints", {
+        body: {
+          roomId,
+          openaiKey: userData?.data?.data?.openai_key,
+          lastBulletpoints: isTestRoom
+            ? JSON.stringify(bulletPointsData.data?.content.bullet_points)
+            : undefined,
+        },
+      });
+    },
+    onSuccess: (res) => {
+      if (!res) return;
+
+      if (res.data) {
+        setBulletPointsData(res.data);
+        setBulletPoints(res.data);
+      }
+    },
+  });
 
   const [bulletPointsData, setBulletPointsData] = useGetDataN2<
     BulletPointsI,
@@ -175,30 +198,18 @@ export function BulletPoints({
     {
       onSuccess: (data) => {
         // If no bullet points are found
-        if (data?.error) {
-          //mutation.mutate();
+        if (data.id === undefined) {
+          console.log("no bullet points found");
         }
       },
     }
   );
 
-  const mutation = useMutation({
-    mutationFn: async () => {
-      return supabase.functions.invoke("bulletpoints", {
-        body: {
-          roomId,
-          openaiKey: userData?.data?.data?.openai_key,
-        },
-      });
-    },
-    onSuccess: (res) => {
-      if (!res) return;
-
-      if (res.data) {
-        setBulletPointsData(res.data);
-      }
-    },
-  });
+  useEffect(() => {
+    if (bulletPointsData.data?.id === undefined) {
+      mutation.mutate();
+    }
+  }, []);
 
   // Read bulletpoints from db
 
