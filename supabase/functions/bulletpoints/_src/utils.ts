@@ -9,9 +9,10 @@ export class OpenAI {
   }
 
   public async query(
-    prompt: string,
     system_prompt: string,
-    model: string = "gpt-3.5-turbo-16k"
+    prompt: string,
+    model: string = "gpt-3.5-turbo-16k",
+    temperature: number = 0
   ) {
     const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
       body: JSON.stringify({
@@ -20,6 +21,7 @@ export class OpenAI {
           { role: "system", content: system_prompt },
           { role: "user", content: prompt },
         ],
+        temperature,
       }),
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
