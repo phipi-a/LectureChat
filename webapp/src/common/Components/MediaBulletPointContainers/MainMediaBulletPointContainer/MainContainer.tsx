@@ -7,7 +7,7 @@ import {
   SubtitlesOutlined,
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Tab, Typography } from "@mui/material";
+import { Box, Tab, Typography, useTheme } from "@mui/material";
 import { Resizable } from "re-resizable";
 import React, { useContext, useRef } from "react";
 import { BulletPointsSuspense } from "../../BulletPoints/BulletPoints";
@@ -25,6 +25,7 @@ export function MainContainer({
   setWidth: React.Dispatch<React.SetStateAction<number>>;
   roomId: string;
 }) {
+  const theme = useTheme();
   const { segments, setCurrentPage, setPlayPosition } = useContext(RoomContext);
   const [currentTab, setCurrentTab] = React.useState("1");
   const [chatBulletpoint, setChatBulletpoint] =
@@ -67,7 +68,8 @@ export function MainContainer({
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          borderRight: "3px solid #1565c0",
+          borderRight: "3px solid ",
+          borderColor: theme.palette.divider,
         }}
         enable={{
           top: false,
@@ -181,7 +183,8 @@ export function MainContainer({
           display: chatBulletpoint ? "flex" : "none",
           flexDirection: "column",
           justifyContent: "center",
-          borderLeft: "3px solid #1565c0",
+          borderLeft: "3px solid",
+          borderColor: theme.palette.divider,
           overflow: "hidden",
         }}
         enable={{
