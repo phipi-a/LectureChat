@@ -4,7 +4,13 @@ import React, { useCallback, useEffect } from "react";
 import { pdfjs } from "react-pdf";
 
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
-import { Box, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import { Document, Page } from "react-pdf";
 import "react-pdf/dist/cjs/Page/AnnotationLayer.css";
 import "react-pdf/dist/cjs/Page/PageCanvas";
@@ -16,9 +22,23 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 export function PdfViewer({ file, width }: { file: any; width: number }) {
-  const { currentPage, setCurrentPage } = React.useContext(RoomContext);
+  const { currentPage, setCurrentPage, segments } =
+    React.useContext(RoomContext);
+  const [autoUpdate, setAutoUpdate] = React.useState<boolean>(true);
   const [numPages, setNumPages] = React.useState(0);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (autoUpdate)
+      if (segments?.length > 0) {
+        setCurrentPage(
+          segments!
+            .sort((a, b) => {
+              return a.created_at! < b.created_at! ? 1 : 0;
+            })!
+            .at(-1)!.page!
+        );
+      }
+  }, [segments]);
 
   const pageRef = React.useRef(currentPage);
   useEffect(() => {
@@ -75,6 +95,18 @@ export function PdfViewer({ file, width }: { file: any; width: number }) {
           setCurrentPage(parseInt(e.target.value));
         }}
       ></TextField>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={autoUpdate}
+            onChange={(e) => {
+              setAutoUpdate(e.target.checked);
+            }}
+          />
+        }
+        label="auto update"
+      />
+
       <Box
         sx={{
           display: "absolute",

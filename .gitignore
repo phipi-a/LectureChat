@@ -4,3 +4,4 @@ open_ai_key.txt
 supabase/functions/.vscode/settings.json
 *.vscode/*
 node_modules
+*.env

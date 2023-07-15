@@ -5,6 +5,7 @@ import { useGetData } from "@/utils/supabase/supabaseData";
 import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useRef } from "react";
 
+import { Database } from "@/common/Interfaces/supabaseTypes";
 import dynamic from "next/dynamic";
 
 const PdfBulletpointContainerSuspense = dynamic(
@@ -27,30 +28,42 @@ const VideoBulletPointContainerSuspense = dynamic(
 );
 
 export default function Room({ params }: { params: { roomId: string } }) {
+  console.log(params.roomId);
+  let table = "room_access";
+  let field = "room_id";
+  if (params.roomId === "000000") {
+    table = "room";
+    field = "id";
+  }
+
   const getRoom = useGetData(
     [params.roomId, "room"],
-    supabase
-      .from("room_access")
-      .select("*")
-      .eq("room_id", params.roomId)
-      .single()
+    supabase.from(table).select("*").eq(field, params.roomId).single()
   );
+  let room = {} as Database["public"]["Tables"]["room_access"]["Row"];
 
-  const room = getRoom.data?.data!;
-
+  if (params.roomId === "000000") {
+    room.room_title = getRoom.data?.data?.title;
+    room.room_is_video_room = getRoom.data?.data?.is_video_room;
+    room.room_video_url = getRoom.data?.data?.video_url;
+  } else {
+    room = getRoom.data?.data;
+  }
   const { segments, setSegments } = useContext(RoomContext);
   const getInitData = useGetData(
-    [room.room_id, "initData"],
+    [params.roomId, "initData"],
     supabase!
       .from("data")
       .select("*")
-      .eq("room_id", room.room_id)
+      .eq("room_id", params.roomId)
       .order("created_at", { ascending: true }),
     {}
   );
   useEffect(() => {
+    console.log("set", getInitData.data?.data);
     setSegments(getInitData.data?.data!);
   }, [getInitData.data, setSegments]);
+  console.log("segments", segments);
   const dataRef = useRef(segments);
   useEffect(() => {
     dataRef.current = segments;
@@ -64,7 +77,7 @@ export default function Room({ params }: { params: { roomId: string } }) {
           event: "*",
           schema: "public",
           table: "data",
-          filter: "room_id=eq." + room.room_id,
+          filter: "room_id=eq." + params.roomId,
         },
 
         (payload: any) => {
@@ -97,12 +110,13 @@ export default function Room({ params }: { params: { roomId: string } }) {
     return () => {
       channel.unsubscribe();
     };
-  }, [room.room_id, setSegments]);
+  }, [params.roomId, setSegments]);
 
+  console.log(segments);
   return (
     <Box display={"flex"} flexDirection={"column"} overflow={"auto"} flex={1}>
       <Typography variant={"h4"} mb={4} mx={2} mt={1}>
-        {room.room_title} ({room.room_id})
+        {room.room_title} ({params.roomId})
       </Typography>
       <Box display={"flex"} flex={1} overflow={"auto"}>
         {room?.room_is_video_room ? (

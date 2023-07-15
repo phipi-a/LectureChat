@@ -17,10 +17,13 @@ function cleanLectureText(videoContent: Data[]) {
     }
     lastPage = page;
   }
+  return fullLecture;
 }
 
 function build_prompt(video_content: Data[], previousBulletPoints) {
+  console.log("content_build_prompt", video_content);
   const convertedText = cleanLectureText(video_content);
+  console.log("convertedText", convertedText);
 
   const prompt = `
         Previous Bullet Points:
@@ -30,7 +33,7 @@ function build_prompt(video_content: Data[], previousBulletPoints) {
         Text:
         ${convertedText}
     `;
-
+  console.log("prompt", prompt);
   return prompt;
 }
 
@@ -38,16 +41,22 @@ export async function analyse_pdf(
   video_content: Data[],
   openai: utils.OpenAI,
   supabaseClient: any,
-  roomId: string
+  roomId: string,
+  lastBulletpoints?: Bulletpoint[]
 ) {
-  const { data, error } = await supabaseClient
-    .from("bulletpoints")
-    .select("*")
-    .eq("room_id", roomId);
+  console.log("content", video_content);
+  let previousBulletPoints;
+  if (lastBulletpoints === undefined) {
+    const { data, error } = await supabaseClient
+      .from("bulletpoints")
+      .select("*")
+      .eq("room_id", roomId);
 
-  // If there are already bullet points, return them
-  const previousBulletPoints =
-    data.length > 0 ? data[0].bulletpoints : undefined;
+    // If there are already bullet points, return them
+    previousBulletPoints = data.length > 0 ? data[0].bulletpoints : undefined;
+  } else {
+    previousBulletPoints = lastBulletpoints;
+  }
 
   const prompt = build_prompt(video_content, previousBulletPoints);
 
@@ -55,6 +64,8 @@ export async function analyse_pdf(
     lecturePrompt,
     prompt
   )) as Bulletpoint[];
+  console.log(lecturePrompt);
+  console.log(prompt);
   console.log(bulletPoints);
   const bulletPointsWithId = bulletPoints.map((bulletpoint, idx) => ({
     ...bulletpoint,
