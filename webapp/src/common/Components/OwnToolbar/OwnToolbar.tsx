@@ -7,6 +7,7 @@ import React, { useContext } from "react";
 import { useQueryClient } from "react-query";
 import Link from "../Link";
 import { SettingsDialog } from "./SettingsDialog";
+import ThemeSwitcher from "./ThemeSwitcher";
 export function OwnToolbar() {
   const { loggedIn, session } = useContext(AuthContext);
   const queryClient = useQueryClient();
@@ -44,6 +45,8 @@ export function OwnToolbar() {
         </Link>
       </Typography>
       <Box sx={{ flexGrow: 1 }} />
+
+      <ThemeSwitcher />
 
       <Button
         sx={{

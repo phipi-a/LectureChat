@@ -4,17 +4,13 @@ import OwnToolbar from "@/common/Components/OwnToolbar";
 import { AuthProvider } from "@/common/Contexts/AuthContext/AuthProvider";
 import { LoadingContext } from "@/common/Contexts/LoadingContext/LoadingContext";
 import { LoadingProvider } from "@/common/Contexts/LoadingContext/LoadingProvider";
-import {
-  AppBar,
-  Box,
-  CssBaseline,
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import LectureThemeProvider from "@/common/Contexts/ThemeContext/ThemeContextProvider";
+import { AppBar, Box, CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import React, { useContext } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+
 const ReactQueryDevtoolsProduction = React.lazy(() =>
   import("react-query/devtools/development").then((d) => ({
     // ---------------------------^^^^^^^^^
@@ -44,11 +40,6 @@ export default function RootLayout({
       },
     },
   });
-  const theme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
 
   return (
     <html
@@ -69,14 +60,14 @@ export default function RootLayout({
           flexDirection: "column",
         }}
       >
-        <ThemeProvider theme={theme}>
+        <LectureThemeProvider>
           <CssBaseline />
           <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
             <QueryClientProvider client={queryClient}>
               <ReactQueryDevtools initialIsOpen={false} />
               <LoadingProvider>
                 <AuthProvider>
-                  <AppBar position="sticky">
+                  <AppBar position="sticky" color="secondary">
                     <OwnToolbar />
                   </AppBar>
                   <InnerLoadingLayout>
@@ -99,7 +90,7 @@ export default function RootLayout({
               </LoadingProvider>
             </QueryClientProvider>
           </SnackbarProvider>
-        </ThemeProvider>
+        </LectureThemeProvider>
       </body>
     </html>
   );
