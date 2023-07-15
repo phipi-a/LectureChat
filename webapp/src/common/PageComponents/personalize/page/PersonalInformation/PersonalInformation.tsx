@@ -114,11 +114,13 @@ export function PersonalInformation({
             freeSolo
             renderTags={(value: readonly string[], getTagProps) =>
               value.map((option: string, index: number) => (
-                <Chip
-                  variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
-                />
+                <div key={option}>
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                </div>
               ))
             }
             renderInput={(params) => (
@@ -161,11 +163,13 @@ export function PersonalInformation({
             freeSolo
             renderTags={(value: readonly string[], getTagProps) =>
               value.map((option: string, index: number) => (
-                <Chip
-                  variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
-                />
+                <div key={option}>
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                </div>
               ))
             }
             renderInput={(params) => (
