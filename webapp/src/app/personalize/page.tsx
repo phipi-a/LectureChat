@@ -186,7 +186,7 @@ export default function Page() {
               }}
               onClick={() => {
                 uploadData();
-                router.back();
+                router.replace("/");
               }}
             >
               Finish
