@@ -6,8 +6,8 @@ import {
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import React, { useEffect } from "react";
-import { ColorModeContext } from "./ThemeContext";
 import { useCookies } from "react-cookie";
+import { ColorModeContext } from "./ThemeContext";
 
 const getDesignTokens = (mode: PaletteMode) => ({
   palette: {

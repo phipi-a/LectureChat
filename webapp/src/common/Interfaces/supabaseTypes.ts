@@ -199,21 +199,51 @@ export interface Database {
       }
       user: {
         Row: {
+          age: number | null
           created_at: string | null
+          difficulty: string | null
+          emojis: boolean | null
+          favorite_topics: string[] | null
+          hobbies: string[] | null
           id: string
+          language: string | null
+          name: string | null
           openai_key: string | null
+          person: string | null
+          storytelling: boolean | null
+          subject_difficulty: string | null
           whisper_url: string | null
         }
         Insert: {
+          age?: number | null
           created_at?: string | null
+          difficulty?: string | null
+          emojis?: boolean | null
+          favorite_topics?: string[] | null
+          hobbies?: string[] | null
           id: string
+          language?: string | null
+          name?: string | null
           openai_key?: string | null
+          person?: string | null
+          storytelling?: boolean | null
+          subject_difficulty?: string | null
           whisper_url?: string | null
         }
         Update: {
+          age?: number | null
           created_at?: string | null
+          difficulty?: string | null
+          emojis?: boolean | null
+          favorite_topics?: string[] | null
+          hobbies?: string[] | null
           id?: string
+          language?: string | null
+          name?: string | null
           openai_key?: string | null
+          person?: string | null
+          storytelling?: boolean | null
+          subject_difficulty?: string | null
           whisper_url?: string | null
         }
         Relationships: [

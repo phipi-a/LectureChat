@@ -182,6 +182,31 @@ export function useUpsertData<
     useMutationOptions
   );
 }
+
+export function useUpsertSelectData<
+  Relation extends GenericTable | GenericView,
+  Row extends Relation extends { Insert: unknown } ? Relation["Insert"] : never,
+  RRow extends Relation extends { Row: unknown } ? Relation["Row"] : never
+>(
+  query: PostgrestQueryBuilder<any, Relation>,
+  useMutationOptions?: UseMutationOptions<
+    PostgrestSingleResponse<RRow[]>,
+    PostgrestError,
+    Row
+  >
+): UseMutationResult<PostgrestSingleResponse<RRow[]>, PostgrestError, Row> {
+  useMutationOptions = addDefaultErrorHandling(
+    useMutationOptions,
+    enqueueSnackbar
+  );
+  return useMutation<PostgrestSingleResponse<RRow[]>, PostgrestError, Row>(
+    (data) => {
+      return awaitData(query.upsert(data).select());
+    },
+    useMutationOptions
+  );
+}
+
 export function useInsertData<
   Relation extends GenericTable | GenericView,
   Row extends Relation extends { Insert: unknown } ? Relation["Insert"] : never

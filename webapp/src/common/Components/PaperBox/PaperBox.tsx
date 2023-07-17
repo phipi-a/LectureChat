@@ -1,11 +1,12 @@
 "use client";
 
-import { Box, Divider, Paper, Typography } from "@mui/material";
-
+import { Box, Divider, Paper, Typography, useTheme } from "@mui/material";
 export function PaperBox({ children, title, button, warning = false }: any) {
+  const theme = useTheme();
+
   return (
     <Box overflow={"auto"} width={"100%"}>
-      <Paper>
+      <Paper variant={theme.palette.mode === "dark" ? "elevation" : "outlined"}>
         <Box height={"100%"} flexDirection={"column"} display={"flex"}>
           <Box display={"flex"} alignItems={"center"}>
             <Typography
