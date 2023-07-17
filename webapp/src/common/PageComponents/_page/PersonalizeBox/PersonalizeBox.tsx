@@ -62,7 +62,7 @@ export function PersonalizeBox() {
             m: 1,
           }}
           onClick={() => {
-            router.push("/personalize");
+            router.replace("/personalize");
           }}
         >
           <Typography

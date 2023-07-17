@@ -3,8 +3,9 @@ import { BulletPointI, ChatI, MessageI } from "@/common/Interfaces/Interfaces";
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { time2sec } from "@/utils/helper";
-import { useGetDataN2 } from "@/utils/supabase/supabaseData";
-import { CloseOutlined, Send } from "@mui/icons-material";
+import { useDeleteData, useGetDataN2 } from "@/utils/supabase/supabaseData";
+import { CloseOutlined, DeleteOutline, Send } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
   IconButton,
@@ -31,6 +32,16 @@ export function Chat({
   roomId: string;
   displayCloseButton?: boolean;
 }) {
+  const default_starting_message: ChatI = {
+    id: undefined,
+    messages: [
+      {
+        role: "user",
+        content: bulletpoint?.bullet_point!,
+      },
+    ],
+  };
+
   const { setPlayPosition, setCurrentPage, bullet_points } =
     useContext(RoomContext);
   const [currentMessage, setCurrentMessage] = React.useState("");
@@ -49,15 +60,7 @@ export function Chat({
       .single(),
     (data) => {
       if (data.data === null) {
-        return {
-          id: undefined,
-          messages: [
-            {
-              role: "user",
-              content: "i want to talk about: " + bulletpoint?.bullet_point,
-            },
-          ],
-        };
+        return default_starting_message;
       }
 
       const messages: MessageI[] = data.data!.content as unknown as MessageI[];
@@ -73,6 +76,12 @@ export function Chat({
       enabled: bulletPointsId !== undefined && bulletpoint?.id !== undefined,
     }
   );
+
+  const deleteCurrentChat = useDeleteData(supabase.from("chat"), {
+    onSuccess: () => {
+      setMessageData(default_starting_message);
+    },
+  });
 
   console.log(messagesData);
   const mutation = useMutation({
@@ -183,6 +192,10 @@ export function Chat({
     });
   }
 
+  function onDeleteChat() {
+    deleteCurrentChat.mutate({ field: "id", value: messagesData.data!.id });
+  }
+
   return (
     <Box display={"flex"} flexDirection={"column"} height={"100%"}>
       <Box
@@ -194,6 +207,12 @@ export function Chat({
           <CloseOutlined />
         </IconButton>
       </Box>
+      <Box
+        alignItems={"center"}
+        display={"flex"}
+        p={1}
+        justifyContent={"center"}
+      ></Box>
       <Box overflow={"auto"} height={"100%"} flex={1} display={"flex"}>
         <Box
           flex={1}
@@ -205,6 +224,24 @@ export function Chat({
           overflow={"auto"}
         >
           <Box flex={1} m={1} overflow={"auto"}>
+            <Box
+              flex={1}
+              justifyContent={"center"}
+              display={messagesData.data!.messages.length > 1 ? "flex" : "none"}
+            >
+              <LoadingButton
+                variant="text"
+                color="inherit"
+                loading={deleteCurrentChat.isLoading}
+                sx={{
+                  opacity: 0.5,
+                }}
+                onClick={onDeleteChat}
+              >
+                Delete Chat
+                <DeleteOutline />
+              </LoadingButton>
+            </Box>
             <List>
               {messagesData
                 .data!.messages.concat(loadingArray)
