@@ -18,17 +18,101 @@ class BodyError extends Error {
     this.name = "BodyError";
   }
 }
+async function getPersonalizedPrompt(
+  user_id: string,
+  supabaseClient: any,
+  room_id: string
+) {
+  let userData = {
+    name: null,
+    age: null,
+    hobbies: null,
+    favorite_tobics: null,
+    subject_difficulty: null,
+    difficulty: null,
+    emojis: null,
+    person: null,
+    storytelling: null,
+    language: null,
+  };
+
+  if (room_id !== "000000") {
+    const user = await supabaseClient
+      .from("user")
+      .select("*")
+      .eq("id", user_id)
+      .single();
+    userData = user.data;
+  } else {
+    const user = await supabaseClient
+      .from("room")
+      .select("*, user!inner(*)")
+      .eq("id", "000000")
+      .single();
+    userData = user.data.user;
+
+    console.log("use other user", userData);
+  }
+  let personalized_prompt = "My Profile:\n";
+  if (userData.name) {
+    personalized_prompt += `Name: ${userData.name}\n`;
+  }
+  if (userData.age) {
+    personalized_prompt += `Age: ${userData.age}\n`;
+  }
+  if (userData.hobbies) {
+    personalized_prompt += `Hobbies: ${userData.hobbies}\n`;
+  }
+  if (userData.favorite_tobics) {
+    personalized_prompt += `Favorite Topics: ${(
+      userData.favorite_tobics as any[]
+    ).join(", ")}\n`;
+  }
+  if (userData.subject_difficulty) {
+    personalized_prompt += `Subject Difficulty: ${userData.subject_difficulty}\n`;
+  }
+  if (userData.difficulty) {
+    personalized_prompt += `Learning Difficulty: ${userData.difficulty}\n`;
+  }
+  if (userData.storytelling) {
+    personalized_prompt += `- likes storytelling\n`;
+  }
+  personalized_prompt += `\n`;
+  if (userData.emojis) {
+    personalized_prompt += `Use lots of emojis in each response to structure and divide it up. `;
+  }
+  if (userData.person) {
+    personalized_prompt += ` Anwer like you are a ${userData.person}.`;
+  }
+  if (userData.language) {
+    personalized_prompt += ` Answer in ${userData.language}.`;
+  }
+  if (userData.hobbies) {
+    personalized_prompt += ` Try to base your answer on: ${(
+      userData.hobbies as any[]
+    ).join(" or ")}.`;
+  }
+
+  personalized_prompt += `Tailor your answer to me so that it is the perfect answer for me. Answer as short as possible`;
+  return personalized_prompt;
+}
 async function chat(
   messages: { role: "user" | "assistant"; content: string }[],
   system_prompt: string,
-  openaiApiKey: string
+  openaiApiKey: string,
+  personalized_prompt: string
 ) {
+  console.log(personalized_prompt);
   console.log(system_prompt);
   console.log(messages);
   const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
     body: JSON.stringify({
       model: model_name,
-      messages: [{ role: "system", content: system_prompt }, ...messages],
+      messages: [
+        { role: "system", content: system_prompt },
+        { role: "user", content: personalized_prompt },
+        ...messages,
+      ],
     }),
     headers: {
       Authorization: `Bearer ${openaiApiKey}`,
@@ -39,6 +123,7 @@ async function chat(
   const data = await response.json();
 
   // TODO: handle quota error
+  console.log(data);
 
   const rawResponse = {
     role: "assistant",
@@ -63,12 +148,16 @@ const video_prompt = `
 You are a chatbot for a video and receive the bullet points of the video. Answer each question in detail and try to reference the video if possible.
   If you reference the video, please use the time in brackets, e.g. [1:23] for 1 minute and 23 seconds. If you don't know the answer, just say "I don't know".
 `;
-
+const useEmojiPrompt = `
+Use lots of emojis at least 3 in each reply to make them easier to read and easy to divide. 
+`;
 async function getSystemPrompt(
   room_id: string,
   supabaseClient: any,
-  bullet_points?: any
+  bullet_points?: any,
+  user_id?: string
 ) {
+  let final_prompt = "";
   if (bullet_points === undefined) {
     const { data: rawData, error: dataError } = await supabaseClient
       .from("bulletpoints")
@@ -78,10 +167,12 @@ async function getSystemPrompt(
     bullet_points = rawData.bulletpoints;
   }
   if (bullet_points?.page !== undefined) {
-    return pdf_prompt + bullet_points;
+    final_prompt += pdf_prompt + bullet_points;
   } else {
-    return video_prompt + bullet_points;
+    final_prompt += video_prompt + bullet_points;
   }
+
+  return final_prompt;
 }
 serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.
@@ -121,15 +212,16 @@ serve(async (req) => {
         },
       }
     );
+    supabaseClient;
     let user = undefined;
     let openaiKey;
     if (room_id !== "000000") {
       console.log("Using user key", room_id);
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
-
+      const us = await supabaseClient.auth.getUser();
+      user = us.data.user;
+      console.log(user);
       if (!user) throw new UnauthorizedError("Unauthorized user");
+
       openaiKey = await getOpenAIKey(user.id, supabaseClient);
     } else {
       console.log("Using test key");
@@ -138,10 +230,22 @@ serve(async (req) => {
     const system_prompt = await getSystemPrompt(
       room_id,
       supabaseClient,
-      bullet_points
+      bullet_points,
+      user?.id
     );
 
-    const res = await chat(messages, system_prompt, openaiKey);
+    const personalized_prompt = await getPersonalizedPrompt(
+      user?.id,
+      supabaseClient,
+      room_id
+    );
+
+    const res = await chat(
+      messages,
+      system_prompt,
+      openaiKey,
+      personalized_prompt
+    );
 
     if (room_id !== "000000") {
       const uploadResponse = await supabaseClient.from("chat").upsert({

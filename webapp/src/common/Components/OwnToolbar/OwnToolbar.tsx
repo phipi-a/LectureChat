@@ -80,7 +80,7 @@ export function OwnToolbar() {
           display: loggedIn ? "none" : "block",
         }}
         onClick={() => {
-          router.push("/signin");
+          router.replace("/signin");
         }}
       >
         Sign in

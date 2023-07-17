@@ -49,7 +49,7 @@ export function EditRoomDialog({
   const queryClient = useQueryClient();
   const deleteRoom = useDeleteData(supabase.from("room"), {
     onSuccess: (res) => {
-      router.push("/");
+      router.replace("/");
       queryClient.invalidateQueries({
         queryKey: ["host_rooms"],
       });
