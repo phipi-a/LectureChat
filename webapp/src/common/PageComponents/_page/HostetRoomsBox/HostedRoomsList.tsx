@@ -33,7 +33,11 @@ export function HostedRoomsList() {
 
   const rooms = useGetData(
     ["host_rooms", userId],
-    supabase.from("room").select("*").order("created_at", { ascending: false })
+    supabase
+      .from("room")
+      .select("*")
+      .eq("id", userId)
+      .order("created_at", { ascending: false })
   );
   const router = useOwnRouter();
   return (
