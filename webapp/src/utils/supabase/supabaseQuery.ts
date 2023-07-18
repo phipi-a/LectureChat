@@ -8,7 +8,7 @@ export const useUserData = (
 ) => {
   return useGetData2(
     ["userData", user_id],
-    supabase.from("user").select("*").single(),
+    supabase.from("user").select("*").eq("id", user_id).single(),
     queryClient,
     {
       enabled: user_id !== null,

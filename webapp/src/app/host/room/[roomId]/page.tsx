@@ -1,9 +1,10 @@
 "use client";
+import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { useGetData } from "@/utils/supabase/supabaseData";
 import Box from "@mui/material/Box";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./page.css";
 
 const HostRoomHeader = dynamic(
@@ -53,11 +54,17 @@ const VideoTranscriptionBoxSuspense = dynamic(
 
 export default function Room({ params }: { params: { roomId: string } }) {
   const [whisperUrl, setWhisperUrl] = useState<string>("http://localhost:9000");
+  const { userId } = useContext(AuthContext);
 
   const getRoom = useGetData(
     ["host", "room", params.roomId],
 
-    supabase.from("room").select("*").eq("id", params.roomId).single()
+    supabase
+      .from("room")
+      .select("*")
+      .eq("id", params.roomId)
+      .eq("user_id", userId)
+      .single()
   );
 
   const room = getRoom.data?.data;

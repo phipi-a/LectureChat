@@ -79,7 +79,7 @@ async function getPersonalizedPrompt(
   }
   personalized_prompt += `\n`;
   if (userData.emojis) {
-    personalized_prompt += `Use lots of emojis in each response to structure and divide it up. `;
+    personalized_prompt += `Use lots of emojis (at least 3 per answer) in each response to structure and divide them up. `;
   }
   if (userData.person) {
     personalized_prompt += ` Anwer like you are a ${userData.person}.`;
@@ -148,9 +148,7 @@ const video_prompt = `
 You are a chatbot for a video and receive the bullet points of the video. Answer each question in detail and try to reference the video if possible.
   If you reference the video, please use the time in brackets, e.g. [1:23] for 1 minute and 23 seconds. If you don't know the answer, just say "I don't know".
 `;
-const useEmojiPrompt = `
-Use lots of emojis at least 3 in each reply to make them easier to read and easy to divide. 
-`;
+
 async function getSystemPrompt(
   room_id: string,
   supabaseClient: any,
