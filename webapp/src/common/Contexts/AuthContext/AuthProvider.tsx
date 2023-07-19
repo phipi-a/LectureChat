@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import CenteredLoading from "@/common/Components/CenteredLoading";
 import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { Session } from "@supabase/supabase-js";
+import { enqueueSnackbar } from "notistack";
 import { supabase } from "../../Modules/SupabaseClient";
 import { AuthContext } from "./AuthContext";
 
@@ -14,6 +15,9 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
 
   useEffect(() => {
     if (window.location.href.includes("type=signup")) {
+      enqueueSnackbar("Email Successfully Verified!", {
+        variant: "success",
+      });
       console.log("signup");
       setSession(null);
       router.replace("/signin");
