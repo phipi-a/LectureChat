@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
       setSession(session);
       setEvent(event);
     });
-  }, [supabase]);
+  }, [supabase, supabase.auth]);
   console.log(session);
   console.log(event);
 
