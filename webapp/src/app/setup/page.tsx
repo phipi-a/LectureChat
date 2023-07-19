@@ -42,7 +42,7 @@ export default function SetupPage() {
               openai.
             </Box>
             <Box component={"span"} color={"text.primary"}>
-              Please head over to{" "}
+              {"Please head over to"}
               <Link href={"https://platform.openai.com/"}>OpenAI</Link> an
               create an account. You can then setup a new key by clicking on
               your profile picture, then on "View API keys" and then click on
@@ -60,16 +60,17 @@ export default function SetupPage() {
             Whisper 👂
             <br />
             <Box component={"span"} color={"text.primary"}>
-              For speach to text we require a self hosted instance of the
-              whisper asr service. You can find the source code and setup
-              instructions on the{" "}
+              {
+                "For speach to text we require a self hosted instance of the whisper asr service. You can find the source code and setup instructions on the "
+              }
               <Link
                 href={"https://github.com/ahmetoner/whisper-asr-webservice"}
               >
                 github page
               </Link>
-              . After setting up the docker image you can add the url to the
-              settings.
+              {
+                ". After setting up the docker image you can add the url to the settings."
+              }
             </Box>
           </Typography>
           <br />
