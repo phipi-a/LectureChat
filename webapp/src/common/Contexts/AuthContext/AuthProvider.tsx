@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 
 import CenteredLoading from "@/common/Components/CenteredLoading";
-import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "../../Modules/SupabaseClient";
 import { AuthContext } from "./AuthContext";
@@ -11,14 +10,11 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [event, setEvent] = useState<string | null>(null);
 
-  const router = useOwnRouter();
-
   useEffect(() => {
     if (window.location.href.includes("type=signup")) {
-      console.log("signup");
-      router.replace("/");
+      window.history.replaceState({}, document.title, "/");
     }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     supabase.auth
