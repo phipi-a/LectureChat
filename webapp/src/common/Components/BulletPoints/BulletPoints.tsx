@@ -141,7 +141,7 @@ export function BulletPoints({
   const { userId } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const [userData, setUserData] = useUserData(userId, queryClient);
-  const isTestRoom = roomId === "000000";
+  const isTestRoom = roomId === "000000" && userId === null;
   const mutation = useMutation({
     mutationFn: async () => {
       return supabase.functions.invoke("bulletpoints", {

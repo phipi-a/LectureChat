@@ -96,19 +96,20 @@ serve(async (req) => {
       // This way your row-level-security (RLS) policies are applied.
       {
         global: {
-          headers:
-            roomId !== "000000"
-              ? { Authorization: req.headers.get("Authorization")! }
-              : {},
+          headers: { Authorization: req.headers.get("Authorization")! },
         },
       }
     );
     let user = undefined;
     let individualisationPrompt = "";
     let openaiKey = "";
-    if (roomId !== "000000") {
-      const { data } = await supabaseClient.auth.getUser();
-      user = data.user;
+    const { data } = await supabaseClient.auth.getUser();
+    user = data.user;
+
+    const isTestRoom = roomId === "000000" && user === null;
+
+    if (!isTestRoom) {
+      console.log("User", user);
 
       if (!user) throw new UnauthorizedError("Unauthorized user");
 
@@ -168,7 +169,7 @@ serve(async (req) => {
 
     // Save the bullet points in the database
     let id: any = undefined;
-    if (roomId !== "000000") {
+    if (!isTestRoom) {
       const {
         data,
         error: updateError,

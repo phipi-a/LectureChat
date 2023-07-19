@@ -1,7 +1,9 @@
 "use client";
+import EthicDialog from "@/common/Components/EthicDialog";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { useGetData } from "@/utils/supabase/supabaseData";
+import { Dialog } from "@mui/material";
 import Box from "@mui/material/Box";
 import dynamic from "next/dynamic";
 import { useContext, useState } from "react";
@@ -53,7 +55,7 @@ const VideoTranscriptionBoxSuspense = dynamic(
 );
 
 export default function Room({ params }: { params: { roomId: string } }) {
-  const [whisperUrl, setWhisperUrl] = useState<string>("http://localhost:9000");
+  const [openWarning, setOpenWarning] = useState<boolean>(true);
   const { userId } = useContext(AuthContext);
 
   const getRoom = useGetData(
@@ -92,6 +94,13 @@ export default function Room({ params }: { params: { roomId: string } }) {
           </>
         )}
       </Box>
+      <Dialog open={openWarning} fullWidth>
+        <EthicDialog
+          handleClose={function (): void {
+            setOpenWarning(false);
+          }}
+        />
+      </Dialog>
     </>
   );
 }

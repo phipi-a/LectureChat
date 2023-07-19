@@ -2,11 +2,13 @@
 import { RoomContext } from "@/common/Contexts/RoomContext/RoomContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
 import { useGetData } from "@/utils/supabase/supabaseData";
-import { Box, Typography } from "@mui/material";
+import { Box, Dialog, Typography } from "@mui/material";
 import { useContext, useEffect, useRef } from "react";
 
+import EthicDialog from "@/common/Components/EthicDialog";
 import { Database } from "@/common/Interfaces/supabaseTypes";
 import dynamic from "next/dynamic";
+import React from "react";
 
 const PdfBulletpointContainerSuspense = dynamic(
   () =>
@@ -30,6 +32,7 @@ const VideoBulletPointContainerSuspense = dynamic(
 export default function Room({ params }: { params: { roomId: string } }) {
   let table = "room_access";
   let field = "room_id";
+  const [openWarning, setOpenWarning] = React.useState(true);
   if (params.roomId === "000000") {
     table = "room";
     field = "id";
@@ -126,6 +129,13 @@ export default function Room({ params }: { params: { roomId: string } }) {
           <PdfBulletpointContainerSuspense roomId={params.roomId} />
         )}
       </Box>
+      <Dialog open={openWarning} fullWidth>
+        <EthicDialog
+          handleClose={function (): void {
+            setOpenWarning(false);
+          }}
+        />
+      </Dialog>
     </Box>
   );
 }
