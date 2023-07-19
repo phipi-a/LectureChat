@@ -8,6 +8,7 @@ import {
 import { useUserData } from "@/utils/supabase/supabaseQuery";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
+import Link from "@/common/Components/Link";
 import {
   Accordion,
   AccordionDetails,
@@ -143,6 +144,20 @@ export function SettingsDialog({ closeDialog }: { closeDialog: () => void }) {
             ),
           }}
         />
+        <div>
+          <Link
+            href="setup"
+            style={{
+              color: "grey",
+              textDecoration: "none",
+            }}
+            onClick={() => {
+              closeDialog();
+            }}
+          >
+            🛈 How to setup
+          </Link>
+        </div>
 
         <Button
           //logout
