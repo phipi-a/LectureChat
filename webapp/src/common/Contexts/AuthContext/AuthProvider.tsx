@@ -12,7 +12,8 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
 
   useEffect(() => {
     if (window.location.href.includes("type=signup")) {
-      window.history.replaceState({}, document.title, "/");
+      console.log("signup");
+      setSession(null);
     }
   }, []);
 
