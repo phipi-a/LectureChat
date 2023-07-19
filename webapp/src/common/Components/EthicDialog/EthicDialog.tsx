@@ -9,12 +9,10 @@ import {
 export function EthicDialog({ handleClose }: { handleClose: () => void }) {
   return (
     <>
-      <DialogTitle>
-        {<Typography variant="h5">⚠️ Warning</Typography>}
-      </DialogTitle>
+      <DialogTitle>⚠️ Warning</DialogTitle>
       <DialogContent>
         <Typography variant="body1">
-          This tool is powered by OpenAI's GPT-3.
+          This tool is powered by OpenAI&apos;s GPT-3.
           <br />
           <br />
           Cause of the nature of the tool, it is possible that the AI generates
