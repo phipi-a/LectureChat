@@ -42,6 +42,7 @@ export async function analyse_pdf(
   openai: utils.OpenAI,
   supabaseClient: any,
   roomId: string,
+  individualisationPrompt: string,
   lastBulletpoints?: Bulletpoint[]
 ) {
   console.log("content", video_content);
@@ -60,17 +61,12 @@ export async function analyse_pdf(
 
   const prompt = build_prompt(video_content, previousBulletPoints);
 
-  const bulletPoints = (await openai.query(
-    lecturePrompt,
-    prompt
-  )) as Bulletpoint[];
-  console.log(lecturePrompt);
-  console.log(prompt);
-  console.log(bulletPoints);
-  const bulletPointsWithId = bulletPoints.map((bulletpoint, idx) => ({
+  const bulletPoints = (
+    await openai.query(lecturePrompt, [individualisationPrompt, prompt])
+  ).map((bulletpoint, idx) => ({
     ...bulletpoint,
     id: `${idx}`,
-  }));
+  })) as Bulletpoint[];
 
-  return { bullet_points: bulletPointsWithId };
+  return { bullet_points: bulletPoints };
 }

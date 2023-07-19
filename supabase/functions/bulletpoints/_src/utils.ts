@@ -1,5 +1,5 @@
 import { BadRequestError } from "../../_shared/errors.ts";
-import { Data, Segment } from "./interfaces.ts";
+import { Bulletpoint, Data, Segment } from "./interfaces.ts";
 
 export class OpenAI {
   apiKey: string;
@@ -10,16 +10,19 @@ export class OpenAI {
 
   public async query(
     system_prompt: string,
-    prompt: string,
+    prompts: string[],
     model: string = "gpt-3.5-turbo-16k",
-    temperature: number = 0
+    temperature: number = 0.4
   ) {
+    console.log("System Prompt", system_prompt);
+    console.log("Prompt", prompts);
+
     const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
       body: JSON.stringify({
         model,
         messages: [
           { role: "system", content: system_prompt },
-          { role: "user", content: prompt },
+          ...prompts.map((prompt) => ({ role: "user", content: prompt })),
         ],
         temperature,
       }),
@@ -34,6 +37,8 @@ export class OpenAI {
 
     try {
       const rawResponse = data.choices[0]["message"]["content"];
+
+      console.log("Raw Response", rawResponse);
       return JSON.parse(rawResponse);
     } catch (e) {
       console.error("Response", data);

@@ -13,9 +13,20 @@ export interface MessageI {
   role: "user" | "assistant";
   content: string;
 }
-export interface BulletPointsJsonI {
+
+// e.g. { "title": "Sparse Coding", "start": "2:05", "end": "14:17" },
+export interface Section {
+  title: string;
+  start: string;
+  end: string;
+}
+export interface BulletpointSection extends Section {
   bullet_points: BulletPointI[];
-  isLong: boolean;
+}
+export interface BulletPointsJsonI {
+  bullet_points: BulletPointI[] | undefined;
+  sections: BulletpointSection[] | undefined;
+  isLong: boolean | undefined;
 }
 export interface BulletPointsI {
   content: BulletPointsJsonI;

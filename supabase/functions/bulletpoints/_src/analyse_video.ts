@@ -50,11 +50,18 @@ function cut_into_sections(
   return video_sections;
 }
 
-async function analyse_short(video_content: Data[], openai: utils.OpenAI) {
+async function analyse_short(
+  video_content: Data[],
+  openai: utils.OpenAI,
+  individualisationPrompt: string
+) {
   const segments = utils.cleanText(video_content);
   const convertedText = utils.segments_to_string(segments);
   const bulletPoints = (
-    (await openai.query(shortVideoPrompt, convertedText)) as Bulletpoint[]
+    await openai.query(shortVideoPrompt, [
+      individualisationPrompt,
+      convertedText,
+    ])
   ).map((bulletpoint, idx) => ({
     ...bulletpoint,
     id: `${idx}`,
@@ -66,15 +73,18 @@ async function analyse_short(video_content: Data[], openai: utils.OpenAI) {
   } as VideoBulletPoints;
 }
 
-async function analyse_long(video_content: Data[], openai: utils.OpenAI) {
+async function analyse_long(
+  video_content: Data[],
+  openai: utils.OpenAI,
+  individualisationPrompt: string
+) {
   const segments = utils.cleanText(video_content);
   const convertedText = utils.segments_to_string(segments);
 
   // Get time sections of video
-  const sectionsRaw = (await openai.query(
-    subsectionPrompt,
-    convertedText
-  )) as Section[];
+  const sectionsRaw = (await openai.query(subsectionPrompt, [
+    convertedText,
+  ])) as Section[];
 
   const sections = sectionsRaw.map((section) => {
     return {
@@ -103,19 +113,22 @@ async function analyse_long(video_content: Data[], openai: utils.OpenAI) {
       prev_summary == "" ? "" : "Summary: " + prev_summary
     }\n\n${current}`;
 
-    const res = await openai.query(subsectionBulletPointPrompt, prompt_content);
+    const res = await openai.query(subsectionBulletPointPrompt, [
+      individualisationPrompt,
+      prompt_content,
+    ]);
 
     prev_summary = res.summary;
-    const bullet_points = res.bullet_points as Bulletpoint[];
+    const bulletPoints = res.bullet_points.map((bulletpoint, idx) => ({
+      ...bulletpoint,
+      id: `${i}-${idx}`,
+    }));
 
     bulletpoints.sections!.push({
       title: section.title,
       start: section.start,
       end: section.end,
-      bullet_points: bullet_points.map((bullet_point, idx) => ({
-        ...bullet_point,
-        id: `${i}-${idx}`,
-      })),
+      bullet_points: bulletPoints,
     });
   }
 
@@ -124,14 +137,15 @@ async function analyse_long(video_content: Data[], openai: utils.OpenAI) {
 
 export async function analyse_video(
   video_content: Data[],
-  openai: utils.OpenAI
+  openai: utils.OpenAI,
+  individualisationPrompt: string
 ) {
   const length = video_content[video_content.length - 1].video_end_ms;
   const maxLength = 60 * 20; // 20 minutes
 
   if (length && length > maxLength) {
-    return await analyse_long(video_content, openai);
+    return await analyse_long(video_content, openai, individualisationPrompt);
   } else {
-    return await analyse_short(video_content, openai);
+    return await analyse_short(video_content, openai, individualisationPrompt);
   }
 }

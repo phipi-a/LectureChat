@@ -36,7 +36,7 @@ function BulletPointList({
   setCurrentPage,
   onOpenChat,
 }: {
-  bulletPoints: BulletPointI[];
+  bulletPoints: BulletPointI[] | undefined;
   bulletPointsId: number;
   setPlayPosition: ({ pos }: { pos: number }) => void;
   setCurrentPage: (page: number) => void;
@@ -64,7 +64,6 @@ function BulletPointList({
 function VideoBulletPoints({
   bulletPoints,
   bulletPointsId,
-
   setPlayPosition,
   setCurrentPage,
   onOpenChat,
@@ -179,6 +178,7 @@ export function BulletPoints({
         return {
           content: {
             bullet_points: [],
+            sections: undefined,
             isLong: false,
           },
           id: undefined,
@@ -187,13 +187,13 @@ export function BulletPoints({
       const bpjson = JSON.parse(
         data.data.bulletpoints as string
       ) as unknown as BulletPointsJsonI;
+
       const bps = {
         content: bpjson,
         id: data.data.id,
       } as BulletPointsI;
       return bps;
     },
-
     queryClient,
     {
       onSuccess: (data) => {
@@ -233,8 +233,9 @@ export function BulletPoints({
     }
   }, [segments.length]);
 
-  const bulletPoints = bulletPointsData.data?.content.bullet_points;
+  const bulletPoints = bulletPointsData.data?.content;
   const bulletPointsId = bulletPointsData.data?.id;
+  console.log("Bulletpoints content", bulletPoints);
 
   const loading = bulletPointsData.isLoading || mutation.isLoading;
   const isVideo = bulletPoints && "isLong" in bulletPoints;
@@ -257,7 +258,7 @@ export function BulletPoints({
         <>
           {isVideo ? (
             <VideoBulletPoints
-              bulletPoints={bulletPoints as unknown as VideoBulletPoints}
+              bulletPoints={bulletPoints as VideoBulletPoints}
               setPlayPosition={setPlayPosition}
               setCurrentPage={setCurrentPage}
               onOpenChat={onOpenChat}
@@ -265,7 +266,7 @@ export function BulletPoints({
             />
           ) : (
             <BulletPointList
-              bulletPoints={bulletPoints as unknown as BulletPointI[]}
+              bulletPoints={(bulletPoints as BulletPointsJsonI).bullet_points}
               setPlayPosition={setPlayPosition}
               setCurrentPage={setCurrentPage}
               onOpenChat={onOpenChat}
