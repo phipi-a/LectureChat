@@ -1,25 +1,13 @@
 "use client";
 import Link from "@/common/Components/Link";
-import { useOwnRouter } from "@/common/Modules/OwnRouter";
-import { supabase } from "@/common/Modules/SupabaseClient";
-import { validateEmail } from "@/utils/helper";
-import { useAuthSignUpWithPassword } from "@/utils/supabase/supabaseAuth";
-import { LoadingButton } from "@mui/lab";
 import { Box, Container, TextField, Typography } from "@mui/material";
-import { enqueueSnackbar } from "notistack";
 import React from "react";
 
 export default function SetupPage() {
   return (
     <main>
       <Container maxWidth={"sm"}>
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          sx={{
-            my: 2,
-          }}
-        >
+        <Box display={"flex"} flexDirection={"column"} sx={{ my: 2 }}>
           <Typography
             variant={"h4"}
             fontFamily={"monospace"}
