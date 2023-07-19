@@ -11,10 +11,8 @@ import { supabase } from "@/common/Modules/SupabaseClient";
 import LearningDifficulties from "@/common/PageComponents/personalize/page/LearningDifficulties";
 import LearningStyle from "@/common/PageComponents/personalize/page/LearningStyle";
 import PersonalInformation from "@/common/PageComponents/personalize/page/PersonalInformation";
-import {
-  useGetData2,
-  useUpsertSelectData,
-} from "@/utils/supabase/supabaseData";
+import { useUpsertSelectData } from "@/utils/supabase/supabaseData";
+import { useUserData } from "@/utils/supabase/supabaseQuery";
 import {
   Box,
   Button,
@@ -36,9 +34,8 @@ export default function Page() {
   const router = useOwnRouter();
 
   const queryClient = useQueryClient();
-  const [userInformation, setUserInformation] = useGetData2(
-    ["userData", userId!],
-    supabase.from("user").select("*").eq("id", userId!).single(),
+  const [userInformation, setUserInformation] = useUserData(
+    userId,
     queryClient
   );
 

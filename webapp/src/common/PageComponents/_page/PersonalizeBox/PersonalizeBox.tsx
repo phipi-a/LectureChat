@@ -3,20 +3,17 @@ import ColoredCircularProgress from "@/common/Components/ColoredCircularProgress
 import PaperBox from "@/common/Components/PaperBox";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { useOwnRouter } from "@/common/Modules/OwnRouter";
-import { supabase } from "@/common/Modules/SupabaseClient";
-import { useGetData } from "@/utils/supabase/supabaseData";
+import { useUserData } from "@/utils/supabase/supabaseQuery";
 import { AutoAwesomeOutlined } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { useContext } from "react";
+import { useQueryClient } from "react-query";
 
 export function PersonalizeBox() {
   const router = useOwnRouter();
   const { userId } = useContext(AuthContext);
-  const userInformation = useGetData(
-    ["userData", userId!],
-    supabase.from("user").select("*").eq("id", userId!).single()
-  );
-  console.log("use", userInformation);
+  const queryClient = useQueryClient();
+  const [userInformation] = useUserData(userId, queryClient);
   function progressPersonalize() {
     let num_of_attributes = 0;
     if (userInformation.data?.data?.age !== null) {
