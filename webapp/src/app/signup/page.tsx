@@ -81,10 +81,12 @@ export default function Home() {
       setConfirmPasswordHelperText("Passwords do not match");
     }
     if (
-      emailHelperText !== "" ||
-      privacyHelperText !== "" ||
-      passwordHelperText !== "" ||
-      confirmPasswordHelperText !== ""
+      !checked ||
+      email.length === 0 ||
+      password.length === 0 ||
+      password.length < 8 ||
+      password !== confirmPassword ||
+      !validateEmail(email)
     ) {
       return;
     }
