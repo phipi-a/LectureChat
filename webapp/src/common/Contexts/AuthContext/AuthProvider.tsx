@@ -19,7 +19,15 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
         variant: "success",
       });
       console.log("signup");
-      setSession(null);
+      supabase.auth
+        .signOut()
+        .then(() => {
+          console.log("signed out");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      console.log(supabase);
       router.replace("/signin");
     }
   }, []);
