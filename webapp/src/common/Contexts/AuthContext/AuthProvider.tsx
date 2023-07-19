@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
         variant: "success",
       });
       console.log("signup");
-      router.replace("https://lecture-chat.vercel.app/signin");
+      window.location.reload();
     }
   }, []);
 
