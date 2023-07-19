@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 
 import CenteredLoading from "@/common/Components/CenteredLoading";
-import { useOwnRouter } from "@/common/Modules/OwnRouter";
 import { Session } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { supabase } from "../../Modules/SupabaseClient";
 import { AuthContext } from "./AuthContext";
@@ -11,7 +11,7 @@ import { AuthContext } from "./AuthContext";
 export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [event, setEvent] = useState<string | null>(null);
-  const router = useOwnRouter();
+  const router = useRouter();
 
   useEffect(() => {
     if (window.location.href.includes("type=signup")) {
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
         variant: "success",
       });
       console.log("signup");
-      window.location.reload();
+      window.location.replace("https://lecture-chat.vercel.app/signin");
     }
   }, []);
 
