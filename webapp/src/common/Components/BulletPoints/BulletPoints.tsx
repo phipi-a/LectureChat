@@ -14,6 +14,7 @@ import { Database } from "@/common/Interfaces/supabaseTypes";
 import { time2sec } from "@/utils/helper";
 import { useGetDataN2 } from "@/utils/supabase/supabaseData";
 import { useUserData } from "@/utils/supabase/supabaseQuery";
+import { Box } from "@mui/material";
 import { BulletPoint } from "./BulletPoint";
 
 interface BulletpointSection {
@@ -45,11 +46,12 @@ function BulletPointList({
   return (
     <>
       {bulletPoints &&
-        bulletPoints.map((bulletPoint: BulletPointI) => (
+        bulletPoints.map((bulletPoint: BulletPointI, i) => (
           <BulletPoint
             key={
               bulletPoint.bullet_point + bulletPoint.start + bulletPoint.page
             }
+            isFirst={i === 0}
             bulletPointId={bulletPointsId}
             bulletPoint={bulletPoint}
             setPlayPosition={setPlayPosition}
@@ -162,17 +164,21 @@ export function BulletPoints({
     },
   });
 
+  const getInitBulletPointsQuery = supabase
+    .from("bulletpoints")
+    .select("*")
+    .eq("room_id", roomId);
+
+  if (!isTestRoom) {
+    getInitBulletPointsQuery.eq("user_id", userId);
+  }
+
   const [bulletPointsData, setBulletPointsData] = useGetDataN2<
     BulletPointsI,
     Database["public"]["Tables"]["bulletpoints"]["Row"]
   >(
     ["bulletpoints", roomId],
-    supabase
-      .from("bulletpoints")
-      .select("*")
-      .eq("room_id", roomId)
-      .eq("user_id", userId)
-      .single(),
+    getInitBulletPointsQuery.single(),
     (data) => {
       if (data.data === null) {
         return {
@@ -242,18 +248,18 @@ export function BulletPoints({
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "end" }}>
+      <Box display="flex" justifyContent="center">
         <LoadingButton
           variant="outlined"
           onClick={() => {
             mutation.mutate();
           }}
           loading={loading}
-          loadingIndicator="Updating..."
+          loadingIndicator="Generating..."
         >
-          Update
+          Regenerate
         </LoadingButton>
-      </div>
+      </Box>
       {bulletPoints && (
         <>
           {isVideo ? (

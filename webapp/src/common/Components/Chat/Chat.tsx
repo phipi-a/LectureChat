@@ -83,7 +83,6 @@ export function Chat({
     },
   });
 
-  console.log(messagesData);
   const mutation = useMutation({
     mutationFn: async (newMessage: MessageI) => {
       messagesData.data!.messages.push(newMessage);
@@ -289,6 +288,7 @@ export function Chat({
           <TextField
             variant="standard"
             fullWidth
+            className="chatbox"
             value={currentMessage}
             onChange={(e) => {
               setCurrentMessage(e.target.value);

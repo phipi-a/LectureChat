@@ -9,18 +9,22 @@ export function BulletPoint({
   setPlayPosition,
   setCurrentPage,
   bulletPointId,
+  isFirst,
 }: {
   onOpenChat: (a: BulletPointI, bulletPointId: number) => void;
   bulletPoint: BulletPointI;
   setPlayPosition: ({ pos }: { pos: number }) => void;
   setCurrentPage: (page: number) => void;
   bulletPointId: number;
+  isFirst: boolean;
 }) {
+  console.log(isFirst);
   return (
     <div>
       <Box display={"flex"} alignItems={"center"}>
         <h3
           style={{ cursor: "pointer" }}
+          className={isFirst ? "jumptopositionbulletpoint" : ""}
           onClick={() => {
             if (bulletPoint.start !== undefined) {
               // mm:ss to ms
@@ -39,6 +43,7 @@ export function BulletPoint({
           sx={{
             mx: 1,
           }}
+          className={isFirst ? "showchatbutton" : ""}
           onClick={() => {
             onOpenChat(bulletPoint, bulletPointId);
           }}
