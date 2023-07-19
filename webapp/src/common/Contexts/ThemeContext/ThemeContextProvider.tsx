@@ -53,8 +53,6 @@ const LectureThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   const theme = createTheme(getDesignTokens(mode));
 
-  console.log(theme);
-
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>

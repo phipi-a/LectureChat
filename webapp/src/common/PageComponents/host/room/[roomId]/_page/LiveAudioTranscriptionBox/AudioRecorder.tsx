@@ -39,7 +39,7 @@ export function AudioRecorder({
         }
         maxValueRef.current = Math.max(maxValueRef.current, max);
         setCurrentValue(max);
-        console.log(silence_border_ref.current, max);
+
         if (max < silence_border_ref.current) {
           if (currentAudioState === "audio") {
             currentAudioStateTime = Date.now();

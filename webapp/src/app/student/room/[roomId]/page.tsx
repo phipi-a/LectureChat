@@ -28,7 +28,6 @@ const VideoBulletPointContainerSuspense = dynamic(
 );
 
 export default function Room({ params }: { params: { roomId: string } }) {
-  console.log(params.roomId);
   let table = "room_access";
   let field = "room_id";
   if (params.roomId === "000000") {
@@ -112,11 +111,10 @@ export default function Room({ params }: { params: { roomId: string } }) {
     };
   }, [params.roomId, setSegments]);
 
-  console.log(segments);
   return (
     <Box display={"flex"} flexDirection={"column"} overflow={"auto"} flex={1}>
-      <Typography variant={"h4"} mb={4} mx={2} mt={1}>
-        {room.room_title} ({params.roomId})
+      <Typography variant={"h4"} mb={1} mx={2} mt={1}>
+        {room.room_title}
       </Typography>
       <Box display={"flex"} flex={1} overflow={"auto"}>
         {room?.room_is_video_room ? (

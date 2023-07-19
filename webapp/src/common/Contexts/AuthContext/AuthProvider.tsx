@@ -22,8 +22,9 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
       setSession(session);
       setEvent(event);
     });
-  }, []);
+  }, [supabase]);
   console.log(session);
+  console.log(event);
 
   if (session === undefined) return <CenteredLoading />;
   else {

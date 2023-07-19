@@ -105,7 +105,6 @@ export function PersonalInformation({
                 : personalInformation.hobbies
             }
             onChange={(event, value) => {
-              console.log(value);
               setPersonalInformation({
                 ...personalInformation,
                 hobbies: value.length === 0 ? null : value,
@@ -151,7 +150,6 @@ export function PersonalInformation({
                 : personalInformation.favorite_topics
             }
             onChange={(event, value) => {
-              console.log(value);
               setPersonalInformation({
                 ...personalInformation,
                 favorite_topics: value.length === 0 ? null : value,
