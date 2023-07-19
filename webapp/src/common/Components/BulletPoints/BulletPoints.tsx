@@ -178,6 +178,7 @@ export function BulletPoints({
         return {
           content: {
             bullet_points: [],
+            sections: undefined,
             isLong: false,
           },
           id: undefined,
@@ -186,6 +187,7 @@ export function BulletPoints({
       const bpjson = JSON.parse(
         data.data.bulletpoints as string
       ) as unknown as BulletPointsJsonI;
+
       const bps = {
         content: bpjson,
         id: data.data.id,
