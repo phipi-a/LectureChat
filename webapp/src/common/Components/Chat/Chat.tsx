@@ -125,9 +125,10 @@ export function Chat({
   }
   useEffect(() => {
     if (scrollRef.current) {
+      console.log("scrolling");
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messagesData.data?.messages]);
+  }, [messagesData.data?.messages.length]);
 
   if (bulletpoint === null) {
     return <></>;

@@ -5,13 +5,24 @@ import { supabase } from "@/common/Modules/SupabaseClient";
 import { validateEmail } from "@/utils/helper";
 import { useAuthSignUpWithPassword } from "@/utils/supabase/supabaseAuth";
 import { LoadingButton } from "@mui/lab";
-import { Box, Container, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import React from "react";
 
 export default function Home() {
   const [emailHelperText, setEmailHelperText] = React.useState("");
   const [passwordHelperText, setPasswordHelperText] = React.useState("");
+  const [checked, setChecked] = React.useState(false);
+  const [privacyHelperText, setPrivacyHelperText] = React.useState("");
   const router = useOwnRouter();
   const [confirmPasswordHelperText, setConfirmPasswordHelperText] =
     React.useState("");
@@ -46,27 +57,35 @@ export default function Home() {
     event.preventDefault();
     setPasswordHelperText("");
     setEmailHelperText("");
+    setPrivacyHelperText("");
     setConfirmPasswordHelperText("");
+
+    if (!checked) {
+      setPrivacyHelperText("Please accept the privacy policy");
+    }
 
     if (email.length === 0) {
       setEmailHelperText("Email cannot be empty");
-      return;
     }
     if (!validateEmail(email)) {
       setEmailHelperText("Invalid email");
-      return;
     }
     if (password.length === 0) {
       setPasswordHelperText("Password cannot be empty");
-      return;
     }
     if (password.length < 8) {
       setPasswordHelperText("Password must be at least 8 characters");
-      return;
     }
     if (password !== confirmPassword) {
       setPasswordHelperText("Passwords do not match");
       setConfirmPasswordHelperText("Passwords do not match");
+    }
+    if (
+      emailHelperText !== "" ||
+      privacyHelperText !== "" ||
+      passwordHelperText !== "" ||
+      confirmPasswordHelperText !== ""
+    ) {
       return;
     }
     createAccount.mutate({ email, password });
@@ -113,6 +132,33 @@ export default function Home() {
             helperText={confirmPasswordHelperText}
             error={confirmPasswordHelperText !== ""}
           />
+          <FormControl required>
+            <FormControlLabel
+              required
+              label={
+                <Typography variant="body2" color="text.secondary">
+                  {"I read and agree to the "}
+                  <a href="/terms" target="_blank" rel="noreferrer">
+                    {"Privacy Policy"}
+                  </a>
+                </Typography>
+              }
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={(event) => {
+                    setChecked(event.target.checked);
+                  }}
+                  name="terms"
+                />
+              }
+            />
+
+            <FormHelperText error={privacyHelperText !== ""}>
+              {privacyHelperText}
+            </FormHelperText>
+          </FormControl>
+
           <LoadingButton
             type="submit"
             loading={createAccount.isLoading}
