@@ -2,7 +2,7 @@ const fs = require("fs");
 const tiktoken = require("@dqbd/tiktoken");
 const utils = require("./utils");
 
-const openaiApiKey = "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";
+const openaiApiKey = "...";
 
 // Load video content
 // Format:
