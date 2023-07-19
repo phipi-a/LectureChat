@@ -11,6 +11,71 @@ import {
 } from "./_src/interfaces.ts";
 import { OpenAI } from "./_src/utils.ts";
 
+function createPersonalisationPrompt(userData) {
+  console.log("User data", userData);
+  let personalized_prompt = "My Profile:\n";
+  if (userData.name) {
+    personalized_prompt += `Name: ${userData.name}\n`;
+  }
+  if (userData.age) {
+    personalized_prompt += `Age: ${userData.age}\n`;
+  }
+  if (userData.hobbies) {
+    personalized_prompt += `Hobbies: ${userData.hobbies}\n`;
+  }
+  if (userData.favorite_tobics) {
+    personalized_prompt += `Favorite Topics: ${userData.favorite_tobics.join(
+      ", "
+    )}\n`;
+  }
+  if (userData.subject_difficulty) {
+    personalized_prompt += `Subject Difficulty: ${userData.subject_difficulty}\n`;
+  }
+  if (userData.difficulty) {
+    personalized_prompt += `Learning Difficulty: ${userData.difficulty}\n`;
+  }
+
+  personalized_prompt += `\n`;
+
+  console.log(userData.language);
+  if (userData.language && userData.language.toLowerCase() !== "english") {
+    personalized_prompt += `You have to generate the bullet points and the longer explanation in the language ${userData.language}, translate if the text is not in ${userData.language}.\n`;
+  }
+
+  if (userData.age < 14) {
+    personalized_prompt += ` Explain it to me like I am ${userData.age}.`;
+  }
+
+  if (userData.hobbies) {
+    personalized_prompt += ` Include my hobbies in the explanation: ${userData.hobbies.join(
+      " or "
+    )}.`;
+  }
+
+  if (userData.difficulty) {
+    personalized_prompt += ` Consider that I have the learning difficulty ${userData.difficulty} in the bullet points\n`;
+  }
+
+  if (userData.subject_difficulty) {
+    personalized_prompt += ` Consider if have problems with ${userData.subject_difficulty} in the bullet points\n`;
+  }
+
+  if (userData.emojis) {
+    personalized_prompt += `You have to use a one emoji at the beginning of each bullet point that fits the bullet points! Also use emojis in the explanation.`;
+  }
+
+  return personalized_prompt;
+}
+
+async function getOpenAIKey(user_id: string, supabaseClient: any) {
+  const { data: rawData, error: dataError } = await supabaseClient
+    .from("user")
+    .select("openai_key")
+    .eq("id", user_id)
+    .single();
+  return rawData.openai_key;
+}
+
 serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.
   if (req.method === "OPTIONS") {
@@ -19,16 +84,9 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    let openaiKey = body.openaiKey;
 
     const roomId = body.roomId!;
     const lastBulletpoints = body.lastBulletpoints;
-    if (roomId === "000000") {
-      console.log("Using test key");
-      openaiKey = Deno.env.get("OPENAI_TEST_KEY")!;
-    }
-    console.log("openaiKey", openaiKey);
-    const openai = new OpenAI(openaiKey);
     const supabaseClient = createClient(
       // Supabase API URL - env var exported by default.
       Deno.env.get("SUPABASE_URL") ?? "",
@@ -46,22 +104,42 @@ serve(async (req) => {
       }
     );
     let user = undefined;
+    let individualisationPrompt = "";
+    let openaiKey = "";
     if (roomId !== "000000") {
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
+      const { data } = await supabaseClient.auth.getUser();
+      user = data.user;
 
       if (!user) throw new UnauthorizedError("Unauthorized user");
+
+      const userData = await supabaseClient
+        .from("user")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      individualisationPrompt = createPersonalisationPrompt(userData.data);
+      openaiKey = await getOpenAIKey(user.id, supabaseClient);
+    } else {
+      const userData = await supabaseClient
+        .from("room")
+        .select("*, user!inner(*)")
+        .eq("id", "000000")
+        .single();
+      individualisationPrompt = createPersonalisationPrompt(userData.data.user);
+
+      console.log("Using test key");
+      openaiKey = Deno.env.get("OPENAI_TEST_KEY")!;
     }
     // Get the text from the data table
     const { data: rawData, error: dataError } = await supabaseClient
       .from("data")
       .select("*")
       .eq("room_id", roomId);
-    console.log("rawData", rawData);
 
     if (dataError) throw dataError;
 
+    const openai = new OpenAI(openaiKey);
     let bulletPoints: BulletpointWithID[] | VideoBulletPoints = [];
     if (rawData.length > 0) {
       const sorted = rawData.sort(
@@ -71,13 +149,18 @@ serve(async (req) => {
       const isVideo = rawData[0].video_start_ms !== null;
 
       if (isVideo) {
-        bulletPoints = await analyse_video(sorted, openai);
+        bulletPoints = await analyse_video(
+          sorted,
+          openai,
+          individualisationPrompt
+        );
       } else {
         bulletPoints = await analyse_pdf(
           sorted,
           openai,
           supabaseClient,
           roomId,
+          individualisationPrompt,
           lastBulletpoints
         );
       }
