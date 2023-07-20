@@ -21,7 +21,8 @@ class BodyError extends Error {
 async function getPersonalizedPrompt(
   user_id: string,
   supabaseClient: any,
-  room_id: string
+  room_id: string,
+  isTestRoom: boolean
 ) {
   let userData = {
     name: null,
@@ -36,7 +37,7 @@ async function getPersonalizedPrompt(
     language: null,
   };
 
-  if (room_id !== "000000") {
+  if (!isTestRoom) {
     const user = await supabaseClient
       .from("user")
       .select("*")
@@ -53,34 +54,32 @@ async function getPersonalizedPrompt(
 
     console.log("use other user", userData);
   }
-  let personalized_prompt = "My Profile:\n";
+  let personalized_prompt = " My Profile: \n";
   if (userData.name) {
-    personalized_prompt += `Name: ${userData.name}\n`;
+    personalized_prompt += ` Name: ${userData.name} \n`;
   }
   if (userData.age) {
-    personalized_prompt += `Age: ${userData.age}\n`;
+    personalized_prompt += `Age: ${userData.age} \n`;
   }
   if (userData.hobbies) {
-    personalized_prompt += `Hobbies: ${userData.hobbies}\n`;
+    personalized_prompt += `Hobbies: ${userData.hobbies} \n`;
   }
   if (userData.favorite_tobics) {
-    personalized_prompt += `Favorite Topics: ${(
+    personalized_prompt += ` Favorite Topics: ${(
       userData.favorite_tobics as any[]
     ).join(", ")}\n`;
   }
   if (userData.subject_difficulty) {
-    personalized_prompt += `Subject Difficulty: ${userData.subject_difficulty}\n`;
+    personalized_prompt += ` Subject Difficulty: ${userData.subject_difficulty} \n`;
   }
   if (userData.difficulty) {
-    personalized_prompt += `Learning Difficulty: ${userData.difficulty}\n`;
+    personalized_prompt += ` Learning Difficulty: ${userData.difficulty} \n`;
   }
   if (userData.storytelling) {
-    personalized_prompt += `- likes storytelling\n`;
+    personalized_prompt += ` - likes storytelling `;
   }
   personalized_prompt += `\n`;
-  if (userData.emojis) {
-    personalized_prompt += `Use lots of emojis (at least 3 per answer) in each response to structure and divide them up. `;
-  }
+
   if (userData.person) {
     personalized_prompt += ` Anwer like you are a ${userData.person}.`;
   }
@@ -93,7 +92,10 @@ async function getPersonalizedPrompt(
     ).join(" or ")}.`;
   }
 
-  personalized_prompt += `Tailor your answer to me so that it is the perfect answer for me. Answer as short as possible`;
+  personalized_prompt += ` Tailor your answer to me so that it is the perfect answer for me. Answer as short as possible`;
+  if (userData.emojis) {
+    personalized_prompt += ` Use at least 3 emojis in every answer. Try to use them in a way that makes sense not only in the end.`;
+  }
   return personalized_prompt;
 }
 async function chat(
@@ -111,7 +113,7 @@ async function chat(
       messages: [
         { role: "system", content: system_prompt },
         { role: "user", content: personalized_prompt },
-        ...messages,
+        ...messages.map((m) => ({ role: m.role, content: m.content })),
       ],
     }),
     headers: {
@@ -123,7 +125,6 @@ async function chat(
   const data = await response.json();
 
   // TODO: handle quota error
-  console.log(data);
 
   const rawResponse = {
     role: "assistant",
@@ -203,20 +204,19 @@ serve(async (req) => {
       // This way your row-level-security (RLS) policies are applied.
       {
         global: {
-          headers:
-            room_id !== "000000"
-              ? { Authorization: req.headers.get("Authorization")! }
-              : {},
+          headers: { Authorization: req.headers.get("Authorization")! },
         },
       }
     );
     supabaseClient;
     let user = undefined;
     let openaiKey;
-    if (room_id !== "000000") {
-      console.log("Using user key", room_id);
-      const us = await supabaseClient.auth.getUser();
-      user = us.data.user;
+
+    const { data } = await supabaseClient.auth.getUser();
+    user = data.user;
+
+    const isTestRoom = room_id === "000000" && user === null;
+    if (!isTestRoom) {
       console.log(user);
       if (!user) throw new UnauthorizedError("Unauthorized user");
 
@@ -235,9 +235,9 @@ serve(async (req) => {
     const personalized_prompt = await getPersonalizedPrompt(
       user?.id,
       supabaseClient,
-      room_id
+      room_id,
+      isTestRoom
     );
-
     const res = await chat(
       messages,
       system_prompt,
@@ -245,7 +245,7 @@ serve(async (req) => {
       personalized_prompt
     );
 
-    if (room_id !== "000000") {
+    if (!isTestRoom) {
       const uploadResponse = await supabaseClient.from("chat").upsert({
         id: id,
         bulletpoint_id: bulletpoint_id,
@@ -257,10 +257,17 @@ serve(async (req) => {
 
     // Save the bullet points in the database
 
-    return new Response(JSON.stringify(res), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({
+        ...res,
+        prompt: system_prompt,
+        personal: personalized_prompt,
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      }
+    );
   } catch (e) {
     console.error("e", e);
 
@@ -277,7 +284,7 @@ serve(async (req) => {
       });
     }
 
-    return new Response(JSON.stringify({ error: "An error occured." }), {
+    return new Response(JSON.stringify({ error: "An error occured.", e: e }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
