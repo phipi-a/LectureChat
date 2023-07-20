@@ -115,11 +115,25 @@ export default function Room({ params }: { params: { roomId: string } }) {
   }, [params.roomId, setSegments]);
 
   return (
-    <Box display={"flex"} flexDirection={"column"} overflow={"auto"} flex={1}>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      width={"100%"}
+      overflow={"auto"}
+      className={"room"}
+      flex={1}
+      minHeight={0}
+    >
       <Typography variant={"h4"} mb={1} mx={2} mt={1}>
         {room.room_title}
       </Typography>
-      <Box display={"flex"} flex={1} overflow={"auto"}>
+      <Box
+        display={"flex"}
+        overflow={"auto"}
+        width={"100%"}
+        flex={1}
+        minHeight={0}
+      >
         {room?.room_is_video_room ? (
           <VideoBulletPointContainerSuspense
             videoUrl={room!.room_video_url}

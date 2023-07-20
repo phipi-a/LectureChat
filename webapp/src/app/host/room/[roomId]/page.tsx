@@ -1,58 +1,17 @@
 "use client";
 import EthicDialog from "@/common/Components/EthicDialog";
+import PdfBulletpointContainerSuspense from "@/common/Components/MediaBulletPointContainers/PdfBulletpointContainer";
+import VideoBulletPointContainerSuspense from "@/common/Components/MediaBulletPointContainers/VideoBulletPointContainer";
 import { AuthContext } from "@/common/Contexts/AuthContext/AuthContext";
 import { supabase } from "@/common/Modules/SupabaseClient";
+import HostRoomHeader from "@/common/PageComponents/host/room/[roomId]/_page/Header";
+import LiveAudioTranscriptionBoxSuspense from "@/common/PageComponents/host/room/[roomId]/_page/LiveAudioTranscriptionBox";
+import VideoTranscriptionBoxSuspense from "@/common/PageComponents/host/room/[roomId]/_page/VideoTranscriptionBox";
 import { useGetData } from "@/utils/supabase/supabaseData";
 import { Dialog } from "@mui/material";
 import Box from "@mui/material/Box";
-import dynamic from "next/dynamic";
 import { useContext, useState } from "react";
 import "./page.css";
-
-const HostRoomHeader = dynamic(
-  () => import("@/common/PageComponents/host/room/[roomId]/_page/Header"),
-  {
-    ssr: false,
-  }
-);
-
-const PdfBulletpointContainerSuspense = dynamic(
-  () =>
-    import(
-      "@/common/Components/MediaBulletPointContainers/PdfBulletpointContainer"
-    ),
-  {
-    ssr: false,
-  }
-);
-const VideoBulletPointContainerSuspense = dynamic(
-  () =>
-    import(
-      "@/common/Components/MediaBulletPointContainers/VideoBulletPointContainer"
-    ),
-  {
-    ssr: false,
-  }
-);
-
-const LiveAudioTranscriptionBoxSuspense = dynamic(
-  () =>
-    import(
-      "@/common/PageComponents/host/room/[roomId]/_page/LiveAudioTranscriptionBox"
-    ),
-  {
-    ssr: false,
-  }
-);
-const VideoTranscriptionBoxSuspense = dynamic(
-  () =>
-    import(
-      "@/common/PageComponents/host/room/[roomId]/_page/VideoTranscriptionBox"
-    ),
-  {
-    ssr: false,
-  }
-);
 
 export default function Room({ params }: { params: { roomId: string } }) {
   const [openWarning, setOpenWarning] = useState<boolean>(true);
@@ -73,26 +32,52 @@ export default function Room({ params }: { params: { roomId: string } }) {
 
   return (
     <>
-      <Box display={"flex"} flexDirection={"column"} flex={1} overflow={"auto"}>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        width={"100%"}
+        overflow={"auto"}
+        className={"room"}
+        flex={1}
+        minHeight={0}
+      >
         <HostRoomHeader
           title={room!.title}
           roomId={room!.id}
           password={room!.password}
         />
-        {room?.is_video_room ? (
-          <>
-            <VideoTranscriptionBoxSuspense roomId={params.roomId} />
-            <VideoBulletPointContainerSuspense
-              videoUrl={room!.video_url}
-              roomId={params.roomId}
-            />
-          </>
-        ) : (
-          <>
-            <LiveAudioTranscriptionBoxSuspense roomId={params.roomId} />
-            <PdfBulletpointContainerSuspense roomId={params.roomId} />
-          </>
-        )}
+        <Box
+          display={"flex"}
+          overflow={"auto"}
+          width={"100%"}
+          flex={1}
+          minHeight={0}
+          flexDirection={"column"}
+        >
+          {room?.is_video_room ? (
+            <>
+              <VideoTranscriptionBoxSuspense roomId={params.roomId} />
+              <Box
+                display={"flex"}
+                overflow={"auto"}
+                width={"100%"}
+                flex={1}
+                minHeight={0}
+                flexDirection={"column"}
+              >
+                <VideoBulletPointContainerSuspense
+                  videoUrl={room!.video_url}
+                  roomId={params.roomId}
+                />
+              </Box>
+            </>
+          ) : (
+            <>
+              <LiveAudioTranscriptionBoxSuspense roomId={params.roomId} />
+              <PdfBulletpointContainerSuspense roomId={params.roomId} />
+            </>
+          )}
+        </Box>
       </Box>
       <Dialog open={openWarning} fullWidth>
         <EthicDialog

@@ -58,6 +58,7 @@ export default function RootLayout({
           width: "100%",
           display: "flex",
           flexDirection: "column",
+          overflow: "auto",
         }}
       >
         <LectureThemeProvider>
@@ -75,10 +76,10 @@ export default function RootLayout({
                       sx={{
                         my: 2,
                         m: 0,
-                        maxWidth: "undefined",
                         height: "100%",
                         width: "100%",
                         display: "flex",
+                        minHeight: "0px",
                         flexDirection: "column",
                         overflow: "auto",
                       }}

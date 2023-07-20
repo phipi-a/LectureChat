@@ -9,7 +9,7 @@ import {
   SubtitlesOutlined,
 } from "@mui/icons-material";
 import { TabContext, TabList } from "@mui/lab";
-import { Box, Tab, Typography } from "@mui/material";
+import { Box, Stack, Tab, Typography } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import Joyride, { Step } from "react-joyride";
 import { BulletPointsSuspense } from "../../BulletPoints/BulletPoints";
@@ -89,136 +89,144 @@ export function MobileMainContainer({
       overflow={"auto"}
       className={"mainbody"}
       sx={{
-        display: "flex",
         flexWrap: "nowrap",
         flex: 1,
-
+        minHeight: 1,
+        maxHeight: "100%",
+        height: "100%",
         flexDirection: "row",
         alignItems: "center",
+        width: "100%",
       }}
     >
-      <TabContext value={currentTab}>
+      <Box
+        p={1}
+        flex={1}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          height: "100%",
+          width: "100%",
+        }}
+      >
         <Box
-          p={1}
           overflow={"auto"}
+          height={"100%"}
+          display={"flex"}
           flex={1}
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            height: "100%",
-          }}
+          width={"100%"}
+          flexDirection={"column"}
         >
           <Box
-            overflow={"auto"}
-            height={"100%"}
-            display={"flex"}
-            flex={1}
-            flexDirection={"column"}
+            sx={{ borderBottom: 1, borderColor: "divider" }}
+            overflow={"hide"}
+            width={"100%"}
           >
-            <Box
-              sx={{ borderBottom: 1, borderColor: "divider" }}
-              overflow={"auto"}
-            >
-              <TabList
-                variant="scrollable"
-                onChange={(e, value) => {
-                  setCurrentTab(value);
-                }}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label={<span style={{ fontSize: "0.7rem" }}>Video</span>}
-                  icon={<OndemandVideoOutlined />}
-                  value="1"
-                />
-                <Tab
-                  label={
-                    <span style={{ fontSize: "0.7rem" }}>Bullet Points</span>
-                  }
-                  icon={<FormatListBulletedOutlined />}
-                  value="2"
-                  className="showbulletpointsbutton"
-                />
-                <Tab
-                  label={<span style={{ fontSize: "0.7rem" }}>Subtitles</span>}
-                  icon={<SubtitlesOutlined />}
-                  value="3"
-                  className="showvideosubtitlesbutton"
-                />
-                {chatBulletpoint ? (
+            <TabContext value={currentTab}>
+              <Stack direction="row">
+                <TabList
+                  variant="scrollable"
+                  onChange={(e, value) => {
+                    setCurrentTab(value);
+                  }}
+                  aria-label="lab API tabs example"
+                >
                   <Tab
-                    label={<span style={{ fontSize: "0.7rem" }}>Chat</span>}
-                    icon={<ChatOutlined />}
-                    value="4"
+                    label={<span style={{ fontSize: "0.7rem" }}>Video</span>}
+                    icon={<OndemandVideoOutlined />}
+                    value="1"
                   />
-                ) : null}
-              </TabList>
-            </Box>
+                  <Tab
+                    label={
+                      <span style={{ fontSize: "0.7rem" }}>Bullet Points</span>
+                    }
+                    icon={<FormatListBulletedOutlined />}
+                    value="2"
+                    className="showbulletpointsbutton"
+                  />
+                  <Tab
+                    label={
+                      <span style={{ fontSize: "0.7rem" }}>Subtitles</span>
+                    }
+                    icon={<SubtitlesOutlined />}
+                    value="3"
+                    className="showvideosubtitlesbutton"
+                  />
+                  {chatBulletpoint ? (
+                    <Tab
+                      label={<span style={{ fontSize: "0.7rem" }}>Chat</span>}
+                      icon={<ChatOutlined />}
+                      value="4"
+                    />
+                  ) : null}
+                </TabList>
+              </Stack>
+            </TabContext>
+          </Box>
 
-            <Box flex={1} alignItems={"center"} overflow={"auto"}>
-              <Box display={currentTab === "1" ? "block" : "none"}>
-                {children}
-              </Box>
-              <Box mt={1} display={currentTab === "2" ? "block" : "none"}>
-                <BulletPointsSuspense
-                  roomId={roomId}
-                  onOpenChat={(a, bulletpointId) => {
-                    setChatBulletpoint({ ...a });
-                    setChatBulletPointId(bulletpointId);
-                  }}
-                />
-              </Box>
-              <Box display={currentTab === "3" ? "block" : "none"}>
-                <Typography variant="body2">
-                  {segments.map((segment, index) => {
-                    return (
-                      <span
-                        key={segment.id + segment.data}
-                        id={segment.id}
-                        className={
-                          index !== 4
-                            ? "text_select"
-                            : "text_select jumptoposition"
+          <Box flex={1} alignItems={"center"} overflow={"auto"}>
+            <Box display={currentTab === "1" ? "block" : "none"}>
+              {children}
+            </Box>
+            <Box mt={1} display={currentTab === "2" ? "block" : "none"}>
+              <BulletPointsSuspense
+                roomId={roomId}
+                onOpenChat={(a, bulletpointId) => {
+                  setChatBulletpoint({ ...a });
+                  setChatBulletPointId(bulletpointId);
+                }}
+              />
+            </Box>
+            <Box display={currentTab === "3" ? "block" : "none"}>
+              <Typography variant="body2">
+                {segments.map((segment, index) => {
+                  return (
+                    <span
+                      key={segment.id + segment.data}
+                      id={segment.id}
+                      className={
+                        index !== 4
+                          ? "text_select"
+                          : "text_select jumptoposition"
+                      }
+                      style={{
+                        borderRadius: "5px",
+                      }}
+                      onClick={() => {
+                        if (segment.video_start_ms !== null) {
+                          setPlayPosition({
+                            pos: segment.video_start_ms!,
+                          });
+                        } else if (segment.page !== null) {
+                          setCurrentPage(segment.page!);
                         }
-                        style={{
-                          borderRadius: "5px",
-                        }}
-                        onClick={() => {
-                          if (segment.video_start_ms !== null) {
-                            setPlayPosition({
-                              pos: segment.video_start_ms!,
-                            });
-                          } else if (segment.page !== null) {
-                            setCurrentPage(segment.page!);
-                          }
-                        }}
-                      >
-                        {segment.data}
-                        &lrm;
-                      </span>
-                    );
-                  })}
-                </Typography>
-              </Box>
-              <Box
-                display={currentTab === "4" ? "block" : "none"}
-                overflow={"auto"}
-                height={"100%"}
-              >
-                <ChatSuspense
-                  onClose={() => {
-                    setChatBulletpoint(null);
-                  }}
-                  displayCloseButton={false}
-                  bulletpoint={chatBulletpoint}
-                  roomId={roomId}
-                  bulletPointsId={chatBulletPointId}
-                />
-              </Box>
+                      }}
+                    >
+                      {segment.data}
+                      &lrm;
+                    </span>
+                  );
+                })}
+              </Typography>
+            </Box>
+            <Box
+              display={currentTab === "4" ? "flex" : "none"}
+              overflow={"auto"}
+              height={"100%"}
+            >
+              <ChatSuspense
+                onClose={() => {
+                  setChatBulletpoint(null);
+                }}
+                displayCloseButton={false}
+                bulletpoint={chatBulletpoint}
+                roomId={roomId}
+                bulletPointsId={chatBulletPointId}
+              />
             </Box>
           </Box>
         </Box>
-      </TabContext>
+      </Box>
 
       {roomId === "000000" && (
         <Joyride
@@ -238,6 +246,7 @@ export function MobileMainContainer({
           }}
           disableOverlayClose={true}
           disableScrolling={true}
+          disableScrollParentFix={true}
           hideBackButton={true}
           hideCloseButton={true}
           callback={(data) => {
@@ -253,7 +262,7 @@ export function MobileMainContainer({
                 ).click();
                 setTimeout(() => {
                   setRun(true);
-                }, 300);
+                }, 500);
               }
               if (5 === data.index) {
                 setRun(false);
@@ -264,7 +273,7 @@ export function MobileMainContainer({
                 ).click();
                 setTimeout(() => {
                   setRun(true);
-                }, 300);
+                }, 500);
               }
             }
           }}

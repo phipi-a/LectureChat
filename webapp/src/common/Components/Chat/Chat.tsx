@@ -128,7 +128,7 @@ export function Chat({
       console.log("scrolling");
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messagesData.data?.messages.length]);
+  }, [messagesData.data?.messages.length, scrollRef.current]);
 
   if (bulletpoint === null) {
     return <></>;
@@ -197,7 +197,12 @@ export function Chat({
   }
 
   return (
-    <Box display={"flex"} flexDirection={"column"} height={"100%"}>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      overflow={"auto"}
+      height={"100%"}
+    >
       <Box
         display={displayCloseButton ? "flex" : "none"}
         alignItems={"center"}
@@ -260,7 +265,6 @@ export function Chat({
                   >
                     <Paper
                       variant="outlined"
-                      ref={scrollRef}
                       sx={{
                         p: 1.3,
                         borderRadius:
@@ -284,6 +288,7 @@ export function Chat({
                     </Paper>
                   </Box>
                 ))}
+              <Box ref={scrollRef} />
             </List>
           </Box>
           <TextField
