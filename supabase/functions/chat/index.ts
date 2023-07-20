@@ -257,17 +257,10 @@ serve(async (req) => {
 
     // Save the bullet points in the database
 
-    return new Response(
-      JSON.stringify({
-        ...res,
-        prompt: system_prompt,
-        personal: personalized_prompt,
-      }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      }
-    );
+    return new Response(JSON.stringify(res), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 200,
+    });
   } catch (e) {
     console.error("e", e);
 

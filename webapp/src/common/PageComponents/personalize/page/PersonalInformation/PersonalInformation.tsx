@@ -1,6 +1,7 @@
 import { PersonalInformationI } from "@/common/Interfaces/Interfaces";
 import { Autocomplete, Chip, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import React from "react";
 
 export function PersonalInformation({
   personalInformation,
@@ -9,6 +10,8 @@ export function PersonalInformation({
   personalInformation: PersonalInformationI;
   setPersonalInformation: (personalInformation: PersonalInformationI) => void;
 }) {
+  const [hobbiesText, setHobbiesText] = React.useState("");
+  const [favoriteTopicsText, setFavoriteTopicsText] = React.useState("");
   return (
     <>
       <Typography variant={"h6"}>Personal information</Typography>
@@ -111,6 +114,22 @@ export function PersonalInformation({
               });
             }}
             freeSolo
+            onBlur={(event) => {
+              setHobbiesText("");
+              if (hobbiesText.trim() !== "") {
+                setPersonalInformation({
+                  ...personalInformation,
+                  hobbies:
+                    personalInformation.hobbies === null
+                      ? [hobbiesText]
+                      : [...personalInformation.hobbies, hobbiesText],
+                });
+              }
+            }}
+            inputValue={hobbiesText}
+            onInputChange={(event, value) => {
+              setHobbiesText(value);
+            }}
             renderTags={(value: readonly string[], getTagProps) =>
               value.map((option: string, index: number) => (
                 <div key={option}>
@@ -157,6 +176,25 @@ export function PersonalInformation({
             }}
             sx={{
               flex: 1,
+            }}
+            inputValue={favoriteTopicsText}
+            onInputChange={(event, value) => {
+              setFavoriteTopicsText(value);
+            }}
+            onBlur={(event) => {
+              setFavoriteTopicsText("");
+              if (favoriteTopicsText.trim() !== "") {
+                setPersonalInformation({
+                  ...personalInformation,
+                  favorite_topics:
+                    personalInformation.favorite_topics === null
+                      ? [favoriteTopicsText]
+                      : [
+                          ...personalInformation.favorite_topics,
+                          favoriteTopicsText,
+                        ],
+                });
+              }
             }}
             freeSolo
             renderTags={(value: readonly string[], getTagProps) =>
