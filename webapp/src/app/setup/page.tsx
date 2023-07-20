@@ -1,7 +1,6 @@
 "use client";
 import Link from "@/common/Components/Link";
 import { Box, Container, Typography } from "@mui/material";
-import React from "react";
 
 export default function SetupPage() {
   return (
@@ -53,12 +52,15 @@ export default function SetupPage() {
               whisper asr service. You can find the source code and setup
               instructions on the{" "}
               <Link
-                href={"https://github.com/ahmetoner/whisper-asr-webservice"}
+                href={
+                  "https://github.com/phipi-a/LectureChat/tree/main/whisper"
+                }
               >
                 github page
               </Link>
               . After setting up the docker image you can add the url to the
-              settings.
+              settings. You have to build the docker image yourself, because we
+              use a modified version of the whisper asr service.
             </Box>
           </Typography>
           <br />
